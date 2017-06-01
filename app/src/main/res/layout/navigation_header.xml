@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="190dp"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/image"
+        android:src="@drawable/logo_songshunter"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:layout_gravity="center"
+        android:scaleType="centerInside"
+        android:layout_marginTop="20dp"
+        android:elevation="4dp"/>
+
+    <TextView
+        android:id="@+id/text"
+        android:text="@string/app_name"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:textColor="@android:color/white"/>
+
+</LinearLayout>

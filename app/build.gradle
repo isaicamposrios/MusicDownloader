@@ -1,0 +1,49 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'alias'
+            keyPassword 'interista'
+            storeFile file('/Users/paolo/Documents/keystore.jks')
+            storePassword 'interista'
+        }
+    }
+    compileSdkVersion 25
+    buildToolsVersion '25.0.3'
+    defaultConfig {
+        applicationId "net.ddns.paolo7297.musicdownloader"
+        minSdkVersion 16
+        targetSdkVersion 25
+        versionCode 8
+        versionName "1.07"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    maven {
+        url 'https://dl.bintray.com/ayz4sci/maven/'
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:design:25.3.1'
+    compile 'com.ayz4sci.androidfactory:downloadprogress:1.0.2'
+    compile 'com.android.volley:volley:1.0.0'
+    compile 'com.android.support:preference-v7:25.3.1'
+    compile 'ch.acra:acra:4.9.2'
+    compile 'com.google.firebase:firebase-core:10.2.4'
+    compile 'com.google.firebase:firebase-ads:10.2.4'
+    testCompile 'junit:junit:4.12'
+}
+
+
+apply plugin: 'com.google.gms.google-services'

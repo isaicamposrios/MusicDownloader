@@ -1,0 +1,188 @@
+package net.ddns.paolo7297.musicdownloader.ui.fragment;
+
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+
+import net.ddns.paolo7297.musicdownloader.R;
+import net.ddns.paolo7297.musicdownloader.adapter.DownloadedSongsAdapter;
+import net.ddns.paolo7297.musicdownloader.adapter.PlaylistAdapter;
+import net.ddns.paolo7297.musicdownloader.placeholder.Playlist;
+import net.ddns.paolo7297.musicdownloader.placeholder.Song;
+import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
+import net.ddns.paolo7297.musicdownloader.playback.PlaylistDBHelper;
+import net.ddns.paolo7297.musicdownloader.task.DownloadedSongsLoaderTask;
+import net.ddns.paolo7297.musicdownloader.ui.activity.SongsEditActivity;
+
+import java.io.File;
+import java.io.FileFilter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+
+import static net.ddns.paolo7297.musicdownloader.Constants.FOLDER_HOME;
+
+/**
+ * Created by paolo on 20/04/17.
+ */
+
+public class DownloadedSongsFragment extends Fragment {
+    private DownloadedSongsAdapter adapter;
+    private ProgressBar progressbar;
+    private ListView listView;
+    private ArrayList<Song> results;
+    private PlaylistDBHelper dbHelper;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View view = inflater.inflate(R.layout.fragment_download,container,false);
+        listView = (ListView) view.findViewById(R.id.list);
+        progressbar = (ProgressBar) view.findViewById(R.id.spinner);
+        progressbar.setVisibility(View.VISIBLE);
+        progressbar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(),R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
+        results = new ArrayList<>();
+        adapter = new DownloadedSongsAdapter(results,getActivity());
+        listView.setAdapter(adapter);
+        progressbar.setVisibility(View.VISIBLE);
+        listView.setVisibility(View.GONE);
+        registerForContextMenu(listView);
+        dbHelper = PlaylistDBHelper.getInstance(getContext());
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                MasterPlayer mp = MasterPlayer.getInstance(getActivity().getApplicationContext());
+                mp.setup(results.toArray(new Song[results.size()]),position);
+
+            }
+        });
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new DownloadedSongsLoaderTask(new DownloadedSongsLoaderTask.DownloadedSongLoaderInterface() {
+            @Override
+            public void prepareUI() {
+                listView.setVisibility(View.GONE);
+                progressbar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void updateFiles(ArrayList<Song> al) {
+                results.clear();
+                Song[] sr = al.toArray(new Song[al.size()]);
+                Arrays.sort(sr, new Comparator<Song>() {
+                    @Override
+                    public int compare(Song lhs, Song rhs) {
+                        return lhs.getName().compareTo(rhs.getName());
+                    }
+                });
+                results.addAll(Arrays.asList(sr));
+                adapter.notifyDataSetChanged();
+                listView.setVisibility(View.VISIBLE);
+                progressbar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public ArrayList<File> getFiles() {
+                return new ArrayList<>(Arrays.asList(new File(Environment.getExternalStorageDirectory()+"/"+FOLDER_HOME+"/").listFiles(new FileFilter() {
+                    @Override
+                    public boolean accept(File pathname) {
+                        return pathname.getName().endsWith(".mp3");
+                    }
+                })));
+            }
+        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.options_downloads,menu);
+        //menu.setHeaderTitle(results.get(((AdapterView.AdapterContextMenuInfo) menuInfo).position).getName());
+
+        super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        final AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.share:
+                Uri uri = Uri.parse(results.get(menuInfo.position).getFile());
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("audio/mp3");
+                i.putExtra(Intent.EXTRA_STREAM,uri);
+                startActivity(Intent.createChooser(i,"Condividi \""+results.get(menuInfo.position).getName()+"\""));
+                return true;
+            case R.id.delete:
+
+                //Toast.makeText(getActivity(), "So di dovere mettere un messaggio di conferma, ma sono pigro", Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("Sei sicuro?");
+                builder.setMessage("Vuoi eliminare \""+results.get(menuInfo.position).getName()+"\"?");
+                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        new File(results.get(menuInfo.position).getFile()).delete();
+                        onResume();
+                    }
+                });
+                builder.setNegativeButton("No", null);
+                builder.show();
+                return true;
+            case R.id.add:
+                View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_playlists,null, false);
+                final AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
+                //builder1.setTitle("Aggiungi a:");
+                builder1.setView(view);
+                ListView listView = (ListView) view.findViewById(R.id.list);
+                final PlaylistDBHelper dbHelper = PlaylistDBHelper.getInstance(getContext().getApplicationContext());
+                final ArrayList<Playlist> playlists = dbHelper.getPlaylists();
+                PlaylistAdapter adapter = new PlaylistAdapter(playlists,getContext());
+                listView.setAdapter(adapter);
+                final AlertDialog a = builder1.create();
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        dbHelper.addSongToPlaylist(results.get(menuInfo.position),playlists.get(position).getName());
+                        a.dismiss();
+                    }
+                });
+                a.show();
+                return true;
+            case R.id.edit:
+                Intent i1 = new Intent(getContext(), SongsEditActivity.class);
+                i1.putExtra("SONG",results.get(menuInfo.position).getFile());
+                startActivity(i1);
+                return true;
+            default:
+                return false;
+        }
+    }
+}

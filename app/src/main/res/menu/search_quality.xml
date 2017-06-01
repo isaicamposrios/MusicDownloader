@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:id="@+id/alta"
+            android:title="Alta"/>
+        <item android:id="@+id/media"
+            android:title="Media"/>
+        <item android:id="@+id/bassa"
+            android:title="Bassa"/>
+        <item android:id="@+id/all"
+            android:title="Qualsiasi"/>
+    </group>
+</menu>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        android:title="Impostazioni Generali">
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:title="Mostra Avviso"
+            android:summary="Abilita l'avviso all'avvio dell'app"
+            android:key="@string/pref_disclaimer"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Impostazioni di Ricerca">
+
+        <ListPreference
+            android:title="Qualità"
+            android:summary="Seleziona il valore da utilizzare come default"
+            android:entries="@array/pref_quality"
+            android:key="pref_quality"
+            android:defaultValue="0"
+            android:entryValues="@array/pref_quality_int"/>
+
+
+        <ListPreference
+            android:title="Ordinamento"
+            android:summary="Seleziona il valore da utilizzare come default"
+            android:entries="@array/pref_verso"
+            android:entryValues="@array/pref_verso_int"
+            android:defaultValue="0"
+            android:key="pref_verso"/>
+
+        <ListPreference
+            android:title="Ordina per"
+            android:summary="Seleziona il valore da utilizzare come default"
+            android:entries="@array/pref_sorting"
+            android:entryValues="@array/pref_sorting_int"
+            android:defaultValue="0"
+            android:key="pref_sorting"/>
+
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

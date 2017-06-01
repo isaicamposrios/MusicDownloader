@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+
+        <item android:id="@+id/popol"
+            android:title="Popolarità" />
+
+        <item android:id="@+id/alfab"
+            android:title="Alfabetico" />
+
+        <item android:id="@+id/data"
+            android:title="Data"/>
+    </group>
+</menu>

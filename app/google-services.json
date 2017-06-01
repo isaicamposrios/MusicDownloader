@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "436752307541",
+    "firebase_url": "https://songshunter-25a01.firebaseio.com",
+    "project_id": "songshunter-25a01",
+    "storage_bucket": "songshunter-25a01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436752307541:android:43af664263226e97",
+        "android_client_info": {
+          "package_name": "net.ddns.paolo7297.musicdownloader"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "436752307541-1asb7dmho40hiqie5kskniomr1855fpe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "net.ddns.paolo7297.musicdownloader",
+            "certificate_hash": "da9a9bf66e2a0fdc77d39440d82da939bce9cc4d"
+          }
+        },
+        {
+          "client_id": "436752307541-3c3sne39jf5qvp6cgdfqhe9gnsjp4hl0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB2K3BqXzoZJ4SIEtzLJ5twWL73v1FRXRQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "436752307541-3c3sne39jf5qvp6cgdfqhe9gnsjp4hl0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

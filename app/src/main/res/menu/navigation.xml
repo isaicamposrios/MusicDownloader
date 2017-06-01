@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single" android:id="@+id/downloading">
+        <item
+            android:id="@+id/search"
+            android:title="Ricerca"
+            android:icon="@drawable/ic_search_black_48dp"/>
+        <item
+            android:id="@+id/top"
+            android:title="Più Scaricate"
+            android:icon="@drawable/ic_thumb_up_black_48dp"/>
+    </group>
+    <group android:checkableBehavior="single" android:id="@+id/local">
+        <item
+            android:id="@+id/download"
+            android:title="Canzoni Scaricate"
+            android:icon="@drawable/ic_music_note_black_48dp"/>
+        <item
+            android:id="@+id/playlists"
+            android:title="Playlist"
+            android:icon="@drawable/ic_playlist_play_black_48dp"/>
+    </group>
+    <group android:checkableBehavior="single" android:id="@+id/app">
+        <item
+            android:id="@+id/settings"
+            android:title="Impostazioni"
+            android:icon="@drawable/ic_settings_black_48dp"/>
+    </group>
+</menu>

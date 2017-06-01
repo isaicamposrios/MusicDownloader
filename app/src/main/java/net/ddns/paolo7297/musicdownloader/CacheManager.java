@@ -24,7 +24,8 @@ public class CacheManager {
     }
 
     public static File retrieveFile(Context context,String url) {
-        return new File(context.getCacheDir(),url);
+        File f = new File(context.getCacheDir(),url);
+        return f.exists() ? f : null;
     }
 
     public boolean isUrl(String url) {

@@ -13,7 +13,9 @@ public class Constants {
     public final static String NOTIFICATION_PREV = "Prev";
     public final static String NOTIFICATION_PP = "PlayPause";
     public final static String NOTIFICATION_NEXT = "Next";
-
     public final static String NOTIFICATION_OPEN = "OFN";
+
+    public final static String CACHE_THRESHOLD = "CacheThreshold";
+    public final static String CACHE_AUTODELETE = "CacheAutodelete";
 
 }

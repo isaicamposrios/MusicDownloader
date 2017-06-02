@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:title="Impostazioni Generali">
         <CheckBoxPreference
@@ -39,6 +38,18 @@
             android:key="pref_sorting"/>
 
 
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Altro">
+        <Preference
+            android:title="Info sulla cache"
+            android:summary="Gestisci la cache della app!">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetPackage="net.ddns.paolo7297.musicdownloader"
+                android:targetClass="net.ddns.paolo7297.musicdownloader.ui.activity.CacheActivity" />
+        </Preference>
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Binder;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -19,7 +18,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.ShareCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -30,23 +28,19 @@ import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebView;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.ddns.paolo7297.musicdownloader.BuildConfig;
+import net.ddns.paolo7297.musicdownloader.CacheManager;
+import net.ddns.paolo7297.musicdownloader.Constants;
 import net.ddns.paolo7297.musicdownloader.R;
-import net.ddns.paolo7297.musicdownloader.UpdateServer;
+import net.ddns.paolo7297.musicdownloader.ServerCommands;
 import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
 import net.ddns.paolo7297.musicdownloader.playback.PlaylistDBHelper;
 import net.ddns.paolo7297.musicdownloader.task.SongTitleRetreiverTask;
@@ -58,13 +52,11 @@ import net.ddns.paolo7297.musicdownloader.ui.fragment.SearchFragment;
 import net.ddns.paolo7297.musicdownloader.ui.fragment.TabManagerFragment;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 
-import static net.ddns.paolo7297.musicdownloader.Constants.*;
+import static net.ddns.paolo7297.musicdownloader.Constants.FOLDER_HOME;
+import static net.ddns.paolo7297.musicdownloader.Constants.NOTIFICATION_OPEN;
 
 /**
  * Created by paolo on 31/10/16.
@@ -85,6 +77,7 @@ public class NavigationActivity extends AppCompatActivity {
     private ProgressBar spinner;
     private Fragment f;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private CacheManager cacheManager;
     //private AdView ads;
 
     private final static int REQ_CODE = 1;
@@ -99,10 +92,11 @@ public class NavigationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         masterPlayer = MasterPlayer.getInstance(getApplicationContext());
+        cacheManager = CacheManager.getInstance(getApplicationContext());
         playlists = PlaylistDBHelper.getInstance(getApplicationContext());
         drawerLayout = (DrawerLayout) findViewById(R.id.navigation_drawer);
         navigationView = (NavigationView) findViewById(R.id.navigation_view);
-        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.text)).setText(getString(R.string.app_name) + " Ver:"+ BuildConfig.VERSION_NAME);
+        //((TextView)navigationView.getHeaderView(0).findViewById(R.id.text)).setText(getString(R.string.app_name) + " Ver:"+ BuildConfig.VERSION_NAME);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
         playerUI = (LinearLayout) findViewById(R.id.playerui);
@@ -196,6 +190,7 @@ public class NavigationActivity extends AppCompatActivity {
         }
         logUpdate();
         //setupAds();
+        clearCache();
 
 
         /*IntentFilter intentFilter = new IntentFilter();
@@ -369,13 +364,13 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     private void checkForUpdates() {
-        long lastUpdate = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getLong(PREFERENCE_LAST_UPDATE,0);
+        /*long lastUpdate = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getLong(PREFERENCE_LAST_UPDATE,0);
         Calendar c = Calendar.getInstance();
         Calendar c1 = Calendar.getInstance();
         c.setTimeInMillis(lastUpdate);
-        c.add(Calendar.HOUR_OF_DAY,1);
+        c.add(Calendar.HOUR_OF_DAY,1);*/
         //if (c.before(c1)) {
-            UpdateServer.checkUpdate(NavigationActivity.this);
+        ServerCommands.checkUpdate(NavigationActivity.this);
             //PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong(PREFERENCE_LAST_UPDATE,System.currentTimeMillis()).commit();
         //}
         //UpdateServer.checkUpdate(NavigationActivity.this);
@@ -504,4 +499,25 @@ public class NavigationActivity extends AppCompatActivity {
             });
         }
     }*/
+
+    private void clearCache() {
+        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(Constants.CACHE_AUTODELETE,true)) {
+            int threshold = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt(Constants.CACHE_THRESHOLD,200);
+            long c = Long.MAX_VALUE;
+            int i;
+            /*for (File f :cacheManager.getSortedCachedSongs()) {
+                System.out.println(f.getName());
+            }*/
+            if (cacheManager.getCachedSongsSize()>threshold) {
+                Toast.makeText(this, "Cache ripulita, cancellate vecchie canzoni", Toast.LENGTH_LONG).show();
+                while (cacheManager.getCachedSongsSize() > threshold) {
+                    cacheManager.getSortedCachedSongs().get(0).delete();
+                }
+            }
+
+        }
+
+
+
+    }
 }

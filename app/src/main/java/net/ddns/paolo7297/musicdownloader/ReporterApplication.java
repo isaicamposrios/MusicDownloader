@@ -2,6 +2,8 @@ package net.ddns.paolo7297.musicdownloader;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.Build;
+import android.os.StrictMode;
 
 import org.acra.ACRA;
 import org.acra.ReportField;
@@ -29,5 +31,16 @@ public class ReporterApplication extends Application {
         super.attachBaseContext(base);
 
         ACRA.init(this);
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            builder.detectFileUriExposure();
+        }
+        StrictMode.setVmPolicy(builder.build());
+
     }
 }

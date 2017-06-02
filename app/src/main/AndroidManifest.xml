@@ -46,6 +46,11 @@
 
         </activity>
 
+        <activity android:name=".ui.activity.CacheActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
         <receiver android:name=".playback.NotificationMediaButtonsReceiver">
             <intent-filter>
                 <action android:name="Prev"/>

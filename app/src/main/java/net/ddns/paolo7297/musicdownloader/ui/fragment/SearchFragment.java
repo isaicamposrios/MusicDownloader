@@ -1,9 +1,13 @@
 package net.ddns.paolo7297.musicdownloader.ui.fragment;
 
 import android.app.DownloadManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
@@ -18,10 +22,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.NotificationCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -30,18 +34,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
-import net.ddns.paolo7297.musicdownloader.BuildConfig;
+import net.ddns.paolo7297.musicdownloader.CacheManager;
 import net.ddns.paolo7297.musicdownloader.R;
 import net.ddns.paolo7297.musicdownloader.adapter.PlaylistAdapter;
 import net.ddns.paolo7297.musicdownloader.adapter.SearchAdapter;
@@ -54,6 +53,10 @@ import net.ddns.paolo7297.musicdownloader.task.ThumbnailsDownloaderTask;
 import net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -79,6 +82,7 @@ public class SearchFragment extends Fragment {
     private int mode = 0;
     private String query = null;
     //private MenuItem prev,next;
+    private CacheManager cacheManager;
     private String querySongs = null;
     private DisablingImageButton prev,next,quality,ascdsc,sortmode;
 
@@ -97,6 +101,7 @@ public class SearchFragment extends Fragment {
         qual = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_quality","0"));
         sort = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_verso","0"));
         mode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_verso","0"));
+        cacheManager = CacheManager.getInstance(getContext());
 
     }
 
@@ -132,7 +137,7 @@ public class SearchFragment extends Fragment {
                     ((ImageView)v.findViewById(R.id.image)).setImageResource(R.drawable.ic_music_note_black_48dp);
                 }*/
                 ((ProgressBar)v.findViewById(R.id.spinner)).getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(),R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
-                new ThumbnailsDownloaderTask(new ThumbnailsDownloaderTask.ThumbnailsDownloaderInterface() {
+                new ThumbnailsDownloaderTask(getContext().getApplicationContext(),new ThumbnailsDownloaderTask.ThumbnailsDownloaderInterface() {
                     @Override
                     public Song getSong() {
                         return s;
@@ -176,8 +181,6 @@ public class SearchFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         //System.out.println(Uri.fromFile(new File(Environment.getExternalStorageDirectory()+"/"+FOLDER_HOME+"/")).toString());
-                        DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
-                        DownloadManager.Request request = new DownloadManager.Request(Uri.parse(s.getFile()));
                         int c = 0;
                         while (new File(
                                 Environment.getExternalStorageDirectory() + "/"+FOLDER_HOME+"/",
@@ -187,21 +190,54 @@ public class SearchFragment extends Fragment {
                             c++;
 
                         }
-                        request.setDestinationUri(Uri.fromFile(new File(
-                                Environment.getExternalStorageDirectory() + "/"+FOLDER_HOME+"/",
-                                s.getFullName()+(
-                                        c==0 ? "" : String.format("(%d)",c)
-                                ) + ".mp3"))
-                        );
-                        request.setTitle(s.getFullName());
-                        request.allowScanningByMediaScanner();
-                        request.setVisibleInDownloadsUi(true);
+                        if (cacheManager.isInCache(s.getFile())) {
+                            try {
+                                File orig = cacheManager.retrieveFile(s.getFile());
+                                File dst =new File(
+                                        Environment.getExternalStorageDirectory() + "/"+FOLDER_HOME+"/",
+                                        s.getFullName()+( c==0 ? "" : String.format("(%d)",c) ) + ".mp3");
+                                dst.createNewFile();
+                                FileChannel ifc = new FileInputStream(orig).getChannel();
+                                FileChannel ofc = new FileOutputStream(dst).getChannel();
+                                ifc.transferTo(0,ifc.size(),ofc);
+                                orig.delete();
+                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
+                                builder.setSmallIcon(R.mipmap.ic_songshunter);
+                                Intent io = new Intent();
+                                io.setAction(android.content.Intent.ACTION_VIEW);
+                                io.setDataAndType(Uri.fromFile(dst),"audio/*");
+                                PendingIntent iopen = PendingIntent.getActivity(getContext(),123456,io,PendingIntent.FLAG_UPDATE_CURRENT);
+                                builder.setContentIntent(iopen);
+                                builder.setContentTitle(s.getFullName());
+                                builder.setContentText("Download completato.");
+                                builder.setAutoCancel(true);
+                                Notification notification = builder.build();
+                                NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                                notificationManager.notify(s.getLength(),notification);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
+                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(s.getFile()));
+                            request.setDestinationUri(Uri.fromFile(new File(
+                                    Environment.getExternalStorageDirectory() + "/"+FOLDER_HOME+"/",
+                                    s.getFullName()+(
+                                            c==0 ? "" : String.format("(%d)",c)
+                                    ) + ".mp3"))
+                            );
+                            request.setTitle(s.getFullName());
+                            request.allowScanningByMediaScanner();
+                            request.setVisibleInDownloadsUi(true);
 
-                        request.setMimeType("audio/MP3");
-                        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                        request.addRequestHeader("user-agent", "Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/20120403211507 Firefox/12.0");
-                        Toast.makeText(getContext().getApplicationContext(), "Download iniziato...", Toast.LENGTH_LONG).show();
-                        long id = downloadManager.enqueue(request);
+                            request.setMimeType("audio/MP3");
+                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                            request.addRequestHeader("user-agent", "Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/20120403211507 Firefox/12.0");
+                            Toast.makeText(getContext().getApplicationContext(), "Download iniziato...", Toast.LENGTH_LONG).show();
+                            long id = downloadManager.enqueue(request);
+                        }
+
+
 
 
                     }

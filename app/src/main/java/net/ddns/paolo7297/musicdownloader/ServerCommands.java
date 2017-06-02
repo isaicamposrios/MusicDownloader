@@ -29,9 +29,7 @@ import static net.ddns.paolo7297.musicdownloader.Constants.SERVER_ADDRESS;
  * Created by paolo on 21/02/17.
  */
 
-public class UpdateServer {
-
-
+public class ServerCommands {
 
     public static void checkUpdate(final Activity activity) {
         final String versionUrl = "http://"+SERVER_ADDRESS+"/projects/musicdownloader/version.php";
@@ -96,4 +94,6 @@ public class UpdateServer {
         queue.add(request);
         queue.start();
     }
+
+
 }

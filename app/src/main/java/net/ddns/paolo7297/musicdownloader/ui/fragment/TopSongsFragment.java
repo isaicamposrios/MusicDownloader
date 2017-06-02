@@ -18,7 +18,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -92,7 +91,7 @@ public class TopSongsFragment extends Fragment {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 final View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.dialog_songinfo,parent,false);
                 ((ProgressBar)v.findViewById(R.id.spinner)).getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(),R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
-                new ThumbnailsDownloaderTask(new ThumbnailsDownloaderTask.ThumbnailsDownloaderInterface() {
+                new ThumbnailsDownloaderTask(getContext().getApplicationContext(),new ThumbnailsDownloaderTask.ThumbnailsDownloaderInterface() {
                     @Override
                     public Song getSong() {
                         return s;

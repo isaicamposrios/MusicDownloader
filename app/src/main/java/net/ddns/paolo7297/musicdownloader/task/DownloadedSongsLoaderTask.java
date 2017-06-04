@@ -12,18 +12,11 @@ import java.util.ArrayList;
  * Created by paolo on 21/04/17.
  */
 
-public class DownloadedSongsLoaderTask extends AsyncTask<Void,Void,Void> {
+public class DownloadedSongsLoaderTask extends AsyncTask<Void, Void, Void> {
 
-
-    public interface DownloadedSongLoaderInterface {
-        void prepareUI();
-        void updateFiles(ArrayList<Song> al);
-        ArrayList<File> getFiles();
-    }
 
     private DownloadedSongLoaderInterface i;
     private ArrayList<Song> results;
-
     public DownloadedSongsLoaderTask(DownloadedSongLoaderInterface i) {
         this.i = i;
     }
@@ -37,18 +30,18 @@ public class DownloadedSongsLoaderTask extends AsyncTask<Void,Void,Void> {
     @Override
     protected Void doInBackground(Void... params) {
         results = new ArrayList<>();
-        for (File f: i.getFiles()) {
-            MediaMetadataRetriever metaRetriever= new MediaMetadataRetriever();
+        for (File f : i.getFiles()) {
+            MediaMetadataRetriever metaRetriever = new MediaMetadataRetriever();
             metaRetriever.setDataSource(f.getAbsolutePath());
             String title = metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE);
             results.add(new Song(
                     "",
                     metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST),
                     title == null ? f.getName() : title,
-                    Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION))/1000,
+                    Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) / 1000,
                     f.getAbsolutePath(),
                     "",
-                    Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE))/1000+" Kbps"
+                    Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)) / 1000 + " Kbps"
             ));
 
         }
@@ -60,5 +53,13 @@ public class DownloadedSongsLoaderTask extends AsyncTask<Void,Void,Void> {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         i.updateFiles(results);
+    }
+
+    public interface DownloadedSongLoaderInterface {
+        void prepareUI();
+
+        void updateFiles(ArrayList<Song> al);
+
+        ArrayList<File> getFiles();
     }
 }

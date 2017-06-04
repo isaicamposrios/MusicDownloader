@@ -10,7 +10,7 @@ import net.ddns.paolo7297.musicdownloader.R;
  * Created by paolo on 01/05/17.
  */
 
-public class PreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class PreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
 
     @Override

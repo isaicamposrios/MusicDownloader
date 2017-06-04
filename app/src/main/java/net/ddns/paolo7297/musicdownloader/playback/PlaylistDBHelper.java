@@ -18,9 +18,6 @@ import java.util.ArrayList;
 
 public class PlaylistDBHelper extends SQLiteOpenHelper {
 
-    private static PlaylistDBHelper dbHelper;
-
-
     private static final String NAME = "playlists.db";
     private static final int VERSION = 1;
     private static final String QUERY_PLAYLIST = "CREATE TABLE Playlist (" +
@@ -42,6 +39,7 @@ public class PlaylistDBHelper extends SQLiteOpenHelper {
             " FOREIGN KEY('Playlist_ID') REFERENCES Playlist ( PID ) ON DELETE CASCADE ON UPDATE NO ACTION," +
             " FOREIGN KEY('Song_ID') REFERENCES Song ( SID ) ON DELETE CASCADE ON UPDATE NO ACTION" +
             ");";
+    private static PlaylistDBHelper dbHelper;
 
     private PlaylistDBHelper(Context context) {
         super(context, NAME, null, VERSION);
@@ -81,7 +79,7 @@ public class PlaylistDBHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<String> getPlaylistsNames() {
-        Cursor c = getReadableDatabase().query("playlist",new String[]{"Name"},null,null,null,null,null);
+        Cursor c = getReadableDatabase().query("playlist", new String[]{"Name"}, null, null, null, null, null);
         ArrayList<String> strings = new ArrayList<>();
         while (c.moveToNext()) {
             strings.add(c.getString(c.getColumnIndex("Name")));
@@ -94,7 +92,7 @@ public class PlaylistDBHelper extends SQLiteOpenHelper {
         ArrayList<Song> songs = new ArrayList<>();
         Cursor c = getReadableDatabase().query(
                 "song INNER JOIN SRP ON song.SID = SRP.Song_ID INNER JOIN playlist ON playlist.PID = SRP.Playlist_ID",
-                new String[]{"Title","Artist","Path","Bitrate","Durate","Size"},
+                new String[]{"Title", "Artist", "Path", "Bitrate", "Durate", "Size"},
                 "Name = ?",
                 new String[]{name},
                 null,
@@ -114,6 +112,7 @@ public class PlaylistDBHelper extends SQLiteOpenHelper {
         c.close();
         return songs;
     }
+
     public int getSongsCount(String name) {
         return (int) DatabaseUtils.queryNumEntries(
                 getReadableDatabase(),
@@ -126,7 +125,7 @@ public class PlaylistDBHelper extends SQLiteOpenHelper {
     public void addEmptyPlaylist(String name) {
         boolean cont = true;
         ArrayList<String> playlists = getPlaylistsNames();
-        for (String s :playlists) {
+        for (String s : playlists) {
             if (s.equals(name)) {
                 cont = false;
             }
@@ -138,7 +137,7 @@ public class PlaylistDBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void addSongToPlaylist(Song song,String playlist) {
+    public void addSongToPlaylist(Song song, String playlist) {
         boolean cont = true;
         ArrayList<Song> songs = getSongs(playlist);
         for (Song s : songs) {
@@ -170,7 +169,7 @@ public class PlaylistDBHelper extends SQLiteOpenHelper {
         ArrayList<Playlist> playlists = new ArrayList<>();
         String query = "SELECT Name, (SELECT COUNT(*) FROM SRP WHERE PID = Playlist_ID) AS \"C\"" +
                 " FROM playlist";
-        Cursor c = getReadableDatabase().rawQuery(query,null);
+        Cursor c = getReadableDatabase().rawQuery(query, null);
         while (c.moveToNext()) {
             playlists.add(new Playlist(
                     c.getInt(c.getColumnIndex("C")),
@@ -182,17 +181,17 @@ public class PlaylistDBHelper extends SQLiteOpenHelper {
     }
 
     public void deletePlaylist(String playlist) {
-        getWritableDatabase().delete("playlist","Name = ?", new String[]{playlist});
+        getWritableDatabase().delete("playlist", "Name = ?", new String[]{playlist});
     }
 
     public void deleteSong(Song song, String playlist) {
         String QUERY = "DELETE FROM Song" +
-                " WHERE Title = '"+song.getName()+"' AND" +
-                " Artist = '"+song.getArtist()+"' AND" +
-                " Path = '"+song.getFile()+"' AND" +
-                " Bitrate = '"+song.getBitrate()+"' AND" +
-                " Durate = "+song.getLength()+" AND" +
-                " SID IN (SELECT Song_ID FROM SRP INNER JOIN playlist ON SRP.Playlist_ID = playlist.PID WHERE Name = '"+playlist+"')";
+                " WHERE Title = '" + song.getName() + "' AND" +
+                " Artist = '" + song.getArtist() + "' AND" +
+                " Path = '" + song.getFile() + "' AND" +
+                " Bitrate = '" + song.getBitrate() + "' AND" +
+                " Durate = " + song.getLength() + " AND" +
+                " SID IN (SELECT Song_ID FROM SRP INNER JOIN playlist ON SRP.Playlist_ID = playlist.PID WHERE Name = '" + playlist + "')";
         getWritableDatabase().execSQL(QUERY);
         //Cursor c = getReadableDatabase().rawQuery(QUERY,null);
         //c.moveToFirst();

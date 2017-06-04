@@ -62,7 +62,7 @@ public class Song {
     }
 
     public String getFullName() {
-        return getArtist() + " - "+getName();
+        return getArtist() + " - " + getName();
     }
 
     public boolean equals(Song s) {

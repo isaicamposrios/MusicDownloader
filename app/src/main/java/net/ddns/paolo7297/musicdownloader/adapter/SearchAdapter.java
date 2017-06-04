@@ -44,15 +44,15 @@ public class SearchAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.row_search_result,null);
+            convertView = inflater.inflate(R.layout.row_search_result, null);
         }
         ((TextView) convertView.findViewById(R.id.title)).setText(songs.get(position).getName());
         ((TextView) convertView.findViewById(R.id.artist)).setText(songs.get(position).getArtist());
         ((TextView) convertView.findViewById(R.id.size)).setText(songs.get(position).getSize());
         ((TextView) convertView.findViewById(R.id.bitrate)).setText(songs.get(position).getBitrate());
-        long i = songs.get(position).getLength()/60;
-        int d = (int) (((float) songs.get(position).getLength()/60 - i)*60);
-        ((TextView) convertView.findViewById(R.id.duration)).setText(String.format("%d:%02d min",i,d));
+        long i = songs.get(position).getLength() / 60;
+        int d = (int) (((float) songs.get(position).getLength() / 60 - i) * 60);
+        ((TextView) convertView.findViewById(R.id.duration)).setText(String.format("%d:%02d min", i, d));
         return convertView;
     }
 

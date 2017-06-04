@@ -19,11 +19,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-
-import net.ddns.paolo7297.musicdownloader.BuildConfig;
 import net.ddns.paolo7297.musicdownloader.R;
 import net.ddns.paolo7297.musicdownloader.adapter.PlaylistAdapter;
 import net.ddns.paolo7297.musicdownloader.placeholder.Playlist;
@@ -48,17 +43,17 @@ public class PlaylistsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_playlist,container,false);
+        View view = inflater.inflate(R.layout.fragment_playlist, container, false);
         listView = (ListView) view.findViewById(R.id.list);
         fab = (FloatingActionButton) view.findViewById(R.id.fab);
         playlists = new ArrayList<>();
-        adapter = new PlaylistAdapter(playlists,getContext().getApplicationContext());
+        adapter = new PlaylistAdapter(playlists, getContext().getApplicationContext());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getContext(),PlaylistActivity.class);
-                i.putExtra("playlist",playlists.get(position).getName());
+                Intent i = new Intent(getContext(), PlaylistActivity.class);
+                i.putExtra("playlist", playlists.get(position).getName());
                 startActivity(i);
             }
         });
@@ -67,7 +62,7 @@ public class PlaylistsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final EditText editText = new EditText(new ContextThemeWrapper(getContext(),R.style.FooterPopupStyle));
+                final EditText editText = new EditText(new ContextThemeWrapper(getContext(), R.style.FooterPopupStyle));
                 editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Nuova playlist");
@@ -93,7 +88,7 @@ public class PlaylistsFragment extends Fragment {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        getActivity().getMenuInflater().inflate(R.menu.options_playlist,menu);
+        getActivity().getMenuInflater().inflate(R.menu.options_playlist, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
@@ -117,7 +112,7 @@ public class PlaylistsFragment extends Fragment {
         playlists.clear();
         playlists.addAll(dbHelper.getPlaylists());
         adapter.notifyDataSetChanged();
-        Log.e("PLAYLIST",playlists.size()+"");
+        Log.e("PLAYLIST", playlists.size() + "");
 
     }
 }

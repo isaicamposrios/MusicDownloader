@@ -35,10 +35,17 @@ import static net.ddns.paolo7297.musicdownloader.Constants.NOTIFICATION_PREV;
  * Created by paolo on 23/04/17.
  */
 
-public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener{
+public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, AudioManager.OnAudioFocusChangeListener {
 
+    public static final int STATUS_NEED_CONFIGURATION = 0;
+    public static final int STATUS_OK = 1;
+    public static final int STATUS_PREPARING = 2;
+    public static final int STATUS_PLAYING = 3;
+    public static final int STATUS_PAUSED = 4;
+    public static final int STATUS_STOPPED = 5;
+    public static final int TYPE_LOCAL = 0;
+    public static final int TYPE_STREAMING = 1;
     private static MasterPlayer mp;
-
     private MediaPlayer player;
     private int status;
     private int index;
@@ -52,58 +59,8 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     private AudioManager audioManager;
     private CacheManager cacheManager;
 
-
-    public static final int STATUS_NEED_CONFIGURATION = 0;
-    public static final int STATUS_OK = 1;
-    public static final int STATUS_PREPARING = 2;
-    public static final int STATUS_PLAYING = 3;
-    public static final int STATUS_PAUSED = 4;
-    public static final int STATUS_STOPPED = 5;
-    public static final int TYPE_LOCAL = 0;
-    public static final int TYPE_STREAMING = 1;
-
-    public class MPInfo{
-        private long duration, totalDuration;
-        private String title;
-        private String artist;
-        private int status;
-
-        public MPInfo(long duration, long totalDuration, String title, String artist, int status) {
-            this.duration = duration;
-            this.totalDuration = totalDuration;
-            this.title = title;
-            this.artist = artist;
-            this.status = status;
-        }
-
-        public long getDuration() {
-            return duration;
-        }
-
-        public long getTotalDuration() {
-            return totalDuration;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public String getArtist() {
-            return artist;
-        }
-
-        public int getStatus() {
-            return status;
-        }
-    }
-
-    public interface MasterPlayerTrackChange {
-        void OnTrackChange();
-    }
-
-
     private MasterPlayer(Context c) {
-        Log.d("PLAYER","Costruttore");
+        Log.d("PLAYER", "Costruttore");
         context = c;
         player = new MediaPlayer();
         player.setOnPreparedListener(this);
@@ -122,13 +79,13 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void play() {
-        Log.d("PLAYER","Play");
+        Log.d("PLAYER", "Play");
         int result = audioManager.requestAudioFocus(this,
                 // Use the music stream.
                 AudioManager.STREAM_MUSIC,
                 // Request permanent focus.
                 AudioManager.AUDIOFOCUS_GAIN);
-        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED &&(status == STATUS_OK || status == STATUS_PAUSED)) {
+        if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED && (status == STATUS_OK || status == STATUS_PAUSED)) {
             player.start();
             status = STATUS_PLAYING;
             setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
@@ -138,7 +95,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void pause() {
-        Log.d("PLAYER","Pause");
+        Log.d("PLAYER", "Pause");
         if (status == STATUS_PLAYING) {
             player.pause();
             status = STATUS_PAUSED;
@@ -149,7 +106,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void toggle() {
-        Log.d("PLAYER","Toggle");
+        Log.d("PLAYER", "Toggle");
         if (status == STATUS_PLAYING) {
             pause();
         } else {
@@ -159,7 +116,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void stop() {
-        Log.d("PLAYER","Stop");
+        Log.d("PLAYER", "Stop");
         if (status == STATUS_PLAYING || status == STATUS_PAUSED) {
             player.stop();
             status = STATUS_STOPPED;
@@ -168,7 +125,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void next() {
-        Log.d("PLAYER","Next");
+        Log.d("PLAYER", "Next");
         index++;
         if (index >= songs.size()) {
             index = 0;
@@ -177,24 +134,24 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void prev() {
-        Log.d("PLAYER","Prev");
+        Log.d("PLAYER", "Prev");
         index--;
-        if (index< 0) {
-            index = songs.size()-1;
+        if (index < 0) {
+            index = songs.size() - 1;
         }
         setSong(index);
     }
 
     public void setup(Song[] files, int index) {
-        Log.d("PLAYER","Setup");
+        Log.d("PLAYER", "Setup");
         songs = new ArrayList<>(Arrays.asList(files));
         this.index = index;
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         setSong(index);
     }
 
-    public void setSong(final int index){
-        Log.d("PLAYER","Set song "+songs.get(index).toString());
+    public void setSong(final int index) {
+        Log.d("PLAYER", "Set song " + songs.get(index).toString());
         try {
             if (!isUrl(songs.get(index).getFile())) {
                 if (!new File(songs.get(index).getFile()).exists()) {
@@ -205,7 +162,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
 
             if (cacheManager.isUrl(songs.get(index).getFile())) {
                 if (!cacheManager.isInCache(songs.get(index).getFile())) {
-                    Log.e("CACHE","Caching...");
+                    Log.e("CACHE", "Caching...");
                     cacheManager.cacheUrl(songs.get(index).getFile(), new CacheManager.CachingInterface() {
                         @Override
                         public void onCachingCompleted(File f) {
@@ -219,8 +176,8 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
                                 if (callback != null) callback.OnTrackChange();
 
                                 mediaSession.setMetadata(new MediaMetadataCompat.Builder()
-                                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE,songs.get(index).getName())
-                                        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST,songs.get(index).getArtist()).build());
+                                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songs.get(index).getName())
+                                        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, songs.get(index).getArtist()).build());
                             } catch (IOException e) {
                                 e.printStackTrace();
                                 status = STATUS_NEED_CONFIGURATION;
@@ -229,7 +186,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
                     });
                 } else {
                     try {
-                        Log.e("CACHE","Already In cache, Loaded");
+                        Log.e("CACHE", "Already In cache, Loaded");
                         File f = cacheManager.retrieveFile(songs.get(index).getFile());
                         player.setDataSource(f.getAbsolutePath());
                         //title = songs.get(index);
@@ -240,15 +197,15 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
                         if (callback != null) callback.OnTrackChange();
 
                         mediaSession.setMetadata(new MediaMetadataCompat.Builder()
-                                .putString(MediaMetadataCompat.METADATA_KEY_TITLE,songs.get(index).getName())
-                                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST,songs.get(index).getArtist()).build());
+                                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songs.get(index).getName())
+                                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, songs.get(index).getArtist()).build());
                     } catch (IOException e) {
                         e.printStackTrace();
                         status = STATUS_NEED_CONFIGURATION;
                     }
                 }
             } else {
-                Log.e("CACHE","Local file");
+                Log.e("CACHE", "Local file");
                 player.setDataSource(songs.get(index).getFile());
 
                 //title = songs.get(index);
@@ -270,13 +227,13 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public MPInfo getInfos() {
-        Log.d("PLAYER","Get Info");
+        Log.d("PLAYER", "Get Info");
         if (status == STATUS_NEED_CONFIGURATION) {
-            return new MPInfo(0,0,null,null,status);
+            return new MPInfo(0, 0, null, null, status);
         } else {
             return new MPInfo(
-                    status == STATUS_PREPARING ? 0 :player.getCurrentPosition(),
-                    status == STATUS_PREPARING ? 0 :player.getDuration(),
+                    status == STATUS_PREPARING ? 0 : player.getCurrentPosition(),
+                    status == STATUS_PREPARING ? 0 : player.getDuration(),
                     songs.get(index).getName(),
                     songs.get(index).getArtist(),
                     status
@@ -285,26 +242,25 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public boolean isPlaying() {
-        Log.d("PLAYER","Get Play status");
+        Log.d("PLAYER", "Get Play status");
         return status == STATUS_PLAYING;
     }
 
     public void setCallback(MasterPlayerTrackChange callback) {
-        Log.d("PLAYER","Set Callback");
+        Log.d("PLAYER", "Set Callback");
         this.callback = callback;
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        Log.d("PLAYER","ON PREPARE");
+        Log.d("PLAYER", "ON PREPARE");
         status = STATUS_OK;
         play();
     }
 
-
     @Override
     public void onCompletion(MediaPlayer mp) {
-        Log.d("PLAYER","ON COMPLETION");
+        Log.d("PLAYER", "ON COMPLETION");
         next();
     }
 
@@ -314,8 +270,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
             // Permanent loss of audio focus
             // Pause playback immediately
             pause();
-        }
-        else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
+        } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
             pause();
         } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
             // Lower the volume
@@ -329,28 +284,28 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         //builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
         builder.setSmallIcon(R.mipmap.ic_songshunter);
         Intent i1 = new Intent();
-        i1.setClass(context,NotificationMediaButtonsReceiver.class);
+        i1.setClass(context, NotificationMediaButtonsReceiver.class);
         i1.setAction(NOTIFICATION_PREV);
-        PendingIntent iprev = PendingIntent.getBroadcast(context,123456,i1,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent iprev = PendingIntent.getBroadcast(context, 123456, i1, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent i2 = new Intent();
-        i2.setClass(context,NotificationMediaButtonsReceiver.class);
+        i2.setClass(context, NotificationMediaButtonsReceiver.class);
         i2.setAction(NOTIFICATION_PP);
-        PendingIntent ipp = PendingIntent.getBroadcast(context,123456,i2,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent ipp = PendingIntent.getBroadcast(context, 123456, i2, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent i3 = new Intent();
-        i3.setClass(context,NotificationMediaButtonsReceiver.class);
+        i3.setClass(context, NotificationMediaButtonsReceiver.class);
         i3.setAction(NOTIFICATION_NEXT);
-        PendingIntent inext = PendingIntent.getBroadcast(context,123456,i3,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent inext = PendingIntent.getBroadcast(context, 123456, i3, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Intent io = new Intent();
         io.setClass(context, NavigationActivity.class);
         io.setAction(NOTIFICATION_OPEN);
-        PendingIntent iopen = PendingIntent.getActivity(context,123456,io,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent iopen = PendingIntent.getActivity(context, 123456, io, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        builder.addAction(R.drawable.ic_skip_previous_black_48dp,"Indietro",iprev);
-        builder.addAction(status == STATUS_PLAYING ? R.drawable.ic_pause_circle_outline_black_48dp : R.drawable.ic_play_circle_outline_black_48dp,"Play",ipp);
-        builder.addAction(R.drawable.ic_skip_next_black_48dp,"Successivo",inext);
+        builder.addAction(R.drawable.ic_skip_previous_black_48dp, "Indietro", iprev);
+        builder.addAction(status == STATUS_PLAYING ? R.drawable.ic_pause_circle_outline_black_48dp : R.drawable.ic_play_circle_outline_black_48dp, "Play", ipp);
+        builder.addAction(R.drawable.ic_skip_next_black_48dp, "Successivo", inext);
         builder.setContentIntent(iopen);
         builder.setStyle(new NotificationCompat.MediaStyle()
                 .setShowActionsInCompactView(1)
@@ -360,11 +315,11 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         builder.setOngoing(status == STATUS_PLAYING);
         Notification notification = builder.build();
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1111,notification);
+        notificationManager.notify(1111, notification);
     }
 
     private void setupMediaSession() {
-        mediaSession = new MediaSessionCompat(context,"MediaSession");
+        mediaSession = new MediaSessionCompat(context, "MediaSession");
         mediaSession.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
         mediaSession.setActive(true);
         mediaSession.setCallback(new MediaSessionCompat.Callback() {
@@ -375,7 +330,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
 
             @Override
             public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
-                KeyEvent k = (KeyEvent) mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
+                KeyEvent k = mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
                 if (k.getAction() == KeyEvent.ACTION_UP) {
                     Log.e("PLAYER", k.toString());
                     switch (k.getKeyCode()) {
@@ -448,7 +403,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
 
     private void setMediaPlaybackState(int state) {
         PlaybackStateCompat.Builder playbackstateBuilder = new PlaybackStateCompat.Builder();
-        if( state == PlaybackStateCompat.STATE_PLAYING ) {
+        if (state == PlaybackStateCompat.STATE_PLAYING) {
             playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS);
         } else {
             playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS);
@@ -460,5 +415,44 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     private boolean isUrl(String s) {
         String s1 = s.trim().toLowerCase();
         return s1.startsWith("http://") || s1.startsWith("https://");
+    }
+
+    public interface MasterPlayerTrackChange {
+        void OnTrackChange();
+    }
+
+    public class MPInfo {
+        private long duration, totalDuration;
+        private String title;
+        private String artist;
+        private int status;
+
+        public MPInfo(long duration, long totalDuration, String title, String artist, int status) {
+            this.duration = duration;
+            this.totalDuration = totalDuration;
+            this.title = title;
+            this.artist = artist;
+            this.status = status;
+        }
+
+        public long getDuration() {
+            return duration;
+        }
+
+        public long getTotalDuration() {
+            return totalDuration;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getArtist() {
+            return artist;
+        }
+
+        public int getStatus() {
+            return status;
+        }
     }
 }

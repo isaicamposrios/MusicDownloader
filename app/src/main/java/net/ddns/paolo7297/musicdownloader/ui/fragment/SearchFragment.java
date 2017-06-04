@@ -84,7 +84,7 @@ public class SearchFragment extends Fragment {
     //private MenuItem prev,next;
     private CacheManager cacheManager;
     private String querySongs = null;
-    private DisablingImageButton prev,next,quality,ascdsc,sortmode;
+    private DisablingImageButton prev, next, quality, ascdsc, sortmode;
 
     public SearchFragment() {
 
@@ -98,9 +98,9 @@ public class SearchFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        qual = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_quality","0"));
-        sort = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_verso","0"));
-        mode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_verso","0"));
+        qual = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_quality", "0"));
+        sort = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_verso", "0"));
+        mode = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("pref_verso", "0"));
         cacheManager = CacheManager.getInstance(getContext());
 
     }
@@ -108,7 +108,7 @@ public class SearchFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_search,container,false);
+        final View view = inflater.inflate(R.layout.fragment_search, container, false);
         text = (TextView) view.findViewById(R.id.text);
         loading = (ProgressBar) view.findViewById(R.id.spinner);
         listView = (ListView) view.findViewById(R.id.list);
@@ -117,10 +117,10 @@ public class SearchFragment extends Fragment {
         quality = (DisablingImageButton) view.findViewById(R.id.quality);
         ascdsc = (DisablingImageButton) view.findViewById(R.id.ascdsc);
         sortmode = (DisablingImageButton) view.findViewById(R.id.modality);
-        loading.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(),R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
+        loading.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
         songsSaved = new ArrayList<>();
         //viewText("Inizia a cercare la musica");
-        adapter = new SearchAdapter(getActivity(),songsSaved);
+        adapter = new SearchAdapter(getActivity(), songsSaved);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -129,15 +129,15 @@ public class SearchFragment extends Fragment {
                 final Song s = songsSaved.get(position);
                 final int p1 = position;
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                final View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.dialog_songinfo,parent,false);
+                final View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.dialog_songinfo, parent, false);
                 /*Bitmap b = getTumbnail(s);
                 if (b != null) {
                     ((ImageView)v.findViewById(R.id.image)).setImageBitmap(b);
                 } else {
                     ((ImageView)v.findViewById(R.id.image)).setImageResource(R.drawable.ic_music_note_black_48dp);
                 }*/
-                ((ProgressBar)v.findViewById(R.id.spinner)).getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(),R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
-                new ThumbnailsDownloaderTask(getContext().getApplicationContext(),new ThumbnailsDownloaderTask.ThumbnailsDownloaderInterface() {
+                ((ProgressBar) v.findViewById(R.id.spinner)).getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
+                new ThumbnailsDownloaderTask(getContext().getApplicationContext(), new ThumbnailsDownloaderTask.ThumbnailsDownloaderInterface() {
                     @Override
                     public Song getSong() {
                         return s;
@@ -145,75 +145,76 @@ public class SearchFragment extends Fragment {
 
                     @Override
                     public void startDownload() {
-                        ((ImageView)v.findViewById(R.id.image)).setVisibility(GONE);
-                        ((ProgressBar)v.findViewById(R.id.spinner)).setVisibility(View.VISIBLE);
+                        v.findViewById(R.id.image).setVisibility(GONE);
+                        v.findViewById(R.id.spinner).setVisibility(View.VISIBLE);
                     }
 
                     @Override
                     public void setThumbnail(Bitmap b) {
                         if (b != null) {
-                            ((ImageView)v.findViewById(R.id.image)).setImageBitmap(b);
+                            ((ImageView) v.findViewById(R.id.image)).setImageBitmap(b);
                         } else {
-                            ((ImageView)v.findViewById(R.id.image)).setImageResource(R.mipmap.ic_song_red);
+                            ((ImageView) v.findViewById(R.id.image)).setImageResource(R.mipmap.ic_song_red);
                         }
-                        ((ImageView)v.findViewById(R.id.image)).setVisibility(View.VISIBLE);
-                        ((ProgressBar)v.findViewById(R.id.spinner)).setVisibility(View.GONE);
+                        v.findViewById(R.id.image).setVisibility(View.VISIBLE);
+                        v.findViewById(R.id.spinner).setVisibility(View.GONE);
                     }
                 }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-                ((TextView)v.findViewById(R.id.title)).setText(s.getName());
-                ((TextView)v.findViewById(R.id.artist)).setText(s.getArtist());
-                ((TextView)v.findViewById(R.id.size)).setText(s.getSize());
-                ((TextView)v.findViewById(R.id.bitrate)).setText(s.getBitrate());
-                long i = s.getLength()/60;
-                int d = (int) (((float) s.getLength()/60 - i)*60);
-                ((TextView)v.findViewById(R.id.time)).setText(String.format("%d:%02d min",i,d));
-                ((DisablingImageButton) v.findViewById(R.id.button_stream)).setOnClickListener(new View.OnClickListener() {
+                ((TextView) v.findViewById(R.id.title)).setText(s.getName());
+                ((TextView) v.findViewById(R.id.artist)).setText(s.getArtist());
+                ((TextView) v.findViewById(R.id.size)).setText(s.getSize());
+                ((TextView) v.findViewById(R.id.bitrate)).setText(s.getBitrate());
+                long i = s.getLength() / 60;
+                int d = (int) (((float) s.getLength() / 60 - i) * 60);
+                ((TextView) v.findViewById(R.id.time)).setText(String.format("%d:%02d min", i, d));
+                v.findViewById(R.id.button_stream).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
                         MasterPlayer mp = MasterPlayer.getInstance(getActivity().getApplicationContext());
                         Song[] temp = new Song[]{songsSaved.get(position)};
                         //mp.setup(songsSaved.toArray(new Song[songsSaved.size()]),position);
-                        mp.setup(temp,0);
+                        mp.setup(temp, 0);
                     }
                 });
-                ((DisablingImageButton) v.findViewById(R.id.button_download)).setOnClickListener(new View.OnClickListener() {
+                v.findViewById(R.id.button_download).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         //System.out.println(Uri.fromFile(new File(Environment.getExternalStorageDirectory()+"/"+FOLDER_HOME+"/")).toString());
                         int c = 0;
                         while (new File(
-                                Environment.getExternalStorageDirectory() + "/"+FOLDER_HOME+"/",
-                                s.getFullName()+(
-                                        c==0 ? "" : String.format("(%d)",c)
+                                Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
+                                s.getFullName() + (
+                                        c == 0 ? "" : String.format("(%d)", c)
                                 ) + ".mp3").exists()) {
                             c++;
 
                         }
+                        Toast.makeText(getContext().getApplicationContext(), "Download iniziato...", Toast.LENGTH_LONG).show();
                         if (cacheManager.isInCache(s.getFile())) {
                             try {
                                 File orig = cacheManager.retrieveFile(s.getFile());
-                                File dst =new File(
-                                        Environment.getExternalStorageDirectory() + "/"+FOLDER_HOME+"/",
-                                        s.getFullName()+( c==0 ? "" : String.format("(%d)",c) ) + ".mp3");
+                                File dst = new File(
+                                        Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
+                                        s.getFullName() + (c == 0 ? "" : String.format("(%d)", c)) + ".mp3");
                                 dst.createNewFile();
                                 FileChannel ifc = new FileInputStream(orig).getChannel();
                                 FileChannel ofc = new FileOutputStream(dst).getChannel();
-                                ifc.transferTo(0,ifc.size(),ofc);
+                                ifc.transferTo(0, ifc.size(), ofc);
                                 orig.delete();
                                 NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
                                 builder.setSmallIcon(R.mipmap.ic_songshunter);
                                 Intent io = new Intent();
                                 io.setAction(android.content.Intent.ACTION_VIEW);
-                                io.setDataAndType(Uri.fromFile(dst),"audio/*");
-                                PendingIntent iopen = PendingIntent.getActivity(getContext(),123456,io,PendingIntent.FLAG_UPDATE_CURRENT);
+                                io.setDataAndType(Uri.fromFile(dst), "audio/*");
+                                PendingIntent iopen = PendingIntent.getActivity(getContext(), 123456, io, PendingIntent.FLAG_UPDATE_CURRENT);
                                 builder.setContentIntent(iopen);
                                 builder.setContentTitle(s.getFullName());
                                 builder.setContentText("Download completato.");
                                 builder.setAutoCancel(true);
                                 Notification notification = builder.build();
                                 NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                                notificationManager.notify(s.getLength(),notification);
+                                notificationManager.notify(s.getLength(), notification);
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
@@ -221,9 +222,9 @@ public class SearchFragment extends Fragment {
                             DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
                             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(s.getFile()));
                             request.setDestinationUri(Uri.fromFile(new File(
-                                    Environment.getExternalStorageDirectory() + "/"+FOLDER_HOME+"/",
-                                    s.getFullName()+(
-                                            c==0 ? "" : String.format("(%d)",c)
+                                    Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
+                                    s.getFullName() + (
+                                            c == 0 ? "" : String.format("(%d)", c)
                                     ) + ".mp3"))
                             );
                             request.setTitle(s.getFullName());
@@ -238,29 +239,27 @@ public class SearchFragment extends Fragment {
                         }
 
 
-
-
                     }
 
                 });
 
-                ((DisablingImageButton) v.findViewById(R.id.button_addplaylist)).setOnClickListener(new View.OnClickListener() {
+                v.findViewById(R.id.button_addplaylist).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_playlists,null, false);
+                        View view = LayoutInflater.from(getContext()).inflate(R.layout.dialog_playlists, null, false);
                         final AlertDialog.Builder builder1 = new AlertDialog.Builder(getContext());
                         //builder1.setTitle("Aggiungi a:");
                         builder1.setView(view);
                         ListView listView = (ListView) view.findViewById(R.id.list);
                         final PlaylistDBHelper dbHelper = PlaylistDBHelper.getInstance(getContext().getApplicationContext());
                         final ArrayList<Playlist> playlists = dbHelper.getPlaylists();
-                        PlaylistAdapter adapter = new PlaylistAdapter(playlists,getContext());
+                        PlaylistAdapter adapter = new PlaylistAdapter(playlists, getContext());
                         listView.setAdapter(adapter);
                         final AlertDialog a = builder1.create();
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                dbHelper.addSongToPlaylist(songsSaved.get(p1),playlists.get(position).getName());
+                                dbHelper.addSongToPlaylist(songsSaved.get(p1), playlists.get(position).getName());
                                 a.dismiss();
                             }
                         });
@@ -304,8 +303,8 @@ public class SearchFragment extends Fragment {
         quality.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContextThemeWrapper ctw = new ContextThemeWrapper(getActivity(),R.style.FooterPopupStyle);
-                PopupMenu menu = new PopupMenu(ctw,v);
+                ContextThemeWrapper ctw = new ContextThemeWrapper(getActivity(), R.style.FooterPopupStyle);
+                PopupMenu menu = new PopupMenu(ctw, v);
                 menu.inflate(R.menu.search_quality);
                 menu.getMenu().findItem(qual == 3 ? R.id.alta : qual == 2 ? R.id.media : qual == 1 ? R.id.bassa : R.id.all).setChecked(true);
                 menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -349,8 +348,8 @@ public class SearchFragment extends Fragment {
         sortmode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContextThemeWrapper ctw = new ContextThemeWrapper(getActivity(),R.style.FooterPopupStyle);
-                PopupMenu menu = new PopupMenu(ctw,v);
+                ContextThemeWrapper ctw = new ContextThemeWrapper(getActivity(), R.style.FooterPopupStyle);
+                PopupMenu menu = new PopupMenu(ctw, v);
                 menu.inflate(R.menu.search_mode);
                 menu.getMenu().findItem(mode == QueryResolverTask.SORT_ALPHABETIC ? R.id.alfab : mode == QueryResolverTask.SORT_DATE ? R.id.data : R.id.popol).setChecked(true);
                 menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -404,7 +403,7 @@ public class SearchFragment extends Fragment {
     public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         MenuInflater menuInflater = getActivity().getMenuInflater();
-        menuInflater.inflate(R.menu.main,menu);
+        menuInflater.inflate(R.menu.main, menu);
         MenuItem search = menu.findItem(R.id.action_search);
         //prev = menu.findItem(R.id.back);
         //next = menu.findItem(R.id.next);
@@ -478,7 +477,7 @@ public class SearchFragment extends Fragment {
             if (query != null) {
                 MenuItemCompat.expandActionView(search);
                 querySongs = query;
-                searchView.setQuery(query,true);
+                searchView.setQuery(query, true);
                 query = null;
             }
         }
@@ -530,7 +529,7 @@ public class SearchFragment extends Fragment {
             public void setResults(ArrayList<Song> songs) {
                 songsSaved.clear();
                 songsSaved.addAll(songs);
-                if (songs.size()>0) {
+                if (songs.size() > 0) {
                     viewList(page);
                 } else {
                     viewText("Non ho trovato nulla");
@@ -545,7 +544,7 @@ public class SearchFragment extends Fragment {
                 maxPage = limit;
             }
 
-        },getActivity()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }, getActivity()).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     private void viewList(int page) {
@@ -595,19 +594,19 @@ public class SearchFragment extends Fragment {
             if (prev != null) prev.setEnabled(true);
             if (next != null) next.setEnabled(true);
         }*/
-        int s = 0,d = 0;
-        if (page == 0 ) {
+        int s = 0, d = 0;
+        if (page == 0) {
             d++;
             s++;
             if (prev != null) prev.setEnabled(false);
             if (next != null) next.setEnabled(false);
         }
-        if (page== 1) {
+        if (page == 1) {
             s++;
             if (prev != null) prev.setEnabled(false);
 
         }
-        if (page>=maxPage/20) {
+        if (page >= maxPage / 20) {
             d++;
             if (next != null) next.setEnabled(false);
         }
@@ -617,10 +616,10 @@ public class SearchFragment extends Fragment {
 
     public Bitmap getTumbnail(Song song) {
         Bitmap b = null;
-        MediaMetadataRetriever mediaMetadataRetriever =  new MediaMetadataRetriever();
-        mediaMetadataRetriever.setDataSource(song.getFile(),new HashMap<String, String>());
+        MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+        mediaMetadataRetriever.setDataSource(song.getFile(), new HashMap<String, String>());
         byte art[] = mediaMetadataRetriever.getEmbeddedPicture();
-        if (art != null ) b = BitmapFactory.decodeByteArray(art,0,art.length);
+        if (art != null) b = BitmapFactory.decodeByteArray(art, 0, art.length);
         return b;
     }
 

@@ -11,44 +11,31 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
 /**
  * Created by paolo on 28/10/16.
  */
-public class QueryResolverTask extends AsyncTask<Void,Void,ArrayList<Song>>{
+public class QueryResolverTask extends AsyncTask<Void, Void, ArrayList<Song>> {
 
+    public static final String QUALITY_ALL = "all";
+    public static final String QUALITY_LOW = "bad";
+    public static final String QUALITY_MED = "good";
+    public static final String QUALITY_HIGH = "best";
+    public static final int SORT_POPULARITY = 0;
+    public static final int SORT_DATE = 1;
+    public static final int SORT_ALPHABETIC = 2;
     private final String urlString = "http://pleer.net/search?q=";
     private final String limit = "&limit=20";
     private final String page = "&page=";
     private final String quality = "&quality=";
-    public static final String QUALITY_ALL = "all";
-    public static final String QUALITY_LOW ="bad";
-    public static final String QUALITY_MED ="good";
-    public static final String QUALITY_HIGH ="best";
     private final String sortmode = "&sort_mode=";
     private final String sortby = "&sort_by=";
-    public static final int SORT_POPULARITY = 0;
-    public static final int SORT_DATE =1;
-    public static final int SORT_ALPHABETIC =2;
-
     private MusicRequestInterface i;
     private Context context;
 
-    public interface MusicRequestInterface {
-        String getSearchQuery();
-        int getPage();
-        String getQuality();
-        int getSortMode();
-        int getSortedBy();
-        void startSearch();
-        void setResults(ArrayList<Song> songs);
-        void setMaxPage(int limit);
-    }
-
     public QueryResolverTask(MusicRequestInterface i, Context context) {
-        this.i= i;
+        this.i = i;
         this.context = context;
     }
 
@@ -63,7 +50,7 @@ public class QueryResolverTask extends AsyncTask<Void,Void,ArrayList<Song>>{
         ArrayList<Song> songs = new ArrayList<>();
         String par = i.getSearchQuery().replaceAll("\\s+", "+");
         try {
-            String url = urlString+par+limit+page+i.getPage()+quality+i.getQuality()+sortmode+i.getSortMode()+sortby+i.getSortedBy();
+            String url = urlString + par + limit + page + i.getPage() + quality + i.getQuality() + sortmode + i.getSortMode() + sortby + i.getSortedBy();
             //URL url = new URL(urlString);
             //connection = (HttpURLConnection) url.openConnection();
             //if (connection.getResponseCode() == 200) {
@@ -136,6 +123,24 @@ public class QueryResolverTask extends AsyncTask<Void,Void,ArrayList<Song>>{
     protected void onPostExecute(ArrayList<Song> s) {
         super.onPostExecute(s);
         i.setResults(s);
+    }
+
+    public interface MusicRequestInterface {
+        String getSearchQuery();
+
+        int getPage();
+
+        String getQuality();
+
+        int getSortMode();
+
+        int getSortedBy();
+
+        void startSearch();
+
+        void setResults(ArrayList<Song> songs);
+
+        void setMaxPage(int limit);
     }
 
 }

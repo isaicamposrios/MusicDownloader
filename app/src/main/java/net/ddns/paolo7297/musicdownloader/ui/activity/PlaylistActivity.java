@@ -47,12 +47,12 @@ public class PlaylistActivity extends AppCompatActivity {
         setTitle(playlist);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        adapter = new DownloadedSongsAdapter(songs,getApplicationContext());
+        adapter = new DownloadedSongsAdapter(songs, getApplicationContext());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                masterPlayer.setup(songs.toArray(new Song[songs.size()]),position);
+                masterPlayer.setup(songs.toArray(new Song[songs.size()]), position);
             }
         });
 
@@ -66,7 +66,7 @@ public class PlaylistActivity extends AppCompatActivity {
         songs.clear();
         songs.addAll(dbHelper.getSongs(playlist));
         adapter.notifyDataSetChanged();
-        toolbar.setSubtitle(songs.size() +" elementi");
+        toolbar.setSubtitle(songs.size() + " elementi");
     }
 
     @Override
@@ -77,7 +77,7 @@ public class PlaylistActivity extends AppCompatActivity {
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        getMenuInflater().inflate(R.menu.options_playlist_song,menu);
+        getMenuInflater().inflate(R.menu.options_playlist_song, menu);
         super.onCreateContextMenu(menu, v, menuInfo);
     }
 
@@ -86,7 +86,7 @@ public class PlaylistActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo menuInf = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.delete:
-                dbHelper.deleteSong(songs.get(menuInf.position),playlist);
+                dbHelper.deleteSong(songs.get(menuInf.position), playlist);
                 onResume();
                 return true;
             default:

@@ -44,9 +44,10 @@ public class PlaylistAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        if (convertView == null) convertView = inflater.inflate(R.layout.row_playlist,parent,false);
+        if (convertView == null)
+            convertView = inflater.inflate(R.layout.row_playlist, parent, false);
         ((TextView) convertView.findViewById(R.id.title)).setText(playlists.get(position).getName());
-        ((TextView) convertView.findViewById(R.id.subtitle)).setText(playlists.get(position).getCount()+" canzoni presenti");
+        ((TextView) convertView.findViewById(R.id.subtitle)).setText(playlists.get(position).getCount() + " canzoni presenti");
         return convertView;
     }
 }

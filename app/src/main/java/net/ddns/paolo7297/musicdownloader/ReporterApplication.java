@@ -15,7 +15,7 @@ import org.acra.annotation.ReportsCrashes;
  */
 @ReportsCrashes(
         mailTo = "ca.paolo97@alice.it",
-        customReportContent = { ReportField.APP_VERSION_CODE, ReportField.APP_VERSION_NAME, ReportField.ANDROID_VERSION, ReportField.PHONE_MODEL, ReportField.CUSTOM_DATA, ReportField.STACK_TRACE, ReportField.LOGCAT },
+        customReportContent = {ReportField.APP_VERSION_CODE, ReportField.APP_VERSION_NAME, ReportField.ANDROID_VERSION, ReportField.PHONE_MODEL, ReportField.CUSTOM_DATA, ReportField.STACK_TRACE, ReportField.LOGCAT},
         mode = ReportingInteractionMode.DIALOG,
         resDialogText = R.string.crash_dialog_text,
         resDialogIcon = android.R.drawable.ic_dialog_alert, //optional. default is a warning sign

@@ -45,15 +45,15 @@ public class DownloadedSongsAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.row_download,null);
+            convertView = inflater.inflate(R.layout.row_download, null);
         }
         ((TextView) convertView.findViewById(R.id.title)).setText(files.get(position).getName());
         ((TextView) convertView.findViewById(R.id.artist)).setText(files.get(position).getArtist());
         //((TextView) convertView.findViewById(R.id.size)).setText();
         ((TextView) convertView.findViewById(R.id.bitrate)).setText(files.get(position).getBitrate());
-        long i = files.get(position).getLength()/60;
-        int d = (int) (((float) files.get(position).getLength()/60 - i)*60);
-        ((TextView) convertView.findViewById(R.id.duration)).setText(String.format("%d:%02d min",i,d));
+        long i = files.get(position).getLength() / 60;
+        int d = (int) (((float) files.get(position).getLength() / 60 - i) * 60);
+        ((TextView) convertView.findViewById(R.id.duration)).setText(String.format("%d:%02d min", i, d));
 
         return convertView;
     }

@@ -32,7 +32,7 @@ public class NotificationMediaButtonsReceiver extends BroadcastReceiver {
             //i.toggleMedia();
             mp.toggle();
         } else {
-            Log.e("!?","Why here?!");
+            Log.e("!?", "Why here?!");
         }
     }
 }

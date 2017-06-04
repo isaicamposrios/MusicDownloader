@@ -11,14 +11,8 @@ import java.io.IOException;
  * Created by paolo on 14/05/17.
  */
 
-public class SongTitleRetreiverTask extends AsyncTask<Void,Void,String> {
+public class SongTitleRetreiverTask extends AsyncTask<Void, Void, String> {
     private SongTitleRetreiverInterface i;
-
-    public interface SongTitleRetreiverInterface {
-        String getUrl();
-        void setup();
-        void complete(String s);
-    }
 
     public SongTitleRetreiverTask(SongTitleRetreiverInterface i) {
         this.i = i;
@@ -46,5 +40,13 @@ public class SongTitleRetreiverTask extends AsyncTask<Void,Void,String> {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
         i.complete(s);
+    }
+
+    public interface SongTitleRetreiverInterface {
+        String getUrl();
+
+        void setup();
+
+        void complete(String s);
     }
 }

@@ -15,8 +15,8 @@ android {
         applicationId "net.ddns.paolo7297.musicdownloader"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 8
-        versionName "1.07"
+        versionCode 9
+        versionName "1.1"
     }
     buildTypes {
         release {
@@ -44,6 +44,5 @@ dependencies {
     compile 'com.google.firebase:firebase-ads:10.2.4'
     testCompile 'junit:junit:4.12'
 }
-
 
 apply plugin: 'com.google.gms.google-services'

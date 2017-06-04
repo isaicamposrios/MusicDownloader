@@ -32,7 +32,7 @@ import static net.ddns.paolo7297.musicdownloader.Constants.SERVER_ADDRESS;
 public class ServerCommands {
 
     public static void checkUpdate(final Activity activity) {
-        final String versionUrl = "http://"+SERVER_ADDRESS+"/projects/musicdownloader/version.php";
+        final String versionUrl = "http://" + SERVER_ADDRESS + "/projects/musicdownloader/version.php";
         RequestQueue queue = Volley.newRequestQueue(activity);
         StringRequest request = new StringRequest(
                 Request.Method.GET,
@@ -42,12 +42,12 @@ public class ServerCommands {
                     public void onResponse(String response) {
                         try {
                             final JSONObject obj = new JSONObject(response);
-                            final String lastestUrl = "http://"+SERVER_ADDRESS+"/projects/musicdownloader/apks/"+obj.getString("name");
-                            if (Float.parseFloat(obj.getString("version")) > Float.parseFloat(activity.getPackageManager().getPackageInfo(activity.getPackageName(),0).versionName)) {
-                                final AlertDialog.Builder builder = new AlertDialog.Builder(new android.view.ContextThemeWrapper(activity,R.style.FooterPopupStyle));
-                                View view = View.inflate(new android.view.ContextThemeWrapper(activity,R.style.FooterPopupStyle), R.layout.dialog_changelog,null);
+                            final String lastestUrl = "http://" + SERVER_ADDRESS + "/projects/musicdownloader/apks/" + obj.getString("name");
+                            if (Float.parseFloat(obj.getString("version")) > Float.parseFloat(activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName)) {
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(new android.view.ContextThemeWrapper(activity, R.style.FooterPopupStyle));
+                                View view = View.inflate(new android.view.ContextThemeWrapper(activity, R.style.FooterPopupStyle), R.layout.dialog_changelog, null);
                                 WebView webView = (WebView) view.findViewById(R.id.website);
-                                webView.loadUrl("http://"+SERVER_ADDRESS+"/projects/musicdownloader/changelog.php?minver="+activity.getPackageManager().getPackageInfo(activity.getPackageName(),0).versionName);
+                                webView.loadUrl("http://" + SERVER_ADDRESS + "/projects/musicdownloader/changelog.php?minver=" + activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName);
                                 builder.setView(view);
                                 builder.setTitle("Aggiornamento disponibile!");
                                 builder.setPositiveButton("Aggiorna ora", new DialogInterface.OnClickListener() {
@@ -58,7 +58,7 @@ public class ServerCommands {
                                             request.setTitle("Aggiornamento di Music Downloader");
                                             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
                                             request.setAllowedOverRoaming(false);
-                                            request.setDestinationUri(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+Constants.FOLDER_HOME,obj.getString("name"))));
+                                            request.setDestinationUri(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Constants.FOLDER_HOME, obj.getString("name"))));
                                             request.setMimeType("application/vnd.android.package-archive");
                                             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                                             request.setVisibleInDownloadsUi(true);

@@ -16,25 +16,18 @@ import java.util.ArrayList;
  * Created by paolo on 21/04/17.
  */
 
-public class TopSongsResolverTask extends AsyncTask<Void,Void,ArrayList<Song>> {
+public class TopSongsResolverTask extends AsyncTask<Void, Void, ArrayList<Song>> {
 
-    private final String urlString = "http://pleer.net/en/gettopperiod?";
-    private final String target = "target1=e";
     public static final int TARGET_WEEK = 1;
     public static final int TARGET_3_MONTH = 2;
     public static final int TARGET_6_MONTH = 3;
     public static final int TARGET_YEAR = 4;
     public static final int TARGET_ALL = 5;
-
+    private final String urlString = "http://pleer.net/en/gettopperiod?";
+    private final String target = "target1=e";
     private final String end = "&target2=r1&select=e&page_ru=1";
 
     private TopSongsResolverInterface i;
-
-    public interface TopSongsResolverInterface {
-        void startSearch();
-        int getTarget();
-        void setResults(ArrayList<Song> songs);
-    }
 
     public TopSongsResolverTask(TopSongsResolverInterface i) {
         this.i = i;
@@ -50,7 +43,7 @@ public class TopSongsResolverTask extends AsyncTask<Void,Void,ArrayList<Song>> {
     protected ArrayList<Song> doInBackground(Void... params) {
         ArrayList<Song> songs = new ArrayList<>();
         try {
-            String url = urlString+target+i.getTarget()+end;
+            String url = urlString + target + i.getTarget() + end;
 
             Document doc = Jsoup.connect(url).get();
             Element element = doc.getElementById("search-results");
@@ -79,5 +72,13 @@ public class TopSongsResolverTask extends AsyncTask<Void,Void,ArrayList<Song>> {
     protected void onPostExecute(ArrayList<Song> songs) {
         super.onPostExecute(songs);
         i.setResults(songs);
+    }
+
+    public interface TopSongsResolverInterface {
+        void startSearch();
+
+        int getTarget();
+
+        void setResults(ArrayList<Song> songs);
     }
 }

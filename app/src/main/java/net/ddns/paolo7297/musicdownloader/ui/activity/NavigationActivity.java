@@ -64,6 +64,7 @@ import static net.ddns.paolo7297.musicdownloader.Constants.NOTIFICATION_OPEN;
 
 public class NavigationActivity extends AppCompatActivity {
 
+    private final static int REQ_CODE = 1;
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -77,11 +78,8 @@ public class NavigationActivity extends AppCompatActivity {
     private ProgressBar spinner;
     private Fragment f;
     private FirebaseAnalytics mFirebaseAnalytics;
-    private CacheManager cacheManager;
     //private AdView ads;
-
-    private final static int REQ_CODE = 1;
-
+    private CacheManager cacheManager;
     private String[] perms = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
@@ -106,7 +104,7 @@ public class NavigationActivity extends AppCompatActivity {
         pp = (DisablingImageButton) findViewById(R.id.play);
         next = (DisablingImageButton) findViewById(R.id.forward);
         spinner = (ProgressBar) findViewById(R.id.spinner);
-        spinner.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(),R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
+        spinner.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         //ads = (AdView) findViewById(R.id.ads);
         setSupportActionBar(toolbar);
@@ -117,7 +115,7 @@ public class NavigationActivity extends AppCompatActivity {
                 refreshPlayer();
             }
         });
-        
+
         playerUI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +131,7 @@ public class NavigationActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.top:
                         f = new TabManagerFragment();
-                        ((TabManagerFragment)f).setTabs(tabLayout);
+                        ((TabManagerFragment) f).setTabs(tabLayout);
                         tabLayout.setVisibility(View.VISIBLE);
                         break;
                     case R.id.search:
@@ -144,17 +142,20 @@ public class NavigationActivity extends AppCompatActivity {
                         f = new DownloadedSongsFragment();
                         tabLayout.setVisibility(View.GONE);
                         break;
-                    case R.id.settings: f = new PreferenceFragment();
+                    case R.id.settings:
+                        f = new PreferenceFragment();
                         tabLayout.setVisibility(View.GONE);
                         break;
-                    case R.id.playlists: f = new PlaylistsFragment();
+                    case R.id.playlists:
+                        f = new PlaylistsFragment();
                         tabLayout.setVisibility(View.GONE);
                         break;
-                    default: f = new Fragment();
+                    default:
+                        f = new Fragment();
                         tabLayout.setVisibility(View.GONE);
                         break;
                 }
-                fm.beginTransaction().replace(R.id.frame,f).commit();
+                fm.beginTransaction().replace(R.id.frame, f).commit();
                 drawerLayout.closeDrawer(Gravity.LEFT);
                 return true;
             }
@@ -162,7 +163,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         //View header = navigationView.getHeaderView(0);
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.openDrawer,R.string.closeDrawer) {
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.openDrawer, R.string.closeDrawer) {
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
@@ -176,7 +177,7 @@ public class NavigationActivity extends AppCompatActivity {
         };
 
         if (savedInstanceState == null) {
-            navigationView.getMenu().performIdentifierAction(R.id.search,0);
+            navigationView.getMenu().performIdentifierAction(R.id.search, 0);
             navigationView.setCheckedItem(R.id.search);
         }
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -185,7 +186,7 @@ public class NavigationActivity extends AppCompatActivity {
         checkFolders();
         checkForUpdates();
         setupPlayer();
-        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("ShowDisclaimer",true)) {
+        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean("ShowDisclaimer", true)) {
             showDisclaimer();
         }
         logUpdate();
@@ -278,10 +279,10 @@ public class NavigationActivity extends AppCompatActivity {
         String type = intent.getType();
         if (Intent.ACTION_SEND.equals(action) && type != null) {
             final ArrayList<String> ss = new ArrayList<>(Arrays.asList(intent.getStringExtra(Intent.EXTRA_TEXT).split(" ")));
-            if (ss.size()>1) {
+            if (ss.size() > 1) {
                 int i = 0;
                 while (i < ss.size()) {
-                    if ( !ss.get(i).startsWith("http")) {
+                    if (!ss.get(i).startsWith("http")) {
                         ss.remove(i);
                     } else {
                         i++;
@@ -303,20 +304,20 @@ public class NavigationActivity extends AppCompatActivity {
                 @Override
                 public void complete(String s) {
                     String res = s.toLowerCase()
-                            .replace("spotify web player - ","")
-                            .replace(" - youtube","")
-                            .replaceAll("-","")
-                            .replace("with lyrics","")
-                            .replace("lyrics","")
+                            .replace("spotify web player - ", "")
+                            .replace(" - youtube", "")
+                            .replaceAll("-", "")
+                            .replace("with lyrics", "")
+                            .replace("lyrics", "")
                             .replaceAll("\\s*\\([^\\)]*\\)\\s*", " ")
                             .replaceAll(" +", " ")
-                            .replaceAll("\"","")
+                            .replaceAll("\"", "")
                             .trim();
                     System.out.println(res);
                     setIntent(new Intent());
                     f = new SearchFragment();
                     ((SearchFragment) f).setQuery(res);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.frame,f).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.frame, f).commit();
                     tabLayout.setVisibility(View.GONE);
                     navigationView.setCheckedItem(R.id.search);
 
@@ -334,31 +335,31 @@ public class NavigationActivity extends AppCompatActivity {
         ArrayList<String> denied = new ArrayList<>();
         int i = 0;
         for (String s : perms) {
-            if (ContextCompat.checkSelfPermission(getApplicationContext(),s) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), s) != PackageManager.PERMISSION_GRANTED) {
                 denied.add(s);
             }
         }
         if (denied.size() > 0) {
-            ActivityCompat.requestPermissions(this,denied.toArray(new String[denied.size()]),REQ_CODE);
+            ActivityCompat.requestPermissions(this, denied.toArray(new String[denied.size()]), REQ_CODE);
         }
     }
 
     private void manualSetPerms() {
         Toast.makeText(this, "Per permettere all'applicazione di funzionare, è necessario concedere i permessi richiesti", Toast.LENGTH_LONG).show();
         Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package",getPackageName(),null);
+        Uri uri = Uri.fromParts("package", getPackageName(), null);
         i.setData(uri);
         finish();
         startActivity(i);
     }
 
-    private void checkFolders(){
-        File f1 = new File(Environment.getExternalStorageDirectory()+"/"+FOLDER_HOME+"/");
+    private void checkFolders() {
+        File f1 = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/");
         if (!f1.exists()) {
             f1.mkdirs();
         }
-        File f2 = new File(f1,"Apks");
-        if (! f2.exists()) {
+        File f2 = new File(f1, "Apks");
+        if (!f2.exists()) {
             f2.mkdirs();
         }
     }
@@ -371,7 +372,7 @@ public class NavigationActivity extends AppCompatActivity {
         c.add(Calendar.HOUR_OF_DAY,1);*/
         //if (c.before(c1)) {
         ServerCommands.checkUpdate(NavigationActivity.this);
-            //PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong(PREFERENCE_LAST_UPDATE,System.currentTimeMillis()).commit();
+        //PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putLong(PREFERENCE_LAST_UPDATE,System.currentTimeMillis()).commit();
         //}
         //UpdateServer.checkUpdate(NavigationActivity.this);
     }
@@ -437,10 +438,10 @@ public class NavigationActivity extends AppCompatActivity {
 
 
     private void showDisclaimer() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this,R.style.FooterPopupStyle));
-        View view = View.inflate(new ContextThemeWrapper(this,R.style.FooterPopupStyle),R.layout.dialog_disclaimer,null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.FooterPopupStyle));
+        View view = View.inflate(new ContextThemeWrapper(this, R.style.FooterPopupStyle), R.layout.dialog_disclaimer, null);
         final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
-        ((TextView) view.findViewById(R.id.neveragain)).setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.neveragain).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //checkBox.setChecked(!checkBox.isChecked());
@@ -453,7 +454,7 @@ public class NavigationActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (checkBox.isChecked()) {
-                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean("ShowDisclaimer",false).apply();
+                    PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean("ShowDisclaimer", false).apply();
                 }
             }
         });
@@ -470,12 +471,12 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     private void logUpdate() {
-        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("LastestVersion",BuildConfig.VERSION_NAME).equals(BuildConfig.VERSION_NAME)) {
+        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getString("LastestVersion", BuildConfig.VERSION_NAME).equals(BuildConfig.VERSION_NAME)) {
             Bundle bundle = new Bundle();
-            bundle.putString("app_update","app_update");
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN,bundle);
+            bundle.putString("app_update", "app_update");
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
         }
-        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LastestVersion",BuildConfig.VERSION_NAME).apply();
+        PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putString("LastestVersion", BuildConfig.VERSION_NAME).apply();
     }
 
     /*private void setupAds() {
@@ -501,14 +502,14 @@ public class NavigationActivity extends AppCompatActivity {
     }*/
 
     private void clearCache() {
-        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(Constants.CACHE_AUTODELETE,true)) {
-            int threshold = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt(Constants.CACHE_THRESHOLD,200);
+        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(Constants.CACHE_AUTODELETE, true)) {
+            int threshold = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt(Constants.CACHE_THRESHOLD, 200);
             long c = Long.MAX_VALUE;
             int i;
             /*for (File f :cacheManager.getSortedCachedSongs()) {
                 System.out.println(f.getName());
             }*/
-            if (cacheManager.getCachedSongsSize()>threshold) {
+            if (cacheManager.getCachedSongsSize() > threshold) {
                 Toast.makeText(this, "Cache ripulita, cancellate vecchie canzoni", Toast.LENGTH_LONG).show();
                 while (cacheManager.getCachedSongsSize() > threshold) {
                     cacheManager.getSortedCachedSongs().get(0).delete();
@@ -516,7 +517,6 @@ public class NavigationActivity extends AppCompatActivity {
             }
 
         }
-
 
 
     }

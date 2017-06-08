@@ -190,7 +190,7 @@ public class TopSongsFragment extends Fragment {
                                 ifc.transferTo(0, ifc.size(), ofc);
                                 orig.delete();
                                 NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
-                                builder.setSmallIcon(R.mipmap.ic_songshunter);
+                                builder.setSmallIcon(R.mipmap.ic_songhunter);
                                 Intent io = new Intent();
                                 io.setAction(android.content.Intent.ACTION_VIEW);
                                 io.setDataAndType(Uri.fromFile(dst), "audio/*");

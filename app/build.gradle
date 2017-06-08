@@ -1,22 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        config {
-            keyAlias 'alias'
-            keyPassword 'interista'
-            storeFile file('/Users/paolo/Documents/keystore.jks')
-            storePassword 'interista'
-        }
-    }
     compileSdkVersion 25
     buildToolsVersion '25.0.3'
     defaultConfig {
         applicationId "net.ddns.paolo7297.musicdownloader"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 9
-        versionName "1.1"
+        versionCode 10
+        versionName "1.11"
     }
     buildTypes {
         release {

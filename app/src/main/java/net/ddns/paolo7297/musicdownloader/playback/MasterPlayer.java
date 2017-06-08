@@ -282,7 +282,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     private void setupNotification() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
         //builder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-        builder.setSmallIcon(R.mipmap.ic_songshunter);
+        builder.setSmallIcon(R.mipmap.ic_songhunter);
         Intent i1 = new Intent();
         i1.setClass(context, NotificationMediaButtonsReceiver.class);
         i1.setAction(NOTIFICATION_PREV);

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SongsHunter</string>
+    <string name="app_name">SongHunter</string>
     <string name="openDrawer">Apertura drawer</string>
     <string name="closeDrawer">Chiusura drawer</string>
     <string name="perm">L\'applicazione necessita di potere scrivere nella memoria del dispositivo per potere salvare le canzoni</string>
@@ -43,7 +43,7 @@
     </string-array>
 
 
-    <string name="crash_dialog_title">SongsHunter ha riscontrato un problema</string>
+    <string name="crash_dialog_title">SongHunter ha riscontrato un problema</string>
     <string name="crash_dialog_text">Si è verificato un problema, cliccando OK potrai inviarmi una mail contenente tutti i dettagli riguardanti il crash.</string>
     <string name="crash_dialog_comment_prompt">Prova a descrivere cosa stavi facendo, potrebbe essere di aiuto!</string>
     <string name="crash_dialog_ok_toast">Grazie mille!</string>

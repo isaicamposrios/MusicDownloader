@@ -27,7 +27,7 @@ public class SongsEditActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
     private String song;
-    private EditText artist, title, album;
+    private EditText artist, title, album, genre, year, composer;
     private FloatingActionButton fab;
     private File songFile;
 
@@ -41,6 +41,9 @@ public class SongsEditActivity extends AppCompatActivity {
         title = (EditText) findViewById(R.id.title);
         artist = (EditText) findViewById(R.id.artist);
         album = (EditText) findViewById(R.id.album);
+        genre = (EditText) findViewById(R.id.genre);
+        year = (EditText) findViewById(R.id.year);
+        composer = (EditText) findViewById(R.id.composer);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         setSupportActionBar(toolbar);
         setTitle("Modifica");
@@ -55,6 +58,9 @@ public class SongsEditActivity extends AppCompatActivity {
                     title.setText(meta.getSongTitle());
                     artist.setText(meta.getArtist());
                     album.setText(meta.getAlbum());
+                    genre.setText(meta.getGenre());
+                    year.setText(meta.getYear());
+                    composer.setText(meta.getComposer());
 
                     fab.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -63,7 +69,14 @@ public class SongsEditActivity extends AppCompatActivity {
                                 meta.setSongTitle(title.getText().toString());
                             if (artist.getText() != null)
                                 meta.setArtist(artist.getText().toString());
-                            if (album.getText() != null) meta.setAlbum(album.getText().toString());
+                            if (album.getText() != null)
+                                meta.setAlbum(album.getText().toString());
+                            if (genre.getText() != null)
+                                meta.setGenre(genre.getText().toString());
+                            if (year.getText() != null)
+                                meta.setYear(year.getText().toString());
+                            if (composer.getText() != null)
+                                meta.setComposer(composer.getText().toString());
                             try {
                                 new MyID3().update(songFile, metadata, meta);
                                 finish();

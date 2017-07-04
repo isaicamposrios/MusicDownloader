@@ -102,6 +102,9 @@ public class TopSongsFragment extends Fragment {
                 final int p1 = position;
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 final View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.dialog_songinfo, parent, false);
+                v.findViewById(R.id.button_stream).setEnabled(false);
+                v.findViewById(R.id.button_download).setEnabled(false);
+                v.findViewById(R.id.button_addplaylist).setEnabled(false);
                 ((ProgressBar) v.findViewById(R.id.spinner)).getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
                 new ThumbnailsDownloaderTask(getContext().getApplicationContext(), new ThumbnailsDownloaderTask.ThumbnailsDownloaderInterface() {
                     @Override
@@ -124,6 +127,9 @@ public class TopSongsFragment extends Fragment {
                         }
                         v.findViewById(R.id.image).setVisibility(View.VISIBLE);
                         v.findViewById(R.id.spinner).setVisibility(View.GONE);
+                        v.findViewById(R.id.button_stream).setEnabled(true);
+                        v.findViewById(R.id.button_download).setEnabled(true);
+                        v.findViewById(R.id.button_addplaylist).setEnabled(true);
                     }
                 }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 ((TextView) v.findViewById(R.id.title)).setText(s.getName());

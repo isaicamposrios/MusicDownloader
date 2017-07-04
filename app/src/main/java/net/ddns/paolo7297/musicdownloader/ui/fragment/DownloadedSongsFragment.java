@@ -149,7 +149,7 @@ public class DownloadedSongsFragment extends Fragment {
         final AdapterView.AdapterContextMenuInfo menuInfo = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.share:
-                Uri uri = Uri.parse(results.get(menuInfo.position).getFile());
+                Uri uri = Uri.fromFile(new File(results.get(menuInfo.position).getFile()));
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("audio/mp3");
                 i.putExtra(Intent.EXTRA_STREAM, uri);

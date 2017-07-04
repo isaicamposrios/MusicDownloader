@@ -137,6 +137,9 @@ public class SearchFragment extends Fragment {
                 } else {
                     ((ImageView)v.findViewById(R.id.image)).setImageResource(R.drawable.ic_music_note_black_48dp);
                 }*/
+                v.findViewById(R.id.button_stream).setEnabled(false);
+                v.findViewById(R.id.button_download).setEnabled(false);
+                v.findViewById(R.id.button_addplaylist).setEnabled(false);
                 ((ProgressBar) v.findViewById(R.id.spinner)).getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
                 new ThumbnailsDownloaderTask(getContext().getApplicationContext(), new ThumbnailsDownloaderTask.ThumbnailsDownloaderInterface() {
                     @Override
@@ -159,6 +162,9 @@ public class SearchFragment extends Fragment {
                         }
                         v.findViewById(R.id.image).setVisibility(View.VISIBLE);
                         v.findViewById(R.id.spinner).setVisibility(View.GONE);
+                        v.findViewById(R.id.button_stream).setEnabled(true);
+                        v.findViewById(R.id.button_download).setEnabled(true);
+                        v.findViewById(R.id.button_addplaylist).setEnabled(true);
                     }
                 }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 ((TextView) v.findViewById(R.id.title)).setText(s.getName());

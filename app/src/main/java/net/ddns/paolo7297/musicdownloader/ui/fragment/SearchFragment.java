@@ -85,6 +85,7 @@ public class SearchFragment extends Fragment {
     private CacheManager cacheManager;
     private String querySongs = null;
     private DisablingImageButton prev, next, quality, ascdsc, sortmode;
+    private AlertDialog dialog;
 
     public SearchFragment() {
 
@@ -279,7 +280,8 @@ public class SearchFragment extends Fragment {
                     }
                 });
 
-                builder.show();
+                dialog = builder.show();
+
 
                 /**/
 
@@ -480,6 +482,22 @@ public class SearchFragment extends Fragment {
                 searchView.setQuery(query, true);
                 query = null;
             }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
         }
     }
 

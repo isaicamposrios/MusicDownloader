@@ -61,6 +61,7 @@ public class TopSongsFragment extends Fragment {
     private SearchAdapter adapter;
     private CacheManager cacheManager;
     private int target = TopSongsResolverTask.TARGET_WEEK;
+    private AlertDialog dialog;
 
     public TopSongsFragment() {
 
@@ -263,12 +264,28 @@ public class TopSongsFragment extends Fragment {
                     }
                 });
 
-                builder.show();
+                dialog = builder.show();
 
                 /**/
             }
         });
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
     }
 
     private void refreshResults() {

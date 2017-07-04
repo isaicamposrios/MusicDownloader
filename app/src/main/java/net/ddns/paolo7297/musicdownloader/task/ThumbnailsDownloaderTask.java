@@ -59,10 +59,15 @@ public class ThumbnailsDownloaderTask extends AsyncTask<Void, Void, Void> {
                 cacheManager.cacheUrl(s.getFile(), new CacheManager.CachingInterface() {
                     @Override
                     public void onCachingCompleted(File f) {
-                        mediaMetadataRetriever.setDataSource(f.getAbsolutePath());
-                        art = mediaMetadataRetriever.getEmbeddedPicture();
-                        completed = true;
-                        onPostExecute(null);
+                        try {
+                            mediaMetadataRetriever.setDataSource(f.getAbsolutePath());
+                            art = mediaMetadataRetriever.getEmbeddedPicture();
+                            completed = true;
+                            onPostExecute(null);
+                        } catch (IllegalArgumentException e) {
+
+                        }
+
                     }
                 });
             }
@@ -73,7 +78,8 @@ public class ThumbnailsDownloaderTask extends AsyncTask<Void, Void, Void> {
                 art = mediaMetadataRetriever.getEmbeddedPicture();
                 completed = true;
             } catch (RuntimeException e) {
-
+                art = null;
+                completed = true;
             }
         }
         return null;

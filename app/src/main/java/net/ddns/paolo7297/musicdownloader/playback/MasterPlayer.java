@@ -8,12 +8,12 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.ResultReceiver;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.NotificationCompat;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import net.ddns.paolo7297.musicdownloader.CacheManager;
@@ -60,11 +60,11 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     private CacheManager cacheManager;
 
     private MasterPlayer(Context c) {
-        Log.d("PLAYER", "Costruttore");
         context = c;
         player = new MediaPlayer();
         player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
+        player.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         cacheManager = CacheManager.getInstance(c);
 
@@ -79,7 +79,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void play() {
-        Log.d("PLAYER", "Play");
         int result = audioManager.requestAudioFocus(this,
                 // Use the music stream.
                 AudioManager.STREAM_MUSIC,
@@ -95,7 +94,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void pause() {
-        Log.d("PLAYER", "Pause");
         if (status == STATUS_PLAYING) {
             player.pause();
             status = STATUS_PAUSED;
@@ -106,7 +104,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void toggle() {
-        Log.d("PLAYER", "Toggle");
         if (status == STATUS_PLAYING) {
             pause();
         } else {
@@ -116,7 +113,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void stop() {
-        Log.d("PLAYER", "Stop");
         if (status == STATUS_PLAYING || status == STATUS_PAUSED) {
             player.stop();
             status = STATUS_STOPPED;
@@ -125,7 +121,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void next() {
-        Log.d("PLAYER", "Next");
         index++;
         if (index >= songs.size()) {
             index = 0;
@@ -134,7 +129,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void prev() {
-        Log.d("PLAYER", "Prev");
         index--;
         if (index < 0) {
             index = songs.size() - 1;
@@ -143,7 +137,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void setup(Song[] files, int index) {
-        Log.d("PLAYER", "Setup");
         songs = new ArrayList<>(Arrays.asList(files));
         this.index = index;
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -151,7 +144,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void setSong(final int index) {
-        Log.d("PLAYER", "Set song " + songs.get(index).toString());
         try {
             if (!isUrl(songs.get(index).getFile())) {
                 if (!new File(songs.get(index).getFile()).exists()) {
@@ -162,7 +154,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
 
             if (cacheManager.isUrl(songs.get(index).getFile())) {
                 if (!cacheManager.isInCache(songs.get(index).getFile())) {
-                    Log.e("CACHE", "Caching...");
                     cacheManager.cacheUrl(songs.get(index).getFile(), new CacheManager.CachingInterface() {
                         @Override
                         public void onCachingCompleted(File f) {
@@ -186,7 +177,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
                     });
                 } else {
                     try {
-                        Log.e("CACHE", "Already In cache, Loaded");
                         File f = cacheManager.retrieveFile(songs.get(index).getFile());
                         player.setDataSource(f.getAbsolutePath());
                         //title = songs.get(index);
@@ -205,7 +195,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
                     }
                 }
             } else {
-                Log.e("CACHE", "Local file");
                 player.setDataSource(songs.get(index).getFile());
 
                 //title = songs.get(index);
@@ -227,7 +216,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public MPInfo getInfos() {
-        Log.d("PLAYER", "Get Info");
         if (status == STATUS_NEED_CONFIGURATION) {
             return new MPInfo(0, 0, null, null, status);
         } else {
@@ -242,25 +230,21 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public boolean isPlaying() {
-        Log.d("PLAYER", "Get Play status");
         return status == STATUS_PLAYING;
     }
 
     public void setCallback(MasterPlayerTrackChange callback) {
-        Log.d("PLAYER", "Set Callback");
         this.callback = callback;
     }
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-        Log.d("PLAYER", "ON PREPARE");
         status = STATUS_OK;
         play();
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        Log.d("PLAYER", "ON COMPLETION");
         next();
     }
 
@@ -332,7 +316,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
             public boolean onMediaButtonEvent(Intent mediaButtonEvent) {
                 KeyEvent k = mediaButtonEvent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
                 if (k.getAction() == KeyEvent.ACTION_UP) {
-                    Log.e("PLAYER", k.toString());
                     switch (k.getKeyCode()) {
                         case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                             //toggle();

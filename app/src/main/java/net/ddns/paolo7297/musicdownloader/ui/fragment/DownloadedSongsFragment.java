@@ -84,39 +84,54 @@ public class DownloadedSongsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        new DownloadedSongsLoaderTask(new DownloadedSongsLoaderTask.DownloadedSongLoaderInterface() {
-            @Override
-            public void prepareUI() {
-                listView.setVisibility(View.GONE);
-                progressbar.setVisibility(View.VISIBLE);
-            }
+        if (results == null || results.size() == 0) {
+            new DownloadedSongsLoaderTask(new DownloadedSongsLoaderTask.DownloadedSongLoaderInterface() {
+                @Override
+                public void prepareUI() {
+                    listView.setVisibility(View.GONE);
+                    progressbar.setVisibility(View.VISIBLE);
+                }
 
-            @Override
-            public void updateFiles(ArrayList<Song> al) {
-                results.clear();
-                Song[] sr = al.toArray(new Song[al.size()]);
-                Arrays.sort(sr, new Comparator<Song>() {
-                    @Override
-                    public int compare(Song lhs, Song rhs) {
-                        return lhs.getName().compareTo(rhs.getName());
-                    }
-                });
-                results.addAll(Arrays.asList(sr));
-                adapter.notifyDataSetChanged();
-                listView.setVisibility(View.VISIBLE);
-                progressbar.setVisibility(View.GONE);
-            }
+                @Override
+                public void updateFiles(ArrayList<Song> al) {
+                    results.clear();
+                    Song[] sr = al.toArray(new Song[al.size()]);
+                    Arrays.sort(sr, new Comparator<Song>() {
+                        @Override
+                        public int compare(Song lhs, Song rhs) {
+                            return lhs.getName().compareTo(rhs.getName());
+                        }
+                    });
+                    results.addAll(Arrays.asList(sr));
+                    adapter.notifyDataSetChanged();
+                    listView.setVisibility(View.VISIBLE);
+                    progressbar.setVisibility(View.GONE);
+                }
 
-            @Override
-            public ArrayList<File> getFiles() {
-                return new ArrayList<>(Arrays.asList(new File(Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/").listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File pathname) {
-                        return pathname.getName().endsWith(".mp3");
-                    }
-                })));
+                @Override
+                public ArrayList<File> getFiles() {
+                    return new ArrayList<>(Arrays.asList(new File(Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/").listFiles(new FileFilter() {
+                        @Override
+                        public boolean accept(File pathname) {
+                            return pathname.getName().endsWith(".mp3");
+                        }
+                    })));
+                }
+            }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        } else {
+            for (int i = 0; i < results.size(); i++) {
+                if (!new File(results.get(i).getFile()).exists()) {
+                    results.remove(i);
+                    i--;
+                    adapter.notifyDataSetChanged();
+                }
             }
-        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override

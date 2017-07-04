@@ -4,10 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation_drawer"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
-    app:elevation="7dp"
-    android:fitsSystemWindows="true" >
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    app:elevation="7dp">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -23,13 +23,13 @@
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tablayout"
-                android:background="@color/colorPrimary"
-                app:tabTextColor="@android:color/white"
-                app:tabSelectedTextColor="@android:color/white"
-                app:tabIndicatorColor="@android:color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tabMode="scrollable"/>
+                android:background="@color/colorPrimary"
+                app:tabIndicatorColor="@android:color/white"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@android:color/white"
+                app:tabTextColor="@android:color/white" />
         </android.support.design.widget.AppBarLayout>
 
         <include layout="@layout/navigation_content"/>
@@ -46,84 +46,85 @@
 
 
         <LinearLayout
+            android:id="@+id/playerui"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_gravity="bottom"
-            android:id="@+id/playerui"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:elevation="5dp"
+            android:orientation="vertical">
             <!--<View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:background="@color/colorPrimary"
                 android:backgroundTint="@color/colorPrimary" />-->
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/title"
-                android:text="Title"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textSize="@dimen/text_title"
-                android:maxLines="1"
-                android:ellipsize="end"/>
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/artist"
-                android:text="Artist"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:textSize="@dimen/text_subtitle"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
                 android:maxLines="1"
-                android:ellipsize="end"/>
+                android:text="Title"
+                android:textSize="@dimen/text_title" />
+            <TextView
+                android:id="@+id/artist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="Artist"
+                android:textSize="@dimen/text_subtitle" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="10dp" >
+                android:layout_margin="10dp"
+                android:orientation="horizontal">
 
                 <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
+                    android:id="@+id/rewind"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/rewind"
-                    android:elevation="5dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
+                    android:elevation="5dp"
                     android:scaleType="fitCenter"
                     android:src="@mipmap/ic_rewind_circle"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
                     <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
+                        android:id="@+id/play"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:id="@+id/play"
-                        android:elevation="5dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
+                        android:elevation="5dp"
                         android:scaleType="fitCenter"
                         android:src="@mipmap/ic_play_circle"/>
                     <ProgressBar
+                        android:id="@+id/spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true"
-                        android:id="@+id/spinner"
                         android:gravity="center"
                         android:visibility="gone"/>
                 </LinearLayout>
 
                 <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
+                    android:id="@+id/forward"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/forward"
-                    android:elevation="5dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
+                    android:elevation="5dp"
                     android:scaleType="fitCenter"
                     android:src="@mipmap/ic_forward_circle"/>
 

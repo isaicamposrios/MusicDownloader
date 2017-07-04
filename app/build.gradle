@@ -7,15 +7,15 @@ android {
         applicationId "net.ddns.paolo7297.musicdownloader"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 10
-        versionName "1.11"
+        versionCode 12
+        versionName "1.13"
     }
     buildTypes {
         debug {
             minifyEnabled false
         }
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }

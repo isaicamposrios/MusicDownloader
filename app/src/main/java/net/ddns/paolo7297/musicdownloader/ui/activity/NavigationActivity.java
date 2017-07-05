@@ -119,7 +119,9 @@ public class NavigationActivity extends AppCompatActivity {
         playerUI.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Arriverà anche una UI per questo poveretto!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Arriverà anche una UI per questo poveretto!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), PlayerActivity.class);
+                startActivity(intent);
             }
         });
 

@@ -29,7 +29,6 @@ public class DisablingImageButton extends android.support.v7.widget.AppCompatIma
 
         Drawable background = getBackground();
         Drawable drawable = getDrawable();
-
         if (enabled) {
             if (background != null)
                 background.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);

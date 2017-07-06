@@ -24,7 +24,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -109,12 +108,12 @@ public class NavigationActivity extends AppCompatActivity {
         //ads = (AdView) findViewById(R.id.ads);
         setSupportActionBar(toolbar);
 
-        masterPlayer.setCallback(new MasterPlayer.MasterPlayerTrackChange() {
+        /*masterPlayer.setCallback(new MasterPlayer.MasterPlayerTrackChange() {
             @Override
             public void OnTrackChange() {
                 refreshPlayer();
             }
-        });
+        });*/
 
         playerUI.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -276,6 +275,13 @@ public class NavigationActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        masterPlayer.setCallback(new MasterPlayer.MasterPlayerTrackChange() {
+            @Override
+            public void OnTrackChange() {
+                refreshPlayer();
+            }
+        });
+        refreshPlayer();
         Intent intent = getIntent();
         String action = intent.getAction();
         String type = intent.getType();
@@ -329,8 +335,15 @@ public class NavigationActivity extends AppCompatActivity {
             if (drawerLayout != null) {
                 drawerLayout.openDrawer(Gravity.LEFT);
             }
+        } else {
+            drawerLayout.closeDrawer(Gravity.LEFT);
         }
         //refreshAds();
+        if (f != null && f instanceof TabManagerFragment) {
+            tabLayout.setVisibility(View.VISIBLE);
+        } else {
+            tabLayout.setVisibility(View.GONE);
+        }
     }
 
     private void checkPerms(String[] perms) {
@@ -440,8 +453,8 @@ public class NavigationActivity extends AppCompatActivity {
 
 
     private void showDisclaimer() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.FooterPopupStyle));
-        View view = View.inflate(new ContextThemeWrapper(this, R.style.FooterPopupStyle), R.layout.dialog_disclaimer, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = View.inflate(this, R.layout.dialog_disclaimer, null);
         final CheckBox checkBox = (CheckBox) view.findViewById(R.id.checkbox);
         view.findViewById(R.id.neveragain).setOnClickListener(new View.OnClickListener() {
             @Override

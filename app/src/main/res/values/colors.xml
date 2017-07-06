@@ -6,6 +6,8 @@
     <color name="colorPrimaryDark">#1E88E5</color>-->
     <color name="colorPrimary">#D90000</color>
     <color name="colorPrimaryDark">#BB0006</color>
-
+    <color name="colorBackground">#212121</color>
     <color name="colorAccent">#FFFFFF</color>
+    <color name="colorTextPrimary">#DDFFFFFF</color>
+    <color name="colorTextSecondary">#B2FFFFFF</color>
 </resources>

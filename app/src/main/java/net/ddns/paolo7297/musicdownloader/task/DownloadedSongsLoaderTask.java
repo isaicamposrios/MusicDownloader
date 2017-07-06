@@ -43,9 +43,7 @@ public class DownloadedSongsLoaderTask extends AsyncTask<Void, Void, Void> {
                     "",
                     Integer.parseInt(metaRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_BITRATE)) / 1000 + " Kbps"
             ));
-
         }
-
         return null;
     }
 

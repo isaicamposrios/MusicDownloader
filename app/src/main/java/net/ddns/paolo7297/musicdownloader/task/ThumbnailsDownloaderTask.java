@@ -45,7 +45,7 @@ public class ThumbnailsDownloaderTask extends AsyncTask<Void, Void, Void> {
         final MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
         if (cacheManager.isUrl(s.getFile())) {
             if (cacheManager.isInCache(s.getFile())) {
-                Log.e("CACHE", "Already In cache, Loaded");
+                Log.i("CACHE", "Already In cache, Loaded");
                 File f = cacheManager.retrieveFile(s.getFile());
                 try {
                     mediaMetadataRetriever.setDataSource(f.getAbsolutePath());
@@ -55,7 +55,7 @@ public class ThumbnailsDownloaderTask extends AsyncTask<Void, Void, Void> {
 
                 }
             } else {
-                Log.e("CACHE", "Caching...");
+                Log.i("CACHE", "Caching...");
                 cacheManager.cacheUrl(s.getFile(), new CacheManager.CachingInterface() {
                     @Override
                     public void onCachingCompleted(File f) {
@@ -72,7 +72,7 @@ public class ThumbnailsDownloaderTask extends AsyncTask<Void, Void, Void> {
                 });
             }
         } else {
-            Log.e("CACHE", "Local file");
+            Log.i("CACHE", "Local file");
             try {
                 mediaMetadataRetriever.setDataSource(s.getFile(), new HashMap<String, String>());
                 art = mediaMetadataRetriever.getEmbeddedPicture();

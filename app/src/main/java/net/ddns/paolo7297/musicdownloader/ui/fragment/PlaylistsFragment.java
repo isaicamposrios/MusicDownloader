@@ -10,7 +10,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,7 +51,7 @@ public class PlaylistsFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent i = new Intent(getContext(), PlaylistActivity.class);
+                Intent i = new Intent(getActivity(), PlaylistActivity.class);
                 i.putExtra("playlist", playlists.get(position).getName());
                 startActivity(i);
             }
@@ -62,7 +61,7 @@ public class PlaylistsFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final EditText editText = new EditText(new ContextThemeWrapper(getContext(), R.style.FooterPopupStyle));
+                final EditText editText = new EditText(getActivity());
                 editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("Nuova playlist");

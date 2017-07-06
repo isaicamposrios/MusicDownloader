@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp">
+        android:layout_margin="5dp"
+        android:orientation="horizontal">
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:orientation="horizontal"
             android:padding="5dp">
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true" />
             <ProgressBar
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
@@ -24,78 +26,70 @@
                 android:visibility="gone" />
         </LinearLayout>
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="5dp">
+            android:layout_margin="5dp"
+            android:orientation="vertical">
             <TextView
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
                 android:textSize="20sp"/>
             <TextView
                 android:id="@+id/artist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
                 android:textSize="18sp"/>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp">
+        android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Dimensione: "
-            android:textStyle="bold"
-            android:textColor="@android:color/black"/>
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/size"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp">
+        android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Bitrate: "
-            android:textStyle="bold"
-            android:textColor="@android:color/black"/>
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/bitrate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
-        android:layout_marginBottom="5dp">
+        android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Durata: "
-            android:textStyle="bold"
-            android:textColor="@android:color/black"/>
+            android:textStyle="bold" />
         <TextView
             android:id="@+id/time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/black" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
     <!--<View
         android:layout_width="match_parent"
@@ -105,11 +99,11 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:backgroundTint="@color/colorPrimary"
         android:orientation="horizontal"
         android:paddingLeft="5dp"
-        android:paddingRight="5dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:background="@color/colorPrimary">
+        android:paddingRight="5dp">
 
         <!--<Button
             android:layout_width="wrap_content"
@@ -141,42 +135,42 @@
             android:textColor="@android:color/black"
             style="?android:attr/buttonBarButtonStyle" />-->
         <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
+            android:id="@+id/button_stream"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button_stream"
-            android:src="@drawable/ic_playlist_play_white_48dp"
-            android:elevation="5dp"
+            android:layout_margin="5dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:elevation="5dp"
             android:scaleType="fitCenter"
-            android:layout_margin="5dp"/>
+            android:src="@drawable/ic_playlist_play_white_48dp" />
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
 
         <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
+            android:id="@+id/button_download"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button_download"
-            android:src="@drawable/ic_file_download_white_48dp"
-            android:elevation="5dp"
+            android:layout_margin="5dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:elevation="5dp"
             android:scaleType="fitCenter"
-            android:layout_margin="5dp"/>
+            android:src="@drawable/ic_file_download_white_48dp" />
         <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />
 
         <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
+            android:id="@+id/button_addplaylist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/button_addplaylist"
-            android:src="@drawable/ic_playlist_add_white_48dp"
-            android:elevation="5dp"
+            android:layout_margin="5dp"
             android:background="?attr/selectableItemBackgroundBorderless"
+            android:elevation="5dp"
             android:scaleType="fitCenter"
-            android:layout_margin="5dp"/>
+            android:src="@drawable/ic_playlist_add_white_48dp" />
 
     </LinearLayout>
 

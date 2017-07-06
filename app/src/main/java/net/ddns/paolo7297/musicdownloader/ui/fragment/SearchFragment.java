@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -149,7 +150,7 @@ public class SearchFragment extends Fragment {
 
                     @Override
                     public void startDownload() {
-                        v.findViewById(R.id.image).setVisibility(GONE);
+                        v.findViewById(R.id.image).setVisibility(View.GONE);
                         v.findViewById(R.id.spinner).setVisibility(View.VISIBLE);
                     }
 
@@ -158,7 +159,7 @@ public class SearchFragment extends Fragment {
                         if (b != null) {
                             ((ImageView) v.findViewById(R.id.image)).setImageBitmap(b);
                         } else {
-                            ((ImageView) v.findViewById(R.id.image)).setImageResource(R.mipmap.ic_song_red);
+                            ((ImageView) v.findViewById(R.id.image)).setImageResource(R.drawable.logo_red_white);
                         }
                         v.findViewById(R.id.image).setVisibility(View.VISIBLE);
                         v.findViewById(R.id.spinner).setVisibility(View.GONE);
@@ -208,7 +209,7 @@ public class SearchFragment extends Fragment {
                                 FileChannel ifc = new FileInputStream(orig).getChannel();
                                 FileChannel ofc = new FileOutputStream(dst).getChannel();
                                 ifc.transferTo(0, ifc.size(), ofc);
-                                orig.delete();
+                                orig.deleteOnExit();
                                 NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
                                 builder.setSmallIcon(R.mipmap.ic_songhunter);
                                 Intent io = new Intent();
@@ -222,6 +223,17 @@ public class SearchFragment extends Fragment {
                                 Notification notification = builder.build();
                                 NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
                                 notificationManager.notify(s.getLength(), notification);
+                                MediaScannerConnection.scanFile(
+                                        getActivity(),
+                                        new String[]{s.getFile()},
+                                        null,
+                                        new MediaScannerConnection.OnScanCompletedListener() {
+                                            @Override
+                                            public void onScanCompleted(String path, Uri uri) {
+
+                                            }
+                                        }
+                                );
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

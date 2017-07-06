@@ -140,6 +140,14 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         songs = new ArrayList<>(Arrays.asList(files));
         this.index = index;
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        /*for (final Song s: files) {
+            if (cacheManager.isUrl(s.getFile())) {
+                if (cacheManager.isInCache(s.getFile())) {
+                    File f = cacheManager.retrieveFile(s.getFile());
+                    if (f != null) s.setFile(f.getAbsolutePath());
+                }
+            }
+        }*/
         setSong(index);
     }
 
@@ -154,16 +162,18 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
 
             if (cacheManager.isUrl(songs.get(index).getFile())) {
                 if (!cacheManager.isInCache(songs.get(index).getFile())) {
+                    status = STATUS_PREPARING;
                     cacheManager.cacheUrl(songs.get(index).getFile(), new CacheManager.CachingInterface() {
                         @Override
                         public void onCachingCompleted(File f) {
                             try {
+                                player.reset();
                                 player.setDataSource(f.getAbsolutePath());
                                 //title = songs.get(index);
                                 //artist = songs.get(index);
                                 //setupNotification();
                                 player.prepareAsync();
-                                status = STATUS_PREPARING;
+
                                 if (callback != null) callback.OnTrackChange();
 
                                 mediaSession.setMetadata(new MediaMetadataCompat.Builder()
@@ -217,14 +227,15 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
 
     public MPInfo getInfos() {
         if (status == STATUS_NEED_CONFIGURATION) {
-            return new MPInfo(0, 0, null, null, status);
+            return new MPInfo(0, 0, null, null, status, null);
         } else {
             return new MPInfo(
                     status == STATUS_PREPARING ? 0 : player.getCurrentPosition(),
                     status == STATUS_PREPARING ? 0 : player.getDuration(),
                     songs.get(index).getName(),
                     songs.get(index).getArtist(),
-                    status
+                    status,
+                    songs.get(index).getFile()
             );
         }
     }
@@ -400,6 +411,14 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         return s1.startsWith("http://") || s1.startsWith("https://");
     }
 
+    public void seek(int millis) {
+        player.seekTo(millis);
+    }
+
+    public int getIndex() {
+        return index;
+    }
+
     public interface MasterPlayerTrackChange {
         void OnTrackChange();
     }
@@ -409,13 +428,15 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         private String title;
         private String artist;
         private int status;
+        private String file;
 
-        public MPInfo(long duration, long totalDuration, String title, String artist, int status) {
+        public MPInfo(long duration, long totalDuration, String title, String artist, int status, String file) {
             this.duration = duration;
             this.totalDuration = totalDuration;
             this.title = title;
             this.artist = artist;
             this.status = status;
+            this.file = file;
         }
 
         public long getDuration() {
@@ -436,6 +457,10 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
 
         public int getStatus() {
             return status;
+        }
+
+        public String getFile() {
+            return file;
         }
     }
 }

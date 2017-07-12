@@ -4,7 +4,7 @@
     <string name="closeDrawer">Chiusura drawer</string>
     <string name="perm">L\'applicazione necessita di potere scrivere nella memoria del dispositivo per potere salvare le canzoni</string>
     <string name="deny">L\'app non funzionerà correttamente</string>
-    <string name="disclaimer">Applicazione create per scaricare canzoni da http://pleer.net.\nUtilizza una grande quantità di dati, quindi non è consigliato utilizzarla con i dati mobili.\nVieni a scoprire altri miei progetti su http://paolo7297.ddns.net/</string>
+    <string name="disclaimer">Applicazione create per scaricare canzoni da http://pleer.net.\nViene consigliato l\'utilizzo di questa app con Wifi.\nVieni a scoprire altri miei progetti su http://paolo7297.ddns.net/</string>
 
     <string name="pref_disclaimer">ShowDisclaimer</string>
 

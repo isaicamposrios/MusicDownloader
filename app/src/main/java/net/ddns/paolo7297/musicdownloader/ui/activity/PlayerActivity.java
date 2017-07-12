@@ -8,6 +8,8 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -84,7 +86,29 @@ public class PlayerActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (cacheManager.isUrl(masterPlayer.getInfos().getFile())) {
+            getMenuInflater().inflate(R.menu.player, menu);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.download:
+                cacheManager.download(masterPlayer.getSong());
+                return true;
+            default:
+                return false;
+        }
+    }
+
     private void refreshplayer() {
+        invalidateOptionsMenu();
         final MasterPlayer.MPInfo info = masterPlayer.getInfos();
         if (info.getStatus() != MasterPlayer.STATUS_NEED_CONFIGURATION) {
             setTitle(info.getTitle());
@@ -124,6 +148,7 @@ public class PlayerActivity extends AppCompatActivity {
             pp.setImageResource(R.drawable.controller_single_play);
         }
     }
+
 
     private void setupPlayer() {
 

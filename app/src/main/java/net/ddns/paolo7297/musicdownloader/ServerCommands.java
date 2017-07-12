@@ -44,8 +44,8 @@ public class ServerCommands {
                             final JSONObject obj = new JSONObject(response);
                             final String lastestUrl = "http://" + SERVER_ADDRESS + "/projects/musicdownloader/apks/" + obj.getString("name");
                             if (Float.parseFloat(obj.getString("version")) > Float.parseFloat(activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName)) {
-                                final AlertDialog.Builder builder = new AlertDialog.Builder(new android.view.ContextThemeWrapper(activity, R.style.FooterPopupStyle));
-                                View view = View.inflate(new android.view.ContextThemeWrapper(activity, R.style.FooterPopupStyle), R.layout.dialog_changelog, null);
+                                final AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                                View view = View.inflate(activity, R.layout.dialog_changelog, null);
                                 WebView webView = (WebView) view.findViewById(R.id.website);
                                 webView.loadUrl("http://" + SERVER_ADDRESS + "/projects/musicdownloader/changelog.php?minver=" + activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName);
                                 builder.setView(view);
@@ -55,7 +55,7 @@ public class ServerCommands {
                                     public void onClick(DialogInterface dialog, int which) {
                                         try {
                                             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(lastestUrl));
-                                            request.setTitle("Aggiornamento di Music Downloader");
+                                            request.setTitle("Aggiornamento di SongHunter");
                                             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
                                             request.setAllowedOverRoaming(false);
                                             request.setDestinationUri(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Constants.FOLDER_HOME, obj.getString("name"))));

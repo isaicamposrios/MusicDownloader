@@ -48,9 +48,9 @@ public class Song {
         return page;
     }*/
 
-    public void setFile(String file) {
+    /*public void setFile(String file) {
         this.file = file;
-    }
+    }*/
 
     public String getBitrate() {
         return bitrate;

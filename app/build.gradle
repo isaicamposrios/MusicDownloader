@@ -7,8 +7,8 @@ android {
         applicationId "net.ddns.paolo7297.musicdownloader"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 13
-        versionName "1.20"
+        versionCode 14
+        versionName "1.21"
     }
     buildTypes {
         debug {

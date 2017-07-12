@@ -151,80 +151,6 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         setSong(index);
     }
 
-    public void setSong(final int index) {
-        try {
-            if (!isUrl(songs.get(index).getFile())) {
-                if (!new File(songs.get(index).getFile()).exists()) {
-                    songs.remove(index);
-                }
-            }
-            player.reset();
-
-            if (cacheManager.isUrl(songs.get(index).getFile())) {
-                if (!cacheManager.isInCache(songs.get(index).getFile())) {
-                    status = STATUS_PREPARING;
-                    cacheManager.cacheUrl(songs.get(index).getFile(), new CacheManager.CachingInterface() {
-                        @Override
-                        public void onCachingCompleted(File f) {
-                            try {
-                                player.reset();
-                                player.setDataSource(f.getAbsolutePath());
-                                //title = songs.get(index);
-                                //artist = songs.get(index);
-                                //setupNotification();
-                                player.prepareAsync();
-
-                                if (callback != null) callback.OnTrackChange();
-
-                                mediaSession.setMetadata(new MediaMetadataCompat.Builder()
-                                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songs.get(index).getName())
-                                        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, songs.get(index).getArtist()).build());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                status = STATUS_NEED_CONFIGURATION;
-                            }
-                        }
-                    });
-                } else {
-                    try {
-                        File f = cacheManager.retrieveFile(songs.get(index).getFile());
-                        player.setDataSource(f.getAbsolutePath());
-                        //title = songs.get(index);
-                        //artist = songs.get(index);
-                        //setupNotification();
-                        player.prepareAsync();
-                        status = STATUS_PREPARING;
-                        if (callback != null) callback.OnTrackChange();
-
-                        mediaSession.setMetadata(new MediaMetadataCompat.Builder()
-                                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songs.get(index).getName())
-                                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, songs.get(index).getArtist()).build());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        status = STATUS_NEED_CONFIGURATION;
-                    }
-                }
-            } else {
-                player.setDataSource(songs.get(index).getFile());
-
-                //title = songs.get(index);
-                //artist = songs.get(index);
-                //setupNotification();
-                player.prepareAsync();
-                status = STATUS_PREPARING;
-                if (callback != null) callback.OnTrackChange();
-
-                mediaSession.setMetadata(new MediaMetadataCompat.Builder()
-                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songs.get(index).getName())
-                        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, songs.get(index).getArtist()).build());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            status = STATUS_NEED_CONFIGURATION;
-        }
-
-    }
-
     public MPInfo getInfos() {
         if (status == STATUS_NEED_CONFIGURATION) {
             return new MPInfo(0, 0, null, null, status, null);
@@ -418,6 +344,85 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     public int getIndex() {
         return index;
     }
+
+    public Song getSong() {
+        return songs.get(index);
+    }
+
+    public void setSong(final int index) {
+        try {
+            if (!isUrl(songs.get(index).getFile())) {
+                if (!new File(songs.get(index).getFile()).exists()) {
+                    songs.remove(index);
+                }
+            }
+            player.reset();
+            player.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
+            if (cacheManager.isUrl(songs.get(index).getFile())) {
+                if (!cacheManager.isInCache(songs.get(index).getFile())) {
+                    status = STATUS_PREPARING;
+                    cacheManager.cacheUrl(songs.get(index).getFile(), new CacheManager.CachingInterface() {
+                        @Override
+                        public void onCachingCompleted(File f) {
+                            try {
+                                player.reset();
+                                player.setDataSource(f.getAbsolutePath());
+                                //title = songs.get(index);
+                                //artist = songs.get(index);
+                                //setupNotification();
+                                player.prepareAsync();
+
+                                if (callback != null) callback.OnTrackChange();
+
+                                mediaSession.setMetadata(new MediaMetadataCompat.Builder()
+                                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songs.get(index).getName())
+                                        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, songs.get(index).getArtist()).build());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                status = STATUS_NEED_CONFIGURATION;
+                            }
+                        }
+                    });
+                } else {
+                    try {
+                        File f = cacheManager.retrieveFile(songs.get(index).getFile());
+                        player.setDataSource(f.getAbsolutePath());
+                        //title = songs.get(index);
+                        //artist = songs.get(index);
+                        //setupNotification();
+                        player.prepareAsync();
+                        status = STATUS_PREPARING;
+                        if (callback != null) callback.OnTrackChange();
+
+                        mediaSession.setMetadata(new MediaMetadataCompat.Builder()
+                                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songs.get(index).getName())
+                                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, songs.get(index).getArtist()).build());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        status = STATUS_NEED_CONFIGURATION;
+                    }
+                }
+            } else {
+                player.setDataSource(songs.get(index).getFile());
+
+                //title = songs.get(index);
+                //artist = songs.get(index);
+                //setupNotification();
+                player.prepareAsync();
+                status = STATUS_PREPARING;
+                if (callback != null) callback.OnTrackChange();
+
+                mediaSession.setMetadata(new MediaMetadataCompat.Builder()
+                        .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songs.get(index).getName())
+                        .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, songs.get(index).getArtist()).build());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            status = STATUS_NEED_CONFIGURATION;
+        }
+
+    }
+
 
     public interface MasterPlayerTrackChange {
         void OnTrackChange();

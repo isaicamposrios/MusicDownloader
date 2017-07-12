@@ -1,29 +1,20 @@
 package net.ddns.paolo7297.musicdownloader.ui.fragment;
 
-import android.app.DownloadManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.NotificationCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.SearchView;
@@ -39,7 +30,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.ddns.paolo7297.musicdownloader.CacheManager;
 import net.ddns.paolo7297.musicdownloader.R;
@@ -50,20 +40,13 @@ import net.ddns.paolo7297.musicdownloader.placeholder.Song;
 import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
 import net.ddns.paolo7297.musicdownloader.playback.PlaylistDBHelper;
 import net.ddns.paolo7297.musicdownloader.task.QueryResolverTask;
-import net.ddns.paolo7297.musicdownloader.task.ThumbnailsDownloaderTask;
 import net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.content.Context.SEARCH_SERVICE;
 import static android.view.View.GONE;
-import static net.ddns.paolo7297.musicdownloader.Constants.FOLDER_HOME;
 
 /**
  * Created by paolo on 01/11/16.
@@ -138,7 +121,7 @@ public class SearchFragment extends Fragment {
                 } else {
                     ((ImageView)v.findViewById(R.id.image)).setImageResource(R.drawable.ic_music_note_black_48dp);
                 }*/
-                v.findViewById(R.id.button_stream).setEnabled(false);
+                /*v.findViewById(R.id.button_stream).setEnabled(false);
                 v.findViewById(R.id.button_download).setEnabled(false);
                 v.findViewById(R.id.button_addplaylist).setEnabled(false);
                 ((ProgressBar) v.findViewById(R.id.spinner)).getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
@@ -167,7 +150,8 @@ public class SearchFragment extends Fragment {
                         v.findViewById(R.id.button_download).setEnabled(true);
                         v.findViewById(R.id.button_addplaylist).setEnabled(true);
                     }
-                }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);*/
+                ((ImageView) v.findViewById(R.id.image)).setImageResource(R.drawable.logo_red_white);
                 ((TextView) v.findViewById(R.id.title)).setText(s.getName());
                 ((TextView) v.findViewById(R.id.artist)).setText(s.getArtist());
                 ((TextView) v.findViewById(R.id.size)).setText(s.getSize());
@@ -180,84 +164,15 @@ public class SearchFragment extends Fragment {
                     public void onClick(View v) {
 
                         MasterPlayer mp = MasterPlayer.getInstance(getActivity().getApplicationContext());
-                        Song[] temp = new Song[]{songsSaved.get(position)};
-                        //mp.setup(songsSaved.toArray(new Song[songsSaved.size()]),position);
-                        mp.setup(temp, 0);
+                        //Song[] temp = new Song[]{songsSaved.get(position)};
+                        mp.setup(songsSaved.toArray(new Song[songsSaved.size()]), position);
+                        //mp.setup(temp, 0);
                     }
                 });
                 v.findViewById(R.id.button_download).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //System.out.println(Uri.fromFile(new File(Environment.getExternalStorageDirectory()+"/"+FOLDER_HOME+"/")).toString());
-                        int c = 0;
-                        while (new File(
-                                Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
-                                s.getFullName() + (
-                                        c == 0 ? "" : String.format("(%d)", c)
-                                ) + ".mp3").exists()) {
-                            c++;
-
-                        }
-                        Toast.makeText(getContext().getApplicationContext(), "Download iniziato...", Toast.LENGTH_LONG).show();
-                        if (cacheManager.isInCache(s.getFile())) {
-                            try {
-                                File orig = cacheManager.retrieveFile(s.getFile());
-                                File dst = new File(
-                                        Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
-                                        s.getFullName() + (c == 0 ? "" : String.format("(%d)", c)) + ".mp3");
-                                dst.createNewFile();
-                                FileChannel ifc = new FileInputStream(orig).getChannel();
-                                FileChannel ofc = new FileOutputStream(dst).getChannel();
-                                ifc.transferTo(0, ifc.size(), ofc);
-                                orig.deleteOnExit();
-                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
-                                builder.setSmallIcon(R.mipmap.ic_songhunter);
-                                Intent io = new Intent();
-                                io.setAction(android.content.Intent.ACTION_VIEW);
-                                io.setDataAndType(Uri.fromFile(dst), "audio/*");
-                                PendingIntent iopen = PendingIntent.getActivity(getContext(), 123456, io, PendingIntent.FLAG_UPDATE_CURRENT);
-                                builder.setContentIntent(iopen);
-                                builder.setContentTitle(s.getFullName());
-                                builder.setContentText("Download completato.");
-                                builder.setAutoCancel(true);
-                                Notification notification = builder.build();
-                                NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                                notificationManager.notify(s.getLength(), notification);
-                                MediaScannerConnection.scanFile(
-                                        getActivity(),
-                                        new String[]{s.getFile()},
-                                        null,
-                                        new MediaScannerConnection.OnScanCompletedListener() {
-                                            @Override
-                                            public void onScanCompleted(String path, Uri uri) {
-
-                                            }
-                                        }
-                                );
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
-                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(s.getFile()));
-                            request.setDestinationUri(Uri.fromFile(new File(
-                                    Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
-                                    s.getFullName() + (
-                                            c == 0 ? "" : String.format("(%d)", c)
-                                    ) + ".mp3"))
-                            );
-                            request.setTitle(s.getFullName());
-                            request.allowScanningByMediaScanner();
-                            request.setVisibleInDownloadsUi(true);
-
-                            request.setMimeType("audio/MP3");
-                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                            request.addRequestHeader("user-agent", "Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/20120403211507 Firefox/12.0");
-                            Toast.makeText(getContext().getApplicationContext(), "Download iniziato...", Toast.LENGTH_LONG).show();
-                            long id = downloadManager.enqueue(request);
-                        }
-
-
+                        cacheManager.download(s);
                     }
 
                 });

@@ -1,24 +1,14 @@
 package net.ddns.paolo7297.musicdownloader.ui.fragment;
 
-import android.app.DownloadManager;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
-import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.NotificationCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import net.ddns.paolo7297.musicdownloader.CacheManager;
 import net.ddns.paolo7297.musicdownloader.R;
@@ -37,17 +26,9 @@ import net.ddns.paolo7297.musicdownloader.placeholder.Playlist;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
 import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
 import net.ddns.paolo7297.musicdownloader.playback.PlaylistDBHelper;
-import net.ddns.paolo7297.musicdownloader.task.ThumbnailsDownloaderTask;
 import net.ddns.paolo7297.musicdownloader.task.TopSongsResolverTask;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-
-import static net.ddns.paolo7297.musicdownloader.Constants.FOLDER_HOME;
 
 /**
  * Created by paolo on 21/04/17.
@@ -97,12 +78,11 @@ public class TopSongsFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                final MediaPlayer[] mediaPlayer = new MediaPlayer[1];
                 final Song s = songsSaved.get(position);
                 final int p1 = position;
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 final View v = ((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.dialog_songinfo, parent, false);
-                v.findViewById(R.id.button_stream).setEnabled(false);
+                /*v.findViewById(R.id.button_stream).setEnabled(false);
                 v.findViewById(R.id.button_download).setEnabled(false);
                 v.findViewById(R.id.button_addplaylist).setEnabled(false);
                 ((ProgressBar) v.findViewById(R.id.spinner)).getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
@@ -131,7 +111,8 @@ public class TopSongsFragment extends Fragment {
                         v.findViewById(R.id.button_download).setEnabled(true);
                         v.findViewById(R.id.button_addplaylist).setEnabled(true);
                     }
-                }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);*/
+                ((ImageView) v.findViewById(R.id.image)).setImageResource(R.drawable.logo_red_white);
                 ((TextView) v.findViewById(R.id.title)).setText(s.getName());
                 ((TextView) v.findViewById(R.id.artist)).setText(s.getArtist());
                 ((TextView) v.findViewById(R.id.size)).setText(s.getSize());
@@ -142,95 +123,14 @@ public class TopSongsFragment extends Fragment {
                 v.findViewById(R.id.button_stream).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        /*try {
-                            if (mediaPlayer[0] != null) {
-                                mediaPlayer[0].stop();
-                                mediaPlayer[0].release();
-                                mediaPlayer[0] = null;
-                                ((Button) v.findViewById(R.id.button_stream)).setText("Streaming");
-                            } else {
-                                mediaPlayer[0] = new MediaPlayer();
-                                mediaPlayer[0].setAudioStreamType(AudioManager.STREAM_MUSIC);
-                                mediaPlayer[0].setDataSource(s.getFile());
-                                mediaPlayer[0].prepare();
-                                mediaPlayer[0].start();
-                                ((Button) v.findViewById(R.id.button_stream)).setText("Stop");
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }*/
                         MasterPlayer mp = MasterPlayer.getInstance(getActivity().getApplicationContext());
-                        /*ArrayList<String> uris = new ArrayList<String>();
-                        ArrayList<String> titles= new ArrayList<String>();
-                        ArrayList<String> artists = new ArrayList<String>();
-                        for (SearchResult s: songsSaved) {
-                            uris.add(s.getFile());
-                            titles.add(s.getName());
-                            artists.add(s.getArtist());
-                        }*/
                         mp.setup(songsSaved.toArray(new Song[songsSaved.size()]), position);
                     }
                 });
                 v.findViewById(R.id.button_download).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //System.out.println(Uri.fromFile(new File(Environment.getExternalStorageDirectory()+"/"+FOLDER_HOME+"/")).toString());
-                        int c = 0;
-                        while (new File(
-                                Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
-                                s.getFullName() + (
-                                        c == 0 ? "" : String.format("(%d)", c)
-                                ) + ".mp3").exists()) {
-                            c++;
-
-                        }
-                        Toast.makeText(getContext().getApplicationContext(), "Download iniziato...", Toast.LENGTH_LONG).show();
-                        if (cacheManager.isInCache(s.getFile())) {
-                            try {
-                                File orig = cacheManager.retrieveFile(s.getFile());
-                                File dst = new File(
-                                        Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
-                                        s.getFullName() + (c == 0 ? "" : String.format("(%d)", c)) + ".mp3");
-                                dst.createNewFile();
-                                FileChannel ifc = new FileInputStream(orig).getChannel();
-                                FileChannel ofc = new FileOutputStream(dst).getChannel();
-                                ifc.transferTo(0, ifc.size(), ofc);
-                                orig.deleteOnExit();
-                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext());
-                                builder.setSmallIcon(R.mipmap.ic_songhunter);
-                                Intent io = new Intent();
-                                io.setAction(android.content.Intent.ACTION_VIEW);
-                                io.setDataAndType(Uri.fromFile(dst), "audio/*");
-                                PendingIntent iopen = PendingIntent.getActivity(getContext(), 123456, io, PendingIntent.FLAG_UPDATE_CURRENT);
-                                builder.setContentIntent(iopen);
-                                builder.setContentTitle(s.getFullName());
-                                builder.setContentText("Download completato.");
-                                builder.setAutoCancel(true);
-                                Notification notification = builder.build();
-                                NotificationManager notificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
-                                notificationManager.notify(s.getLength(), notification);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            DownloadManager downloadManager = (DownloadManager) getContext().getSystemService(Context.DOWNLOAD_SERVICE);
-                            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(s.getFile()));
-                            request.setDestinationUri(Uri.fromFile(new File(
-                                    Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
-                                    s.getFullName() + (
-                                            c == 0 ? "" : String.format("(%d)", c)
-                                    ) + ".mp3"))
-                            );
-                            request.setTitle(s.getFullName());
-                            request.allowScanningByMediaScanner();
-                            request.setVisibleInDownloadsUi(true);
-
-                            request.setMimeType("audio/MP3");
-                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                            request.addRequestHeader("user-agent", "Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/20120403211507 Firefox/12.0");
-                            Toast.makeText(getContext().getApplicationContext(), "Download iniziato...", Toast.LENGTH_LONG).show();
-                            long id = downloadManager.enqueue(request);
-                        }
+                        cacheManager.download(s);
                     }
 
                 });

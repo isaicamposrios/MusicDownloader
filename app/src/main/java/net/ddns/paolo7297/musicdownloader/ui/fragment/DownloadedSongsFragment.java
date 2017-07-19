@@ -33,10 +33,8 @@ import net.ddns.paolo7297.musicdownloader.playback.PlaylistDBHelper;
 import net.ddns.paolo7297.musicdownloader.ui.activity.SongsEditActivity;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static net.ddns.paolo7297.musicdownloader.Constants.FOLDER_HOME;
 
@@ -89,37 +87,35 @@ public class DownloadedSongsFragment extends Fragment {
         listView.setVisibility(View.VISIBLE);
 
         if (results == null || results.size() == 0) {
-            ArrayList<File> files = new ArrayList<>(Arrays.asList(new File(Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/").listFiles(new FileFilter() {
+            /*ArrayList<File> files = new ArrayList<>(Arrays.asList(new File(Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/").listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File pathname) {
                     return pathname.getName().endsWith(".mp3");
                 }
-            })));
-            //File f = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/");
+            })));*/
+            File f = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/");
             ContentResolver cr = getActivity().getContentResolver();
 
             Cursor c = null;
             try {
                 results.clear();
-                for (File f : files) {
-                    c = cr.query(
-                            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                            null,
-                            MediaStore.Audio.Media.DATA + " LIKE ? ",
-                            new String[]{f.getCanonicalPath()},
-                            MediaStore.Audio.Media.TITLE + " ASC"
-                    );
-                    while (c != null && c.moveToNext()) {
-                        results.add(new Song(
-                                c.getLong(c.getColumnIndex(MediaStore.Audio.Media._ID)) + "",
-                                c.getString(c.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
-                                c.getString(c.getColumnIndex(MediaStore.Audio.Media.TITLE)),
-                                (int) ((c.getLong(c.getColumnIndex(MediaStore.Audio.Media.DURATION)) / 1000)),
-                                c.getString(c.getColumnIndex(MediaStore.Audio.Media.DATA)),
-                                ((c.getLong(c.getColumnIndex(MediaStore.Audio.Media.SIZE)) / 1024) / 1024) + " MB",
-                                ""
-                        ));
-                    }
+                c = cr.query(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        null,
+                        MediaStore.Audio.Media.DATA + " LIKE '" + f.getCanonicalPath() + "%' ",
+                        new String[]{},
+                        MediaStore.Audio.Media.TITLE + " ASC"
+                );
+                while (c != null && c.moveToNext()) {
+                    results.add(new Song(
+                            c.getLong(c.getColumnIndex(MediaStore.Audio.Media._ID)) + "",
+                            c.getString(c.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
+                            c.getString(c.getColumnIndex(MediaStore.Audio.Media.TITLE)),
+                            (int) ((c.getLong(c.getColumnIndex(MediaStore.Audio.Media.DURATION)) / 1000)),
+                            c.getString(c.getColumnIndex(MediaStore.Audio.Media.DATA)),
+                            ((c.getLong(c.getColumnIndex(MediaStore.Audio.Media.SIZE)) / 1024) / 1024) + " MB",
+                            null
+                    ));
                 }
             } catch (IOException e) {
                 e.printStackTrace();

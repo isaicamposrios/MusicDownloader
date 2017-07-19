@@ -75,7 +75,7 @@
                 android:contentDescription="Precedente"
                 android:cropToPadding="true"
                 android:scaleType="fitEnd"
-                android:src="@drawable/controller_single_rewind" />
+                android:src="@drawable/controller_rewind" />
 
             <ImageButton
                 android:id="@+id/play"
@@ -89,7 +89,7 @@
                 android:contentDescription="Pausa|Riproduci"
                 android:cropToPadding="true"
                 android:scaleType="fitCenter"
-                android:src="@drawable/controller_single_pause" />
+                android:src="@drawable/controller_pause" />
 
             <ImageButton
                 android:id="@+id/forward"
@@ -102,7 +102,37 @@
                 android:contentDescription="Successiva"
                 android:cropToPadding="true"
                 android:scaleType="fitStart"
-                android:src="@drawable/controller_single_forward" />
+                android:src="@drawable/controller_forward" />
+
+            <ImageButton
+                android:id="@+id/shuffle"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@id/rewind"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Riproduzione casuale"
+                android:cropToPadding="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/controller_shuffle_enabled" />
+
+            <ImageButton
+                android:id="@+id/repeat"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@id/forward"
+                android:adjustViewBounds="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Ripeti"
+                android:cropToPadding="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/controller_repeat_all" />
         </RelativeLayout>
 
     </LinearLayout>

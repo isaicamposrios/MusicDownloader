@@ -10,13 +10,16 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.ResultReceiver;
+import android.support.annotation.IntDef;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.view.KeyEvent;
 
 import net.ddns.paolo7297.musicdownloader.CacheManager;
+import net.ddns.paolo7297.musicdownloader.Constants;
 import net.ddns.paolo7297.musicdownloader.R;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
 import net.ddns.paolo7297.musicdownloader.ui.activity.NavigationActivity;
@@ -25,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Stack;
 
 import static net.ddns.paolo7297.musicdownloader.Constants.NOTIFICATION_NEXT;
 import static net.ddns.paolo7297.musicdownloader.Constants.NOTIFICATION_OPEN;
@@ -43,11 +47,13 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     public static final int STATUS_PLAYING = 3;
     public static final int STATUS_PAUSED = 4;
     public static final int STATUS_STOPPED = 5;
-    public static final int TYPE_LOCAL = 0;
-    public static final int TYPE_STREAMING = 1;
+    public static final int SHUFFLE_ENABLED = 0;
+    public static final int SHUFFLE_DISABLED = 1;
+    public static final int REPEAT_ONE = 0;
+    public static final int REPEAT_ALL = 1;
     private static MasterPlayer mp;
     private MediaPlayer player;
-    private int status;
+    private int status, repeat, shuffle;
     private int index;
     private ArrayList<Song> songs;
     //private ArrayList<String> titles;
@@ -58,7 +64,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     private MediaSessionCompat mediaSession;
     private AudioManager audioManager;
     private CacheManager cacheManager;
-
+    private Stack<Integer> prevIndex;
     private MasterPlayer(Context c) {
         context = c;
         player = new MediaPlayer();
@@ -67,7 +73,9 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         player.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
         audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         cacheManager = CacheManager.getInstance(c);
-
+        shuffle = PreferenceManager.getDefaultSharedPreferences(c).getInt(Constants.PREFERENCE_SHUFFLE, SHUFFLE_DISABLED);
+        repeat = PreferenceManager.getDefaultSharedPreferences(c).getInt(Constants.PREFERENCE_REPEAT, REPEAT_ALL);
+        prevIndex = new Stack<>();
         setupMediaSession();
         status = STATUS_NEED_CONFIGURATION;
 
@@ -121,17 +129,29 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public void next() {
-        index++;
-        if (index >= songs.size()) {
-            index = 0;
+        if (shuffle == SHUFFLE_DISABLED) {
+            index++;
+            if (index >= songs.size()) {
+                index = 0;
+            }
+        } else {
+            int previndex = index;
+            while (index == previndex) {
+                index = (int) (Math.random() * songs.size());
+            }
+            prevIndex.push(previndex);
         }
         setSong(index);
     }
 
     public void prev() {
-        index--;
-        if (index < 0) {
-            index = songs.size() - 1;
+        if (shuffle == SHUFFLE_DISABLED || prevIndex.size() == 0) {
+            index--;
+            if (index < 0) {
+                index = songs.size() - 1;
+            }
+        } else {
+            index = prevIndex.pop();
         }
         setSong(index);
     }
@@ -149,6 +169,12 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
             }
         }*/
         setSong(index);
+    }
+
+    public void setup(Song[] files, int index, @ShuffleMode int shuffle, @RepeatMode int repeat) {
+        setShuffle(shuffle);
+        setRepeat(repeat);
+        setup(files, index);
     }
 
     public MPInfo getInfos() {
@@ -182,7 +208,12 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        next();
+        if (repeat == REPEAT_ALL) {
+            next();
+        } else {
+            mp.seekTo(0);
+            mp.start();
+        }
     }
 
     @Override
@@ -423,6 +454,47 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
 
     }
 
+    public void toggleRepeat() {
+        if (repeat == REPEAT_ALL) {
+            setRepeat(REPEAT_ONE);
+        } else {
+            setRepeat(REPEAT_ALL);
+        }
+    }
+
+    public void toggleShuffle() {
+        if (shuffle == SHUFFLE_ENABLED) {
+            setShuffle(SHUFFLE_DISABLED);
+        } else {
+            setShuffle(SHUFFLE_ENABLED);
+        }
+    }
+
+    public int getRepeat() {
+        return repeat;
+    }
+
+    public void setRepeat(@RepeatMode int repeat) {
+        this.repeat = repeat;
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(Constants.PREFERENCE_REPEAT, repeat).apply();
+    }
+
+    public int getShuffle() {
+        return shuffle;
+    }
+
+    public void setShuffle(@ShuffleMode int shuffle) {
+        this.shuffle = shuffle;
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(Constants.PREFERENCE_SHUFFLE, shuffle).apply();
+    }
+
+    @IntDef({REPEAT_ALL, REPEAT_ONE})
+    public @interface RepeatMode {
+    }
+
+    @IntDef({SHUFFLE_DISABLED, SHUFFLE_ENABLED})
+    public @interface ShuffleMode {
+    }
 
     public interface MasterPlayerTrackChange {
         void OnTrackChange();

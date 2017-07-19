@@ -33,7 +33,7 @@ public class PlayerActivity extends AppCompatActivity {
     private SeekBar bar;
     private TextView timeLapsed, timeCompleted;
     private SquaredImageView imgView;
-    private ImageButton prev, pp, next;
+    private ImageButton prev, pp, next, shuffle, repeat;
     private CacheManager cacheManager;
 
     @Override
@@ -50,6 +50,8 @@ public class PlayerActivity extends AppCompatActivity {
         prev = (ImageButton) findViewById(R.id.rewind);
         pp = (ImageButton) findViewById(R.id.play);
         next = (ImageButton) findViewById(R.id.forward);
+        repeat = (ImageButton) findViewById(R.id.repeat);
+        shuffle = (ImageButton) findViewById(R.id.shuffle);
 
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,9 +72,29 @@ public class PlayerActivity extends AppCompatActivity {
                 masterPlayer.next();
             }
         });
+        repeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                masterPlayer.toggleRepeat();
+                refreshplayer();
+            }
+        });
+        shuffle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                masterPlayer.toggleShuffle();
+                refreshplayer();
+            }
+        });
 
         setSupportActionBar(toolbar);
         //setTitle("In riproduzione");
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -82,6 +104,12 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public boolean onNavigateUp() {
         onBackPressed();
         return true;
     }
@@ -123,8 +151,16 @@ public class PlayerActivity extends AppCompatActivity {
                 next.setEnabled(true);
             }
             setPlaying(info.getStatus() == MasterPlayer.STATUS_PLAYING);
-        } else {
-
+            if (masterPlayer.getShuffle() == MasterPlayer.SHUFFLE_ENABLED) {
+                shuffle.setImageResource(R.drawable.controller_shuffle_enabled);
+            } else {
+                shuffle.setImageResource(R.drawable.controller_shuffle_disabled);
+            }
+            if (masterPlayer.getRepeat() == MasterPlayer.REPEAT_ALL) {
+                repeat.setImageResource(R.drawable.controller_repeat_all);
+            } else {
+                repeat.setImageResource(R.drawable.controller_repeat_one);
+            }
         }
     }
 
@@ -143,9 +179,9 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void setPlaying(boolean isPlaying) {
         if (isPlaying) {
-            pp.setImageResource(R.drawable.controller_single_pause);
+            pp.setImageResource(R.drawable.controller_pause);
         } else {
-            pp.setImageResource(R.drawable.controller_single_play);
+            pp.setImageResource(R.drawable.controller_play);
         }
     }
 

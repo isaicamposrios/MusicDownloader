@@ -1,6 +1,7 @@
 package net.ddns.paolo7297.musicdownloader.adapter;
 
 import android.content.Context;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,10 +51,11 @@ public class DownloadedSongsAdapter extends BaseAdapter {
         ((TextView) convertView.findViewById(R.id.title)).setText(files.get(position).getName());
         ((TextView) convertView.findViewById(R.id.artist)).setText(files.get(position).getArtist());
         //((TextView) convertView.findViewById(R.id.size)).setText();
-        ((TextView) convertView.findViewById(R.id.bitrate)).setText(files.get(position).getBitrate());
+        convertView.findViewById(R.id.bitrate).setVisibility(View.GONE);
         long i = files.get(position).getLength() / 60;
         int d = (int) (((float) files.get(position).getLength() / 60 - i) * 60);
         ((TextView) convertView.findViewById(R.id.duration)).setText(String.format("%d:%02d min", i, d));
+        ((TextView) convertView.findViewById(R.id.duration)).setGravity(Gravity.BOTTOM);
 
         return convertView;
     }

@@ -4,12 +4,14 @@
     <group android:checkableBehavior="single">
 
         <item android:id="@+id/popol"
-            android:title="Popolarità" />
+            android:title="@string/popularity" />
 
         <item android:id="@+id/alfab"
-            android:title="Alfabetico" />
+            android:title="@string/alpabetic" />
 
         <item android:id="@+id/data"
-            android:title="Data"/>
+            android:title="@string/date" />
+
     </group>
+
 </menu>

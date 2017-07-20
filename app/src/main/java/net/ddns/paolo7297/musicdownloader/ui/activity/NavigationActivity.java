@@ -157,7 +157,7 @@ public class NavigationActivity extends AppCompatActivity {
                         break;
                 }
                 fm.beginTransaction().replace(R.id.frame, f).commit();
-                drawerLayout.closeDrawer(Gravity.LEFT);
+                drawerLayout.closeDrawer(Gravity.START);
                 return true;
             }
         });
@@ -193,42 +193,6 @@ public class NavigationActivity extends AppCompatActivity {
         logUpdate();
         //setupAds();
         clearCache();
-
-
-        /*IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(DOWNLOAD_STARTED);
-        intentFilter.addAction(DOWNLOAD_PROGRESS);
-        intentFilter.addAction(DOWNLOAD_PAUSED);
-        intentFilter.addAction(DOWNLOAD_FAILED);
-        intentFilter.addAction(DOWNLOAD_CONNECTING);
-        intentFilter.addAction(DOWNLOAD_CONNECTED);
-        intentFilter.addAction(DOWNLOAD_CANCELLED);
-        intentFilter.addAction(DOWNLOAD_COMPLETED);
-        /*BroadcastReceiver br = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                switch (intent.getAction()){
-                    case DOWNLOAD_STARTED:
-                        db.addDownload(intent.getLongExtra(DOWNLOAD_ID,0));
-                        break;
-                    case DOWNLOAD_PROGRESS:
-                        break;
-                    case DOWNLOAD_PAUSED:
-                        break;
-                    case DOWNLOAD_FAILED:
-                        break;
-                    case DOWNLOAD_CONNECTING:
-                        break;
-                    case DOWNLOAD_CONNECTED:
-                        break;
-                    case DOWNLOAD_CANCELLED:
-                        break;
-                    case DOWNLOAD_COMPLETED:
-                        db.removeDownload(intent.getLongExtra(DOWNLOAD_ID,0));
-                        break;
-                }
-            }
-        };*/
     }
 
     @Override
@@ -259,8 +223,8 @@ public class NavigationActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(Gravity.LEFT)) {
-            drawerLayout.closeDrawer(Gravity.LEFT);
+        if (drawerLayout.isDrawerOpen(Gravity.START)) {
+            drawerLayout.closeDrawer(Gravity.START);
         } else {
             super.onBackPressed();
         }
@@ -333,10 +297,10 @@ public class NavigationActivity extends AppCompatActivity {
             }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else if (NOTIFICATION_OPEN.equals(action)) {
             if (drawerLayout != null) {
-                drawerLayout.openDrawer(Gravity.LEFT);
+                drawerLayout.openDrawer(Gravity.START);
             }
         } else {
-            drawerLayout.closeDrawer(Gravity.LEFT);
+            drawerLayout.closeDrawer(Gravity.START);
         }
         //refreshAds();
         if (f != null && f instanceof TabManagerFragment) {
@@ -360,7 +324,7 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
     private void manualSetPerms() {
-        Toast.makeText(this, "Per permettere all'applicazione di funzionare, è necessario concedere i permessi richiesti", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.perms_request, Toast.LENGTH_LONG).show();
         Intent i = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", getPackageName(), null);
         i.setData(uri);
@@ -464,8 +428,8 @@ public class NavigationActivity extends AppCompatActivity {
             }
         });
         builder.setView(view);
-        builder.setTitle("Attenzione!");
-        builder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.warning);
+        builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (checkBox.isChecked()) {
@@ -525,7 +489,7 @@ public class NavigationActivity extends AppCompatActivity {
                 System.out.println(f.getName());
             }*/
             if (cacheManager.getCachedSongsSize() > threshold) {
-                Toast.makeText(this, "Cache ripulita, cancellate vecchie canzoni", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.cache_over_notification, Toast.LENGTH_LONG).show();
                 while (cacheManager.getCachedSongsSize() > threshold) {
                     cacheManager.getSortedCachedSongs().get(0).delete();
                 }

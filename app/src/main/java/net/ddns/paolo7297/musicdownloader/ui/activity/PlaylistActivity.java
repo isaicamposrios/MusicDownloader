@@ -18,6 +18,7 @@ import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
 import net.ddns.paolo7297.musicdownloader.playback.PlaylistDBHelper;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by paolo on 11/05/17.
@@ -66,7 +67,7 @@ public class PlaylistActivity extends AppCompatActivity {
         songs.clear();
         songs.addAll(dbHelper.getSongs(playlist));
         adapter.notifyDataSetChanged();
-        toolbar.setSubtitle(songs.size() + " elementi");
+        toolbar.setSubtitle(String.format(Locale.getDefault(), "%d %s", songs.size(), getString(R.string.elements)));
     }
 
     @Override

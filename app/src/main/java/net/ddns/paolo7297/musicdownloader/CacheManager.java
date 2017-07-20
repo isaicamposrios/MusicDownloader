@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 
 import static net.ddns.paolo7297.musicdownloader.Constants.FOLDER_HOME;
 
@@ -115,18 +116,18 @@ public class CacheManager {
         while (new File(
                 Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
                 s.getFullName() + (
-                        c == 0 ? "" : String.format("(%d)", c)
+                        c == 0 ? "" : String.format(Locale.getDefault(), "(%d)", c)
                 ) + ".mp3").exists()) {
             c++;
 
         }
-        Toast.makeText(context.getApplicationContext(), "Download iniziato...", Toast.LENGTH_LONG).show();
+        Toast.makeText(context.getApplicationContext(), context.getString(R.string.download_started) + "...", Toast.LENGTH_LONG).show();
         if (isInCache(s.getFile())) {
             try {
                 File orig = retrieveFile(s.getFile());
                 File dst = new File(
                         Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
-                        s.getFullName() + (c == 0 ? "" : String.format("(%d)", c)) + ".mp3");
+                        s.getFullName() + (c == 0 ? "" : String.format(Locale.getDefault(), "(%d)", c)) + ".mp3");
                 dst.createNewFile();
                 FileChannel ifc = new FileInputStream(orig).getChannel();
                 FileChannel ofc = new FileOutputStream(dst).getChannel();
@@ -141,7 +142,7 @@ public class CacheManager {
                 PendingIntent iopen = PendingIntent.getActivity(context, 123456, io, PendingIntent.FLAG_UPDATE_CURRENT);
                 builder.setContentIntent(iopen);
                 builder.setContentTitle(s.getFullName());
-                builder.setContentText("Download completato.");
+                builder.setContentText(context.getString(R.string.download_completed));
                 builder.setAutoCancel(true);
                 Notification notification = builder.build();
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -155,7 +156,7 @@ public class CacheManager {
             request.setDestinationUri(Uri.fromFile(new File(
                     Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/",
                     s.getFullName() + (
-                            c == 0 ? "" : String.format("(%d)", c)
+                            c == 0 ? "" : String.format(Locale.getDefault(), "(%d)", c)
                     ) + ".mp3"))
             );
             request.setTitle(s.getFullName());
@@ -165,7 +166,7 @@ public class CacheManager {
             request.setMimeType("audio/MP3");
             request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             request.addRequestHeader("user-agent", "Mozilla/5.0 (Windows NT 6.1; rv:12.0) Gecko/20120403211507 Firefox/12.0");
-            Toast.makeText(context.getApplicationContext(), "Download iniziato...", Toast.LENGTH_LONG).show();
+            Toast.makeText(context.getApplicationContext(), context.getString(R.string.download_started) + "...", Toast.LENGTH_LONG).show();
             downloadManager.enqueue(request);
         }
     }

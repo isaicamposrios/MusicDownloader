@@ -17,6 +17,7 @@ import net.ddns.paolo7297.musicdownloader.Constants;
 import net.ddns.paolo7297.musicdownloader.R;
 
 import java.io.File;
+import java.util.Locale;
 
 /**
  * Created by paolo on 02/06/17.
@@ -34,7 +35,7 @@ public class CacheActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cache);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        setTitle("Gestione Cache");
+        setTitle(getString(R.string.cache_management));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         cacheManager = CacheManager.getInstance(getApplicationContext());
@@ -49,7 +50,7 @@ public class CacheActivity extends AppCompatActivity {
                 update();
             }
         });
-        ((EditText) findViewById(R.id.threshold)).setText("" + PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt(Constants.CACHE_THRESHOLD, 200));
+        ((EditText) findViewById(R.id.threshold)).setText(String.format(Locale.getDefault(), "%d", PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt(Constants.CACHE_THRESHOLD, 200)));
         ((CheckBox) findViewById(R.id.autodelete)).setChecked(PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(Constants.CACHE_AUTODELETE, true));
         findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,8 +69,8 @@ public class CacheActivity extends AppCompatActivity {
     }
 
     private void update() {
-        ((TextView) findViewById(R.id.count)).setText("Numero di canzoni: " + cacheManager.cachedSongsCount());
-        ((TextView) findViewById(R.id.size)).setText("Dimensione cache: " + cacheManager.getCachedSongsSize() + "MB");
+        ((TextView) findViewById(R.id.count)).setText(String.format(Locale.getDefault(), "%s %d", getString(R.string.songs_number), cacheManager.cachedSongsCount()));
+        ((TextView) findViewById(R.id.size)).setText(String.format(Locale.getDefault(), "%s %dMB", getString(R.string.cache_Size), cacheManager.getCachedSongsSize()));
         findViewById(R.id.clear).setEnabled(cacheManager.getCachedSongsSize() != 0);
         if (cacheManager.getCachedSongsSize() > PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getInt(Constants.CACHE_THRESHOLD, 200)) {
             System.out.println(((TextView) findViewById(R.id.size)).getTextColors().toString());

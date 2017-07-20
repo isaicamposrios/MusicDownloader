@@ -29,6 +29,7 @@ import net.ddns.paolo7297.musicdownloader.playback.PlaylistDBHelper;
 import net.ddns.paolo7297.musicdownloader.task.TopSongsResolverTask;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by paolo on 21/04/17.
@@ -119,7 +120,7 @@ public class TopSongsFragment extends Fragment {
                 ((TextView) v.findViewById(R.id.bitrate)).setText(s.getBitrate());
                 long i = s.getLength() / 60;
                 int d = (int) (((float) s.getLength() / 60 - i) * 60);
-                ((TextView) v.findViewById(R.id.time)).setText(String.format("%d:%02d min", i, d));
+                ((TextView) v.findViewById(R.id.time)).setText(String.format(Locale.getDefault(), "%d:%02d min", i, d));
                 v.findViewById(R.id.button_stream).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

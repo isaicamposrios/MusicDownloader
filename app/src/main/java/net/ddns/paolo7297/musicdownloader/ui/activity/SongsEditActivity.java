@@ -46,7 +46,7 @@ public class SongsEditActivity extends AppCompatActivity {
         composer = (EditText) findViewById(R.id.composer);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         setSupportActionBar(toolbar);
-        setTitle("Modifica");
+        setTitle(getString(R.string.edit));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         songFile = new File(song);

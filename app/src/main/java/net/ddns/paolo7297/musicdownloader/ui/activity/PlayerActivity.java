@@ -21,6 +21,7 @@ import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
 import net.ddns.paolo7297.musicdownloader.ui.SquaredImageView;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * Created by paolo on 05/07/17.
@@ -173,8 +174,8 @@ public class PlayerActivity extends AppCompatActivity {
 
     private void updateTimers() {
         MasterPlayer.MPInfo info = masterPlayer.getInfos();
-        timeCompleted.setText(String.format("%2d:%02d", (info.getTotalDuration() / 1000) / 60, (info.getTotalDuration() / 1000) % 60));
-        timeLapsed.setText(String.format("%2d:%02d", (info.getDuration() / 1000) / 60, (info.getDuration() / 1000) % 60));
+        timeCompleted.setText(String.format(Locale.getDefault(), "%2d:%02d", (info.getTotalDuration() / 1000) / 60, (info.getTotalDuration() / 1000) % 60));
+        timeLapsed.setText(String.format(Locale.getDefault(), "%2d:%02d", (info.getDuration() / 1000) / 60, (info.getDuration() / 1000) % 60));
     }
 
     private void setPlaying(boolean isPlaying) {

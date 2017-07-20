@@ -7,6 +7,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import net.ddns.paolo7297.musicdownloader.R;
 import net.ddns.paolo7297.musicdownloader.placeholder.Playlist;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
 
@@ -40,9 +41,11 @@ public class PlaylistDBHelper extends SQLiteOpenHelper {
             " FOREIGN KEY('Song_ID') REFERENCES Song ( SID ) ON DELETE CASCADE ON UPDATE NO ACTION" +
             ");";
     private static PlaylistDBHelper dbHelper;
+    private Context context;
 
     private PlaylistDBHelper(Context context) {
         super(context, NAME, null, VERSION);
+        this.context = context;
     }
 
     public static PlaylistDBHelper getInstance(Context c) {
@@ -58,7 +61,7 @@ public class PlaylistDBHelper extends SQLiteOpenHelper {
         db.execSQL(QUERY_SONG);
         db.execSQL(QUERY_RELATIONSHIP);
         ContentValues cv = new ContentValues();
-        cv.put("Name", "Preferiti");
+        cv.put("Name", context.getString(R.string.favorites));
         db.insert("playlist", null, cv);
     }
 

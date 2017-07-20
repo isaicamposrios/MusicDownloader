@@ -5,73 +5,13 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <include layout="@layout/toolbar"/>
     </android.support.design.widget.AppBarLayout>
 
-    <!--<LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/main"
-        android:layout_margin="10dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:text="Titolo:"
-                android:textSize="@dimen/text_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:textSize="@dimen/text_subtitle"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:text="Artista:"
-                android:textSize="@dimen/text_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/artist"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:textSize="@dimen/text_subtitle"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:text="Album:"
-                android:textSize="@dimen/text_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <EditText
-                android:id="@+id/album"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:textSize="@dimen/text_subtitle"/>
-        </LinearLayout>
-
-    </LinearLayout>-->
     <GridLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
@@ -79,10 +19,11 @@
         android:layout_margin="10dp"
         android:columnCount="2"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Titolo:"
+            android:text="@string/title"
             android:textSize="@dimen/text_subtitle" />
 
         <EditText
@@ -91,10 +32,11 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:textSize="@dimen/text_subtitle"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Artista:"
+            android:text="@string/artist"
             android:textSize="@dimen/text_subtitle" />
 
         <EditText
@@ -103,10 +45,11 @@
             android:layout_height="wrap_content"
             android:inputType="text"
             android:textSize="@dimen/text_subtitle"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Album:"
+            android:text="@string/album"
             android:textSize="@dimen/text_subtitle" />
 
         <EditText
@@ -119,7 +62,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Genere:"
+            android:text="@string/genre"
             android:textSize="@dimen/text_subtitle" />
 
         <EditText
@@ -132,7 +75,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Anno:"
+            android:text="@string/Year"
             android:textSize="@dimen/text_subtitle" />
 
         <EditText
@@ -145,7 +88,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Compositore:"
+            android:text="@string/composer"
             android:textSize="@dimen/text_subtitle" />
 
         <EditText
@@ -154,16 +97,18 @@
             android:layout_height="wrap_content"
             android:inputType="number"
             android:textSize="@dimen/text_subtitle" />
+
     </GridLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
+        android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:src="@drawable/ic_done_white_48dp"
         app:backgroundTint="@color/colorPrimary"
         app:layout_anchor="@id/main"
         app:layout_anchorGravity="bottom|right|end" />
+
 </android.support.design.widget.CoordinatorLayout>

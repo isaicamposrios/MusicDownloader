@@ -65,6 +65,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     private AudioManager audioManager;
     private CacheManager cacheManager;
     private Stack<Integer> prevIndex;
+
     private MasterPlayer(Context c) {
         context = c;
         player = new MediaPlayer();
@@ -255,9 +256,9 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         io.setAction(NOTIFICATION_OPEN);
         PendingIntent iopen = PendingIntent.getActivity(context, 123456, io, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        builder.addAction(R.drawable.ic_skip_previous_black_48dp, "Indietro", iprev);
-        builder.addAction(status == STATUS_PLAYING ? R.drawable.ic_pause_circle_outline_black_48dp : R.drawable.ic_play_circle_outline_black_48dp, "Play", ipp);
-        builder.addAction(R.drawable.ic_skip_next_black_48dp, "Successivo", inext);
+        builder.addAction(R.drawable.ic_skip_previous_black_48dp, context.getString(R.string.prev), iprev);
+        builder.addAction(status == STATUS_PLAYING ? R.drawable.ic_pause_circle_outline_black_48dp : R.drawable.ic_play_circle_outline_black_48dp, context.getString(R.string.play_pause), ipp);
+        builder.addAction(R.drawable.ic_skip_next_black_48dp, context.getString(R.string.next), inext);
         builder.setContentIntent(iopen);
         builder.setStyle(new NotificationCompat.MediaStyle()
                 .setShowActionsInCompactView(1)

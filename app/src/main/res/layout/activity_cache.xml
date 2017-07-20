@@ -1,72 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <include layout="@layout/toolbar"/>
+
     </android.support.design.widget.AppBarLayout>
+
     <LinearLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:id="@+id/main"
+        android:layout_margin="20dp"
         android:orientation="vertical"
-        android:layout_margin="20dp">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/count"
-            android:textSize="@dimen/text_subtitle"/>
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/size"
             android:textSize="@dimen/text_subtitle"/>
+
+        <TextView
+            android:id="@+id/size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_subtitle"/>
+
         <Button
-            android:padding="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:id="@+id/clear"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pulisci"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:text="@string/clean" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <CheckBox
+                android:id="@+id/autodelete"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/autodelete"/>
+                android:layout_height="wrap_content" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cancella cache oltre:"
+                android:text="@string/clear_after"
                 android:textSize="@dimen/text_subtitle"/>
+
             <EditText
+                android:id="@+id/threshold"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:inputType="numberDecimal"
-                android:id="@+id/threshold"/>
+                android:inputType="numberDecimal" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="MB"
+                android:text="@string/mb"
                 android:textSize="@dimen/text_subtitle"/>
+
         </LinearLayout>
+
         <Button
-            android:padding="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Salva"/>
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:text="@string/save" />
+
     </LinearLayout>
+
 </android.support.design.widget.CoordinatorLayout>

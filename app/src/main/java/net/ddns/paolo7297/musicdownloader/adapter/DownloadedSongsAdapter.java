@@ -12,6 +12,7 @@ import net.ddns.paolo7297.musicdownloader.R;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by paolo on 20/04/17.
@@ -54,7 +55,7 @@ public class DownloadedSongsAdapter extends BaseAdapter {
         convertView.findViewById(R.id.bitrate).setVisibility(View.GONE);
         long i = files.get(position).getLength() / 60;
         int d = (int) (((float) files.get(position).getLength() / 60 - i) * 60);
-        ((TextView) convertView.findViewById(R.id.duration)).setText(String.format("%d:%02d min", i, d));
+        ((TextView) convertView.findViewById(R.id.duration)).setText(String.format(Locale.getDefault(), "%d:%02d min", i, d));
         ((TextView) convertView.findViewById(R.id.duration)).setGravity(Gravity.BOTTOM);
 
         return convertView;

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import net.ddns.paolo7297.musicdownloader.CacheManager;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
@@ -45,7 +44,6 @@ public class ThumbnailsDownloaderTask extends AsyncTask<Void, Void, Void> {
         final MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
         if (cacheManager.isUrl(s.getFile())) {
             if (cacheManager.isInCache(s.getFile())) {
-                Log.i("CACHE", "Already In cache, Loaded");
                 File f = cacheManager.retrieveFile(s.getFile());
                 try {
                     mediaMetadataRetriever.setDataSource(f.getAbsolutePath());
@@ -55,7 +53,6 @@ public class ThumbnailsDownloaderTask extends AsyncTask<Void, Void, Void> {
 
                 }
             } else {
-                Log.i("CACHE", "Caching...");
                 cacheManager.cacheUrl(s.getFile(), new CacheManager.CachingInterface() {
                     @Override
                     public void onCachingCompleted(File f) {
@@ -72,7 +69,6 @@ public class ThumbnailsDownloaderTask extends AsyncTask<Void, Void, Void> {
                 });
             }
         } else {
-            Log.i("CACHE", "Local file");
             try {
                 mediaMetadataRetriever.setDataSource(s.getFile(), new HashMap<String, String>());
                 art = mediaMetadataRetriever.getEmbeddedPicture();

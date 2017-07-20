@@ -1,54 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory
-        android:title="Impostazioni Generali">
+    <PreferenceCategory android:title="@string/general_settings">
         <CheckBoxPreference
             android:defaultValue="false"
-            android:title="Mostra Avviso"
-            android:summary="Abilita l'avviso all'avvio dell'app"
-            android:key="@string/pref_disclaimer"/>
+            android:key="@string/pref_disclaimer"
+            android:summary="@string/alert_at_startup"
+            android:title="@string/show_alert" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="Impostazioni di Ricerca">
+    <PreferenceCategory android:title="@string/search_settings">
 
         <ListPreference
-            android:title="Qualità"
-            android:summary="Seleziona il valore da utilizzare come default"
-            android:entries="@array/pref_quality"
-            android:key="pref_quality"
             android:defaultValue="0"
-            android:entryValues="@array/pref_quality_int"/>
+            android:entries="@array/pref_quality"
+            android:entryValues="@array/pref_quality_int"
+            android:key="pref_quality"
+            android:summary="@string/default_value"
+            android:title="@string/quality" />
 
 
         <ListPreference
-            android:title="Ordinamento"
-            android:summary="Seleziona il valore da utilizzare come default"
+            android:defaultValue="0"
             android:entries="@array/pref_verso"
             android:entryValues="@array/pref_verso_int"
-            android:defaultValue="0"
-            android:key="pref_verso"/>
+            android:key="pref_verso"
+            android:summary="@string/default_value"
+            android:title="@string/sorting" />
 
         <ListPreference
-            android:title="Ordina per"
-            android:summary="Seleziona il valore da utilizzare come default"
+            android:defaultValue="0"
             android:entries="@array/pref_sorting"
             android:entryValues="@array/pref_sorting_int"
-            android:defaultValue="0"
-            android:key="pref_sorting"/>
+            android:key="pref_sorting"
+            android:summary="@string/default_value"
+            android:title="@string/sort_by" />
 
 
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:title="Altro">
+    <PreferenceCategory android:title="@string/other">
         <Preference
-            android:title="Info sulla cache"
-            android:summary="Gestisci la cache della app!">
+            android:summary="@string/cache_management"
+            android:title="@string/cache_info">
             <intent
                 android:action="android.intent.action.VIEW"
-                android:targetPackage="net.ddns.paolo7297.musicdownloader"
-                android:targetClass="net.ddns.paolo7297.musicdownloader.ui.activity.CacheActivity" />
+                android:targetClass="net.ddns.paolo7297.musicdownloader.ui.activity.CacheActivity"
+                android:targetPackage="net.ddns.paolo7297.musicdownloader" />
         </Preference>
     </PreferenceCategory>
 

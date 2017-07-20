@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.InputType;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -64,16 +63,16 @@ public class PlaylistsFragment extends Fragment {
                 final EditText editText = new EditText(getActivity());
                 editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Nuova playlist");
+                builder.setTitle(R.string.new_playlist);
                 builder.setView(editText);
-                builder.setPositiveButton("Conferma", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dbHelper.addEmptyPlaylist(editText.getText().toString().trim());
                         onResume();
                     }
                 });
-                builder.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -111,7 +110,5 @@ public class PlaylistsFragment extends Fragment {
         playlists.clear();
         playlists.addAll(dbHelper.getPlaylists());
         adapter.notifyDataSetChanged();
-        Log.e("PLAYLIST", playlists.size() + "");
-
     }
 }

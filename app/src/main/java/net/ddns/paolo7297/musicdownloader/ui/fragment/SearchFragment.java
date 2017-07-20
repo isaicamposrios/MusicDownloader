@@ -44,6 +44,7 @@ import net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 
 import static android.content.Context.SEARCH_SERVICE;
 import static android.view.View.GONE;
@@ -158,7 +159,7 @@ public class SearchFragment extends Fragment {
                 ((TextView) v.findViewById(R.id.bitrate)).setText(s.getBitrate());
                 long i = s.getLength() / 60;
                 int d = (int) (((float) s.getLength() / 60 - i) * 60);
-                ((TextView) v.findViewById(R.id.time)).setText(String.format("%d:%02d min", i, d));
+                ((TextView) v.findViewById(R.id.time)).setText(String.format(Locale.getDefault(), "%d:%02d min", i, d));
                 v.findViewById(R.id.button_stream).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -384,7 +385,7 @@ public class SearchFragment extends Fragment {
                     songsSaved.clear();
                     querySongs = null;
                     adapter.notifyDataSetChanged();
-                    viewText("Inizia a cercare la musica");
+                    viewText(getString(R.string.start_search_music));
                     return true;
                 }
             });
@@ -407,7 +408,7 @@ public class SearchFragment extends Fragment {
                 }
             });*/
 
-            viewText("Inizia a cercare la musica");
+            viewText(getString(R.string.start_search_music));
 
             if (query != null) {
                 MenuItemCompat.expandActionView(search);
@@ -483,7 +484,7 @@ public class SearchFragment extends Fragment {
                 if (songs.size() > 0) {
                     viewList(page);
                 } else {
-                    viewText("Non ho trovato nulla");
+                    viewText(getString(R.string.nothing_found));
                 }
                 //adapter.setSongs(songsSaved);
                 adapter.notifyDataSetChanged();
@@ -522,29 +523,6 @@ public class SearchFragment extends Fragment {
     }
 
     private void viewCursors(int page) {
-        /*if (page == 0 || page>maxPage/20) {
-            if (prev != null) prev.setVisible(false);
-            if (next != null) next.setVisible(false);
-        } else if (page== 1) {
-            if (prev != null) prev.setVisible(false);
-            if (next != null) next.setVisible(true);
-        } else {
-            if (prev != null) prev.setVisible(true);
-            if (next != null) next.setVisible(true);
-        }
-        if (page == 0 ) {
-            if (prev != null) prev.setEnabled(false);
-            if (next != null) next.setEnabled(false);
-        } else if (page== 1) {
-            if (prev != null) prev.setEnabled(false);
-            if (next != null) next.setEnabled(true);
-        } else if (page>maxPage/20) {
-            if (prev != null) prev.setEnabled(true);
-            if (next != null) next.setEnabled(false);
-        } else {
-            if (prev != null) prev.setEnabled(true);
-            if (next != null) next.setEnabled(true);
-        }*/
         int s = 0, d = 0;
         if (page == 0) {
             d++;

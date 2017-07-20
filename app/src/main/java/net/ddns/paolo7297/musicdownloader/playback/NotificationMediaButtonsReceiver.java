@@ -3,7 +3,6 @@ package net.ddns.paolo7297.musicdownloader.playback;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import static net.ddns.paolo7297.musicdownloader.Constants.NOTIFICATION_NEXT;
 import static net.ddns.paolo7297.musicdownloader.Constants.NOTIFICATION_PP;
@@ -31,8 +30,6 @@ public class NotificationMediaButtonsReceiver extends BroadcastReceiver {
         } else if (intent.getAction().equals(NOTIFICATION_PP)) {
             //i.toggleMedia();
             mp.toggle();
-        } else {
-            Log.e("!?", "Why here?!");
         }
     }
 }

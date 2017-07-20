@@ -49,13 +49,13 @@ public class ServerCommands {
                                 WebView webView = (WebView) view.findViewById(R.id.website);
                                 webView.loadUrl("http://" + SERVER_ADDRESS + "/projects/musicdownloader/changelog.php?minver=" + activity.getPackageManager().getPackageInfo(activity.getPackageName(), 0).versionName);
                                 builder.setView(view);
-                                builder.setTitle("Aggiornamento disponibile!");
-                                builder.setPositiveButton("Aggiorna ora", new DialogInterface.OnClickListener() {
+                                builder.setTitle(R.string.update_available);
+                                builder.setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         try {
                                             DownloadManager.Request request = new DownloadManager.Request(Uri.parse(lastestUrl));
-                                            request.setTitle("Aggiornamento di SongHunter");
+                                            request.setTitle(activity.getApplicationContext().getString(R.string.update_notify));
                                             request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI | DownloadManager.Request.NETWORK_MOBILE);
                                             request.setAllowedOverRoaming(false);
                                             request.setDestinationUri(Uri.fromFile(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + Constants.FOLDER_HOME, obj.getString("name"))));
@@ -69,7 +69,7 @@ public class ServerCommands {
                                         }
                                     }
                                 });
-                                builder.setNegativeButton("Più tardi", new DialogInterface.OnClickListener() {
+                                builder.setNegativeButton(R.string.not_now, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         dialog.cancel();

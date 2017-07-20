@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="net.ddns.paolo7297.musicdownloader.ui.activity.NavigationActivity">
 
@@ -11,17 +10,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
+
         <ListView
             android:id="@+id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
+
         <ProgressBar
+            android:id="@+id/spinner"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:id="@+id/spinner"
             android:gravity="center"/>
+
         <TextView
             android:id="@+id/text"
             android:layout_width="match_parent"
@@ -29,44 +31,44 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:gravity="center"/>
+
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/footer"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_weight="0"
         android:background="@color/colorPrimary"
-        android:id="@+id/footer"
         android:elevation="7dp"
-        android:theme="@style/FooterPopupStyle"
-        >
+        android:theme="@style/FooterPopupStyle">
 
         <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
             android:id="@+id/back"
-
-            android:src="@drawable/ic_keyboard_arrow_left_white_48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="fitCenter"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"/>
-
-        <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:id="@+id/next"
-            android:src="@drawable/ic_keyboard_arrow_right_white_48dp"
+
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="fitCenter"
-            android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp"/>
+            android:paddingRight="5dp"
+            android:paddingTop="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_keyboard_arrow_left_white_48dp" />
+
+        <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
+            android:id="@+id/next"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingBottom="10dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_keyboard_arrow_right_white_48dp" />
 
         <View
             android:layout_width="0dp"
@@ -74,43 +76,44 @@
             android:layout_weight="1"/>
 
         <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
             android:id="@+id/quality"
-            android:src="@drawable/ic_high_quality_white_48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="fitCenter"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"/>
-
-        <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingBottom="10dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_high_quality_white_48dp" />
+
+        <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
             android:id="@+id/ascdsc"
-            android:src="@drawable/ic_arrow_drop_down_white_48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="fitCenter"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"/>
-
-        <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:id="@+id/modality"
-            android:src="@drawable/ic_sort_white_48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:scaleType="fitCenter"
-            android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:paddingLeft="5dp"
-            android:paddingRight="5dp"/>
+            android:paddingRight="5dp"
+            android:paddingTop="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_arrow_drop_down_white_48dp" />
+
+        <net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton
+            android:id="@+id/modality"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:paddingBottom="10dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_sort_white_48dp" />
+
     </LinearLayout>
 
 </LinearLayout>

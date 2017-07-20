@@ -4,7 +4,7 @@
     <string name="closeDrawer">Chiusura drawer</string>
     <string name="perm">L\'applicazione necessita di potere scrivere nella memoria del dispositivo per potere salvare le canzoni</string>
     <string name="deny">L\'app non funzionerà correttamente</string>
-    <string name="disclaimer">Applicazione creata per scaricare canzoni da http://pleer.net.\nViene consigliato l\'utilizzo di questa app con Wifi.\nVieni a scoprire altri miei progetti su http://paolo7297.ddns.net/</string>
+    <string name="disclaimer">Applicazione create per scaricare canzoni da http://pleer.net.\nViene consigliato l\'utilizzo di questa app con Wifi.\nVieni a scoprire altri miei progetti su http://paolo7297.ddns.net/</string>
 
     <string name="pref_disclaimer">ShowDisclaimer</string>
 
@@ -48,8 +48,6 @@
     <string name="any">Qualsiasi</string>
     <string name="ascendant">Crescente</string>
     <string name="descendant">Decrescente</string>
-    <string name="songs_in_playlist">canzoni presenti</string>
-    <string name="favorites">Preferiti</string>
     <string name="cache_management">Gestione Cache</string>
     <string name="songs_number">Numero di canzoni:</string>
     <string name="cache_Size">Dimensione cache:</string>
@@ -65,15 +63,8 @@
     <string name="confirm">Conferma</string>
     <string name="cancel">Annulla</string>
     <string name="ok">Okay</string>
-    <string name="top_week">Top Settimana</string>
-    <string name="top_three_month">Top 3 Mesi</string>
-    <string name="top_six_month">Top 6 Mesi</string>
-    <string name="top_year">Top Annuali</string>
-    <string name="top_all_time">Top di Sempre</string>
     <string name="start_search_music">Inizia a cercare la musica</string>
     <string name="nothing_found">Non ho trovato nulla</string>
-    <string name="update_available">Aggiornamento disponibile!</string>
-    <string name="update_now">Aggiorna ora</string>
     <string name="update_notify">Aggiornamento di SongHunter</string>
     <string name="not_now">Più tardi</string>
     <string name="download_started">Download iniziato</string>
@@ -88,6 +79,15 @@
     <string name="sort_by">Ordina per</string>
     <string name="other">Altro</string>
     <string name="cache_info">Info sulla cache</string>
+    <string name="songs_in_playlist">canzoni presenti</string>
+    <string name="favorites">Preferiti</string>
+    <string name="top_week">Top Settimana</string>
+    <string name="top_three_month">Top 3 Mesi</string>
+    <string name="top_six_month">Top 6 Mesi</string>
+    <string name="top_year">Top Annuali</string>
+    <string name="top_all_time">Top di Sempre</string>
+    <string name="update_now">Aggiorna ora</string>
+    <string name="update_available">Aggiornamento disponibile!</string>
     <string name="download_completed">Download completato.</string>
 
 </resources>

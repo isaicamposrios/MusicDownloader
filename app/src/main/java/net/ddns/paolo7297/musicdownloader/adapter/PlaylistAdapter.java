@@ -11,6 +11,7 @@ import net.ddns.paolo7297.musicdownloader.R;
 import net.ddns.paolo7297.musicdownloader.placeholder.Playlist;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Created by paolo on 10/05/17.
@@ -47,7 +48,7 @@ public class PlaylistAdapter extends BaseAdapter {
         if (convertView == null)
             convertView = inflater.inflate(R.layout.row_playlist, parent, false);
         ((TextView) convertView.findViewById(R.id.title)).setText(playlists.get(position).getName());
-        ((TextView) convertView.findViewById(R.id.subtitle)).setText(playlists.get(position).getCount() + " canzoni presenti");
+        ((TextView) convertView.findViewById(R.id.subtitle)).setText(String.format(Locale.getDefault(), "%d %s", playlists.get(position).getCount(), context.getString(R.string.songs_in_playlist)));
         return convertView;
     }
 }

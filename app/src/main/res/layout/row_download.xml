@@ -10,12 +10,15 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_marginBottom="6dp"
+        android:layout_marginEnd="6dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="6dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="6dp"
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -24,6 +27,7 @@
             android:maxLines="1"
             android:textColor="@color/colorTextPrimary"
             android:textSize="19sp" />
+
         <TextView
             android:id="@+id/artist"
             android:layout_width="wrap_content"
@@ -32,6 +36,7 @@
             android:maxLines="1"
             android:textColor="@color/colorTextSecondary"
             android:textSize="15sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -41,6 +46,7 @@
         android:layout_margin="6dp"
         android:gravity="center"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/duration"
             android:layout_width="wrap_content"
@@ -48,6 +54,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/colorTextSecondary" />
+
         <TextView
             android:id="@+id/bitrate"
             android:layout_width="wrap_content"
@@ -55,6 +62,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="@color/colorTextSecondary" />
+
     </LinearLayout>
 
 </LinearLayout>

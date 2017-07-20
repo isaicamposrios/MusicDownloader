@@ -36,11 +36,11 @@ public class TabManagerFragment extends Fragment {
             fs[i] = new TopSongsFragment();
             fs[i].setTarget(i + 1);
         }
-        adapter.add(fs[0], "Top Settimana");
-        adapter.add(fs[1], "Top 3 Mesi");
-        adapter.add(fs[2], "Top 6 Mesi");
-        adapter.add(fs[3], "Top Annuali");
-        adapter.add(fs[4], "Top di Sempre");
+        adapter.add(fs[0], getString(R.string.top_week));
+        adapter.add(fs[1], getString(R.string.top_three_month));
+        adapter.add(fs[2], getString(R.string.top_six_month));
+        adapter.add(fs[3], getString(R.string.top_year));
+        adapter.add(fs[4], getString(R.string.top_all_time));
         viewPager.setAdapter(adapter);
         // Set Tabs inside Toolbar
         //TabLayout tabs = (TabLayout) view.findViewById(R.id.result_tabs);

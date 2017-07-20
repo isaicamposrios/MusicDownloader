@@ -46,7 +46,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:text="00:00"
+                android:layout_alignParentStart="true"
+                android:text="@string/starttime"
                 android:textSize="@dimen/text_subtitle" />
 
 
@@ -54,8 +55,9 @@
                 android:id="@+id/time_completed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:text="00:00"
+                android:text="@string/starttime"
                 android:textSize="@dimen/text_subtitle" />
         </RelativeLayout>
 
@@ -70,9 +72,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/play"
+                android:layout_toStartOf="@id/play"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Precedente"
+                android:contentDescription="@string/prev"
                 android:cropToPadding="true"
                 android:scaleType="fitEnd"
                 android:src="@drawable/controller_rewind" />
@@ -86,7 +89,7 @@
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Pausa|Riproduci"
+                android:contentDescription="@string/play_pause"
                 android:cropToPadding="true"
                 android:scaleType="fitCenter"
                 android:src="@drawable/controller_pause" />
@@ -96,10 +99,11 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/play"
                 android:layout_toRightOf="@+id/play"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Successiva"
+                android:contentDescription="@string/next"
                 android:cropToPadding="true"
                 android:scaleType="fitStart"
                 android:src="@drawable/controller_forward" />
@@ -110,11 +114,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_toLeftOf="@id/rewind"
+                android:layout_toStartOf="@id/rewind"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Riproduzione casuale"
+                android:contentDescription="@string/random_play"
                 android:cropToPadding="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/controller_shuffle_enabled" />
@@ -124,12 +130,14 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
+                android:layout_toEndOf="@id/forward"
                 android:layout_toRightOf="@id/forward"
                 android:adjustViewBounds="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Ripeti"
+                android:contentDescription="@string/repeat"
                 android:cropToPadding="true"
                 android:scaleType="centerCrop"
                 android:src="@drawable/controller_repeat_all" />

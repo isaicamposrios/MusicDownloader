@@ -35,6 +35,7 @@ import net.ddns.paolo7297.musicdownloader.ui.activity.SongsEditActivity;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static net.ddns.paolo7297.musicdownloader.Constants.FOLDER_HOME;
 
@@ -193,22 +194,22 @@ public class DownloadedSongsFragment extends Fragment {
                 Intent i = new Intent(Intent.ACTION_SEND);
                 i.setType("audio/mp3");
                 i.putExtra(Intent.EXTRA_STREAM, uri);
-                startActivity(Intent.createChooser(i, "Condividi \"" + results.get(menuInfo.position).getName() + "\""));
+                startActivity(Intent.createChooser(i, String.format(Locale.getDefault(), "%s \"%s\"", getString(R.string.share), results.get(menuInfo.position).getName())));
                 return true;
             case R.id.delete:
 
                 //Toast.makeText(getActivity(), "So di dovere mettere un messaggio di conferma, ma sono pigro", Toast.LENGTH_SHORT).show();
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                builder.setTitle("Sei sicuro?");
-                builder.setMessage("Vuoi eliminare \"" + results.get(menuInfo.position).getName() + "\"?");
-                builder.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                builder.setTitle(R.string.are_you_sure);
+                builder.setMessage(String.format(Locale.getDefault(), "%s \"%s\"?", getString(R.string.want_to_del), results.get(menuInfo.position).getName()));
+                builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         new File(results.get(menuInfo.position).getFile()).delete();
                         onResume();
                     }
                 });
-                builder.setNegativeButton("No", null);
+                builder.setNegativeButton(R.string.no, null);
                 builder.show();
                 return true;
             case R.id.add:

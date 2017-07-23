@@ -10,6 +10,7 @@ import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -163,10 +164,8 @@ public class SearchFragment extends Fragment {
                 v.findViewById(R.id.button_stream).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         MasterPlayer mp = MasterPlayer.getInstance(getActivity().getApplicationContext());
-                        //Song[] temp = new Song[]{songsSaved.get(position)};
-                        mp.setup(songsSaved.toArray(new Song[songsSaved.size()]), position);
+                        mp.setup(songsSaved.toArray(new Song[songsSaved.size()]), position, MasterPlayer.SHUFFLE_DISABLED, MasterPlayer.REPEAT_ONE);
                         //mp.setup(temp, 0);
                     }
                 });
@@ -488,7 +487,8 @@ public class SearchFragment extends Fragment {
                 }
                 //adapter.setSongs(songsSaved);
                 adapter.notifyDataSetChanged();
-                listView.setSelectionAfterHeaderView();
+                //listView.setSelectionAfterHeaderView();
+
             }
 
             @Override
@@ -501,7 +501,15 @@ public class SearchFragment extends Fragment {
 
     private void viewList(int page) {
         if (text != null) text.setVisibility(GONE);
-        if (listView != null) listView.setVisibility(View.VISIBLE);
+        if (listView != null) {
+            listView.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    listView.setSelection(0);
+                }
+            }, 100);
+        }
         if (loading != null) loading.setVisibility(GONE);
         viewCursors(page);
 

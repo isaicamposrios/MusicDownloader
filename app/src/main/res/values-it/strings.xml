@@ -89,5 +89,6 @@
     <string name="update_now">Aggiorna ora</string>
     <string name="update_available">Aggiornamento disponibile!</string>
     <string name="download_completed">Download completato.</string>
+    <string name="showqueue">Mostra elenco</string>
 
 </resources>

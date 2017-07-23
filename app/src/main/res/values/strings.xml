@@ -89,5 +89,6 @@
     <string name="other">Altro</string>
     <string name="cache_info">Info sulla cache</string>
     <string name="download_completed">Download completato.</string>
+    <string name="showqueue">Mostra elenco</string>
 
 </resources>

@@ -8,4 +8,10 @@
         android:title="@string/download"
         app:showAsAction="always" />
 
+    <item
+        android:id="@+id/showqueue"
+        android:icon="@drawable/ic_list_white_48dp"
+        android:title="@string/showqueue"
+        app:showAsAction="always" />
+
 </menu>

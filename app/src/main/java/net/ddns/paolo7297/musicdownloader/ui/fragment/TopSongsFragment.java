@@ -125,7 +125,7 @@ public class TopSongsFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         MasterPlayer mp = MasterPlayer.getInstance(getActivity().getApplicationContext());
-                        mp.setup(songsSaved.toArray(new Song[songsSaved.size()]), position);
+                        mp.setup(songsSaved.toArray(new Song[songsSaved.size()]), position, MasterPlayer.SHUFFLE_DISABLED, MasterPlayer.REPEAT_ALL);
                     }
                 });
                 v.findViewById(R.id.button_download).setOnClickListener(new View.OnClickListener() {

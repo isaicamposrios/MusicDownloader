@@ -69,7 +69,14 @@ public class Song {
         return getArtist() + " - " + getName();
     }
 
-    public boolean equals(Song s) {
-        return id.equals(s.id) && name.equals(s.name) && artist.equals(s.artist) && file.equals(s.file) && bitrate.equals(s.bitrate) && (length == s.length) && size.equals(s.size);
+    @Override
+    public boolean equals(Object s) {
+        return s != null &&
+                ((id != null && id.equals(((Song) s).id)) || (id == null && ((Song) s).id == null)) &&
+                ((name != null && name.equals(((Song) s).name)) || (name == null && ((Song) s).name == null)) &&
+                ((artist != null && artist.equals(((Song) s).artist)) || (artist == null && ((Song) s).artist == null)) &&
+                ((file != null && file.equals(((Song) s).file)) || (file == null && ((Song) s).file == null)) &&
+                ((bitrate != null && bitrate.equals(((Song) s).bitrate)) || (bitrate == null && ((Song) s).bitrate == null)) &&
+                (length == ((Song) s).length);
     }
 }

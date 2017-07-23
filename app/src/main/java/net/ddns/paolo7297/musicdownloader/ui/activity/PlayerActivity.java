@@ -11,12 +11,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import net.ddns.paolo7297.musicdownloader.CacheManager;
 import net.ddns.paolo7297.musicdownloader.R;
+import net.ddns.paolo7297.musicdownloader.adapter.DownloadedSongsAdapter;
 import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
 import net.ddns.paolo7297.musicdownloader.ui.SquaredImageView;
 
@@ -36,6 +39,8 @@ public class PlayerActivity extends AppCompatActivity {
     private SquaredImageView imgView;
     private ImageButton prev, pp, next, shuffle, repeat;
     private CacheManager cacheManager;
+    private ListView listView;
+    private DownloadedSongsAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,7 +58,10 @@ public class PlayerActivity extends AppCompatActivity {
         next = (ImageButton) findViewById(R.id.forward);
         repeat = (ImageButton) findViewById(R.id.repeat);
         shuffle = (ImageButton) findViewById(R.id.shuffle);
+        listView = (ListView) findViewById(R.id.list);
 
+        adapter = new DownloadedSongsAdapter(masterPlayer.getSongs(), getApplicationContext());
+        listView.setAdapter(adapter);
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +108,12 @@ public class PlayerActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         setupPlayer();
-
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                masterPlayer.setSong(position);
+            }
+        });
     }
 
     @Override
@@ -117,12 +130,12 @@ public class PlayerActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (cacheManager.isUrl(masterPlayer.getInfos().getFile())) {
-            getMenuInflater().inflate(R.menu.player, menu);
-            return true;
-        } else {
-            return false;
+        getMenuInflater().inflate(R.menu.player, menu);
+        if (!cacheManager.isUrl(masterPlayer.getInfos().getFile())) {
+            menu.findItem(R.id.download).setVisible(false);
         }
+        return true;
+
     }
 
     @Override
@@ -131,8 +144,24 @@ public class PlayerActivity extends AppCompatActivity {
             case R.id.download:
                 cacheManager.download(masterPlayer.getSong());
                 return true;
+            case R.id.showqueue:
+                toggleQueue();
+                return true;
             default:
                 return false;
+        }
+    }
+
+    private void toggleQueue() {
+        if (listView.getVisibility() == View.VISIBLE) {
+            listView.setVisibility(View.GONE);
+            imgView.setAlpha(1.0f);
+        } else {
+            listView.setVisibility(View.VISIBLE);
+            imgView.setAlpha(0.3f);
+            if (adapter.getCount() > masterPlayer.getIndex()) {
+                listView.smoothScrollToPosition(masterPlayer.getIndex());
+            }
         }
     }
 
@@ -162,6 +191,9 @@ public class PlayerActivity extends AppCompatActivity {
             } else {
                 repeat.setImageResource(R.drawable.controller_repeat_one);
             }
+            if (listView.getVisibility() == View.VISIBLE && adapter.getCount() > masterPlayer.getIndex()) {
+                listView.smoothScrollToPosition(masterPlayer.getIndex());
+            }
         }
     }
 
@@ -188,7 +220,6 @@ public class PlayerActivity extends AppCompatActivity {
 
 
     private void setupPlayer() {
-
         final MasterPlayer.MPInfo info = masterPlayer.getInfos();
         if (info.getStatus() == MasterPlayer.STATUS_NEED_CONFIGURATION) {
             finish();
@@ -265,6 +296,7 @@ public class PlayerActivity extends AppCompatActivity {
                 }
             });
             refreshplayer();
+            adapter.notifyDataSetChanged();
         }
     }
 }

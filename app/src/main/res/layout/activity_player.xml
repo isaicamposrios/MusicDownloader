@@ -19,13 +19,24 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <net.ddns.paolo7297.musicdownloader.ui.SquaredImageView
-            android:id="@+id/img"
+        <net.ddns.paolo7297.musicdownloader.ui.SquaredLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:background="#424242"
-            android:src="@drawable/logo_red_white" />
+            android:layout_margin="20dp">
+
+            <net.ddns.paolo7297.musicdownloader.ui.SquaredImageView
+                android:id="@+id/img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#424242"
+                android:src="@drawable/logo_red_white" />
+
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </net.ddns.paolo7297.musicdownloader.ui.SquaredLayout>
 
         <android.support.v7.widget.AppCompatSeekBar
             android:id="@+id/seekbar"

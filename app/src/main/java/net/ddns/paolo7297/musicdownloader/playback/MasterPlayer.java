@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -52,6 +53,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     public static final int REPEAT_ONE = 0;
     public static final int REPEAT_ALL = 1;
     private static MasterPlayer mp;
+    private static IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
     private MediaPlayer player;
     private int status, repeat, shuffle;
     private int index;
@@ -65,6 +67,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     private AudioManager audioManager;
     private CacheManager cacheManager;
     private Stack<Integer> prevIndex;
+    private EarphoneDisconnectReceiver receiver;
 
     private MasterPlayer(Context c) {
         context = c;
@@ -76,6 +79,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
         cacheManager = CacheManager.getInstance(c);
         shuffle = PreferenceManager.getDefaultSharedPreferences(c).getInt(Constants.PREFERENCE_SHUFFLE, SHUFFLE_DISABLED);
         repeat = PreferenceManager.getDefaultSharedPreferences(c).getInt(Constants.PREFERENCE_REPEAT, REPEAT_ALL);
+        receiver = new EarphoneDisconnectReceiver();
         prevIndex = new Stack<>();
         setupMediaSession();
         status = STATUS_NEED_CONFIGURATION;
@@ -99,6 +103,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
             setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
             if (callback != null) callback.OnTrackChange();
             setupNotification();
+            context.registerReceiver(receiver, intentFilter);
         }
     }
 
@@ -126,6 +131,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
             player.stop();
             status = STATUS_STOPPED;
             if (callback != null) callback.OnTrackChange();
+            context.unregisterReceiver(receiver);
         }
     }
 
@@ -378,7 +384,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
     }
 
     public Song getSong() {
-        return songs.get(index);
+        return songs != null ? songs.get(index) : null;
     }
 
     public void setSong(final int index) {
@@ -389,6 +395,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
                 }
             }
             player.reset();
+            this.index = index;
             player.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK);
             if (cacheManager.isUrl(songs.get(index).getFile())) {
                 if (!cacheManager.isInCache(songs.get(index).getFile())) {
@@ -453,6 +460,14 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
             status = STATUS_NEED_CONFIGURATION;
         }
 
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public ArrayList<Song> getSongs() {
+        return songs;
     }
 
     public void toggleRepeat() {

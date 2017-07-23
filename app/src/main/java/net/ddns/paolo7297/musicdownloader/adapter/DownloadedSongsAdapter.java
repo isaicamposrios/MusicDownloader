@@ -1,7 +1,7 @@
 package net.ddns.paolo7297.musicdownloader.adapter;
 
 import android.content.Context;
-import android.view.Gravity;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import net.ddns.paolo7297.musicdownloader.R;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
+import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -20,12 +21,14 @@ import java.util.Locale;
 
 public class DownloadedSongsAdapter extends BaseAdapter {
 
-    ArrayList<Song> files;
-    Context context;
+    private ArrayList<Song> files;
+    private Context context;
+    private MasterPlayer masterPlayer;
 
     public DownloadedSongsAdapter(ArrayList<Song> files, Context context) {
         this.files = files;
         this.context = context;
+        masterPlayer = MasterPlayer.getInstance(context);
     }
 
     @Override
@@ -52,12 +55,17 @@ public class DownloadedSongsAdapter extends BaseAdapter {
         ((TextView) convertView.findViewById(R.id.title)).setText(files.get(position).getName());
         ((TextView) convertView.findViewById(R.id.artist)).setText(files.get(position).getArtist());
         //((TextView) convertView.findViewById(R.id.size)).setText();
-        convertView.findViewById(R.id.bitrate).setVisibility(View.GONE);
+
         long i = files.get(position).getLength() / 60;
         int d = (int) (((float) files.get(position).getLength() / 60 - i) * 60);
         ((TextView) convertView.findViewById(R.id.duration)).setText(String.format(Locale.getDefault(), "%d:%02d min", i, d));
-        ((TextView) convertView.findViewById(R.id.duration)).setGravity(Gravity.BOTTOM);
-
+        if (masterPlayer.getSong() != null && files.get(position).equals(masterPlayer.getSong())) {
+            ((TextView) convertView.findViewById(R.id.title)).setTypeface(null, Typeface.BOLD);
+            ((TextView) convertView.findViewById(R.id.artist)).setTypeface(null, Typeface.BOLD);
+        } else {
+            ((TextView) convertView.findViewById(R.id.title)).setTypeface(null, Typeface.NORMAL);
+            ((TextView) convertView.findViewById(R.id.artist)).setTypeface(null, Typeface.NORMAL);
+        }
         return convertView;
     }
 }

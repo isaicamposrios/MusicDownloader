@@ -18,17 +18,17 @@
         <item>@string/date</item>
     </string-array>
 
-    <string-array name="pref_quality_int">
+    <string-array name="pref_quality_int" translatable="false">
         <item>3</item>
         <item>2</item>
         <item>1</item>
         <item>0</item>
     </string-array>
-    <string-array name="pref_verso_int">
+    <string-array name="pref_verso_int" translatable="false">
         <item>0</item>
         <item>1</item>
     </string-array>
-    <string-array name="pref_sorting_int">
+    <string-array name="pref_sorting_int" translatable="false">
         <item>0</item>
         <item>2</item>
         <item>1</item>

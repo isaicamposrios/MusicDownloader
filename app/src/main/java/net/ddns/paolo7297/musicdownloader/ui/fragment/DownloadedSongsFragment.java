@@ -75,6 +75,7 @@ public class DownloadedSongsFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MasterPlayer mp = MasterPlayer.getInstance(getActivity().getApplicationContext());
                 mp.setup(results.toArray(new Song[results.size()]), position);
+                adapter.notifyDataSetInvalidated();
 
             }
         });

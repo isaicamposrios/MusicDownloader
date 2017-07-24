@@ -206,6 +206,7 @@ public class DownloadedSongsFragment extends Fragment {
                 builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        getActivity().getContentResolver().delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, MediaStore.Audio.Media.DATA + "='" + results.get(menuInfo.position).getFile() + "'", null);
                         new File(results.get(menuInfo.position).getFile()).delete();
                         onResume();
                     }

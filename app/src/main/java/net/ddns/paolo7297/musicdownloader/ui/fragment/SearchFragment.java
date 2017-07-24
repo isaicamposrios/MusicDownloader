@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.media.MediaMetadataRetriever;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -112,7 +111,6 @@ public class SearchFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                final MediaPlayer[] mediaPlayer = new MediaPlayer[1];
                 final Song s = songsSaved.get(position);
                 final int p1 = position;
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

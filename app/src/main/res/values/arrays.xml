@@ -33,4 +33,12 @@
         <item>2</item>
         <item>1</item>
     </string-array>
+
+    <string-array name="bitrates" translatable="false">
+        <item>320kbps</item>
+        <item>256kbps</item>
+        <item>192kbps</item>
+        <item>128kbps</item>
+        <item>64kbps</item>
+    </string-array>
 </resources>

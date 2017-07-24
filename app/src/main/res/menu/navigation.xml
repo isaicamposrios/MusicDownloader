@@ -9,7 +9,10 @@
             android:id="@+id/search"
             android:icon="@drawable/ic_search_black_48dp"
             android:title="@string/search" />
-
+        <item
+            android:id="@+id/youtube"
+            android:icon="@drawable/ic_search_black_48dp"
+            android:title="@string/cerca_su_youtube" />
         <item
             android:id="@+id/top"
             android:icon="@drawable/ic_thumb_up_black_48dp"

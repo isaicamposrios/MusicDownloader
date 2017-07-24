@@ -88,4 +88,10 @@
     <string name="cache_info">Cache info</string>
     <string name="download_completed">Download completed.</string>
     <string name="showqueue">Show Queue</string>
+    <string name="cerca_su_youtube">Search on Youtube</string>
+    <string name="start_search_youtube_music">Start searching music.\\nYou will notice lower audio quality, but it\'s usefull if you can\'t found songs in any other way.</string>
+    <string name="remember_details">Download started. Remember to edit song\'s tags</string>
+    <string name="hint">Click here or swipe right to see all app functions!</string>
+    <string name="show_hint_name">Show tutorial</string>
+    <string name="show_hint_at_startup">Show or hide tutorial at application startup</string>
 </resources>

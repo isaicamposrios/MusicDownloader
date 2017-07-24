@@ -19,5 +19,6 @@ public class Constants {
 
     public final static String CACHE_THRESHOLD = "CacheThreshold";
     public final static String CACHE_AUTODELETE = "CacheAutodelete";
+    public final static String HINT_SHOWN = "HintShow";
 
 }

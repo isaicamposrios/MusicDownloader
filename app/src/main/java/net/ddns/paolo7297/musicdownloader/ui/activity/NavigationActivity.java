@@ -49,10 +49,15 @@ import net.ddns.paolo7297.musicdownloader.ui.fragment.PlaylistsFragment;
 import net.ddns.paolo7297.musicdownloader.ui.fragment.PreferenceFragment;
 import net.ddns.paolo7297.musicdownloader.ui.fragment.SearchFragment;
 import net.ddns.paolo7297.musicdownloader.ui.fragment.TabManagerFragment;
+import net.ddns.paolo7297.musicdownloader.ui.fragment.YoutubeSearchFragment;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import ru.dimorinny.showcasecard.ShowCaseView;
+import ru.dimorinny.showcasecard.position.TopLeftToolbar;
+import ru.dimorinny.showcasecard.radius.Radius;
 
 import static net.ddns.paolo7297.musicdownloader.Constants.FOLDER_HOME;
 import static net.ddns.paolo7297.musicdownloader.Constants.NOTIFICATION_OPEN;
@@ -151,12 +156,17 @@ public class NavigationActivity extends AppCompatActivity {
                         f = new PlaylistsFragment();
                         tabLayout.setVisibility(View.GONE);
                         break;
+                    case R.id.youtube:
+                        f = new YoutubeSearchFragment();
+                        tabLayout.setVisibility(View.GONE);
+                        break;
                     default:
                         f = new Fragment();
                         tabLayout.setVisibility(View.GONE);
                         break;
                 }
                 fm.beginTransaction().replace(R.id.frame, f).commit();
+
                 drawerLayout.closeDrawer(Gravity.START);
                 return true;
             }
@@ -193,6 +203,7 @@ public class NavigationActivity extends AppCompatActivity {
         logUpdate();
         //setupAds();
         clearCache();
+        showHint();
     }
 
     @Override
@@ -496,7 +507,23 @@ public class NavigationActivity extends AppCompatActivity {
             }
 
         }
+    }
 
-
+    private void showHint() {
+        if (PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).getBoolean(Constants.HINT_SHOWN, true)) {
+            new ShowCaseView.Builder(this)
+                    .withTypedPosition(new TopLeftToolbar())
+                    .withTypedRadius(new Radius(186F))
+                    .withContent(getString(R.string.hint))
+                    .withColor(R.color.colorOverlay)
+                    .withDismissListener(new ShowCaseView.DismissListener() {
+                        @Override
+                        public void onDismiss() {
+                            PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit().putBoolean(Constants.HINT_SHOWN, false).apply();
+                        }
+                    })
+                    .build()
+                    .show(this);
+        }
     }
 }

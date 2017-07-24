@@ -71,7 +71,8 @@
     <string name="top_year">Top Annuali</string>
     <string name="top_all_time">Top di Sempre</string>
     <string name="start_search_music">Inizia a cercare la musica</string>
-    <string name="nothing_found">Non ho trovato nulla</string>
+    <string name="start_search_youtube_music">Inizia a cercare la musica.\nTramite youtube riscontrerai una qualità più bassa di suono.\nMa è utile in caso non si riesca a trovare tramite il metodo tradizionale.</string>
+    <string name="nothing_found">Non ho trovato nulla, prova a cercare su Youtube!</string>
     <string name="update_available">Aggiornamento disponibile!</string>
     <string name="update_now">Aggiorna ora</string>
     <string name="update_notify">Aggiornamento di SongHunter</string>
@@ -90,5 +91,10 @@
     <string name="cache_info">Info sulla cache</string>
     <string name="download_completed">Download completato.</string>
     <string name="showqueue">Mostra elenco</string>
+    <string name="cerca_su_youtube">Cerca su Youtube</string>
+    <string name="remember_details">Download iniziato. Ricorda di andare a modificare i dettagli della canzone!</string>
+    <string name="hint">Clicca qua o trascina verso destra per accedere a tutte le funzioni dell\'applicazione!</string>
+    <string name="show_hint_name">Mostra tutorial</string>
+    <string name="show_hint_at_startup">Scegli se mostrare o meno il tutorial all\'avvio</string>
 
 </resources>

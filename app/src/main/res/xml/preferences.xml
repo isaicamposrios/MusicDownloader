@@ -6,6 +6,12 @@
             android:key="@string/pref_disclaimer"
             android:summary="@string/alert_at_startup"
             android:title="@string/show_alert" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="HintShow"
+            android:summary="@string/show_hint_at_startup"
+            android:title="@string/show_hint_name" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/search_settings">

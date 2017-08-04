@@ -1,4 +1,4 @@
-package net.ddns.paolo7297.musicdownloader;
+package net.ddns.paolo7297.musicdownloader.playback;
 
 import android.app.DownloadManager;
 import android.app.Notification;
@@ -6,12 +6,14 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 
+import net.ddns.paolo7297.musicdownloader.R;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
 
 import java.io.File;
@@ -147,6 +149,19 @@ public class CacheManager {
                 Notification notification = builder.build();
                 NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
                 notificationManager.notify(s.getLength(), notification);
+                MediaScannerConnection.scanFile(
+                        context,
+                        new String[]{dst.getAbsolutePath()},
+                        null,
+                        new MediaScannerConnection.MediaScannerConnectionClient() {
+                            public void onMediaScannerConnected() {
+
+                            }
+
+                            public void onScanCompleted(String path, Uri uri) {
+
+                            }
+                        });
             } catch (IOException e) {
                 e.printStackTrace();
             }

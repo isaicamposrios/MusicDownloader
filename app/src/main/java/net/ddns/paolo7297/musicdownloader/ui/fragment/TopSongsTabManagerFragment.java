@@ -16,7 +16,7 @@ import net.ddns.paolo7297.musicdownloader.adapter.TabsAdapter;
  * Created by paolo on 21/04/17.
  */
 
-public class TabManagerFragment extends Fragment {
+public class TopSongsTabManagerFragment extends Fragment {
     TabLayout tabs;
 
     public void setTabs(TabLayout tabs) {

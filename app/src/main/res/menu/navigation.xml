@@ -21,13 +21,13 @@
     </group>
 
     <group
-        android:id="@+id/local"
+        android:id="@+id/device"
         android:checkableBehavior="single">
 
         <item
-            android:id="@+id/download"
+            android:id="@+id/local"
             android:icon="@drawable/ic_music_note_black_48dp"
-            android:title="@string/downloaded_song" />
+            android:title="@string/music" />
 
         <item
             android:id="@+id/playlists"

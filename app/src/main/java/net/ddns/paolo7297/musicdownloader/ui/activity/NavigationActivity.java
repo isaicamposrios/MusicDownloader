@@ -36,19 +36,19 @@ import android.widget.Toast;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import net.ddns.paolo7297.musicdownloader.BuildConfig;
-import net.ddns.paolo7297.musicdownloader.CacheManager;
 import net.ddns.paolo7297.musicdownloader.Constants;
 import net.ddns.paolo7297.musicdownloader.R;
 import net.ddns.paolo7297.musicdownloader.ServerCommands;
+import net.ddns.paolo7297.musicdownloader.playback.CacheManager;
 import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
 import net.ddns.paolo7297.musicdownloader.playback.PlaylistDBHelper;
 import net.ddns.paolo7297.musicdownloader.task.SongTitleRetreiverTask;
 import net.ddns.paolo7297.musicdownloader.ui.DisablingImageButton;
-import net.ddns.paolo7297.musicdownloader.ui.fragment.DownloadedSongsFragment;
 import net.ddns.paolo7297.musicdownloader.ui.fragment.PlaylistsFragment;
 import net.ddns.paolo7297.musicdownloader.ui.fragment.PreferenceFragment;
 import net.ddns.paolo7297.musicdownloader.ui.fragment.SearchFragment;
-import net.ddns.paolo7297.musicdownloader.ui.fragment.TabManagerFragment;
+import net.ddns.paolo7297.musicdownloader.ui.fragment.SongsTabManagerFragment;
+import net.ddns.paolo7297.musicdownloader.ui.fragment.TopSongsTabManagerFragment;
 import net.ddns.paolo7297.musicdownloader.ui.fragment.YoutubeSearchFragment;
 
 import java.io.File;
@@ -136,17 +136,18 @@ public class NavigationActivity extends AppCompatActivity {
                 FragmentManager fm = getSupportFragmentManager();
                 switch (item.getItemId()) {
                     case R.id.top:
-                        f = new TabManagerFragment();
-                        ((TabManagerFragment) f).setTabs(tabLayout);
+                        f = new TopSongsTabManagerFragment();
+                        ((TopSongsTabManagerFragment) f).setTabs(tabLayout);
                         tabLayout.setVisibility(View.VISIBLE);
                         break;
                     case R.id.search:
                         f = new SearchFragment();
                         tabLayout.setVisibility(View.GONE);
                         break;
-                    case R.id.download:
-                        f = new DownloadedSongsFragment();
-                        tabLayout.setVisibility(View.GONE);
+                    case R.id.local:
+                        f = new SongsTabManagerFragment();
+                        ((SongsTabManagerFragment) f).setTabs(tabLayout);
+                        tabLayout.setVisibility(View.VISIBLE);
                         break;
                     case R.id.settings:
                         f = new PreferenceFragment();
@@ -212,7 +213,6 @@ public class NavigationActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQ_CODE:
                 ArrayList<String> denied = new ArrayList<>();
-                int j = 0;
                 for (int i = 0; i < permissions.length; i++) {
                     if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
                         if (ActivityCompat.shouldShowRequestPermissionRationale(this, permissions[i])) {
@@ -224,7 +224,6 @@ public class NavigationActivity extends AppCompatActivity {
                     }
                 }
                 if (denied.size() > 0) {
-
                     checkPerms(denied.toArray(new String[denied.size()]));
                 }
 
@@ -314,7 +313,7 @@ public class NavigationActivity extends AppCompatActivity {
             drawerLayout.closeDrawer(Gravity.START);
         }
         //refreshAds();
-        if (f != null && f instanceof TabManagerFragment) {
+        if (f != null && (f instanceof TopSongsTabManagerFragment || f instanceof SongsTabManagerFragment)) {
             tabLayout.setVisibility(View.VISIBLE);
         } else {
             tabLayout.setVisibility(View.GONE);

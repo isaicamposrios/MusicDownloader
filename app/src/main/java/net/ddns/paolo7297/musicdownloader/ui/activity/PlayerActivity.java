@@ -17,9 +17,9 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import net.ddns.paolo7297.musicdownloader.CacheManager;
 import net.ddns.paolo7297.musicdownloader.R;
-import net.ddns.paolo7297.musicdownloader.adapter.DownloadedSongsAdapter;
+import net.ddns.paolo7297.musicdownloader.adapter.LocalSongsAdapter;
+import net.ddns.paolo7297.musicdownloader.playback.CacheManager;
 import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
 import net.ddns.paolo7297.musicdownloader.ui.SquaredImageView;
 
@@ -40,7 +40,7 @@ public class PlayerActivity extends AppCompatActivity {
     private ImageButton prev, pp, next, shuffle, repeat;
     private CacheManager cacheManager;
     private ListView listView;
-    private DownloadedSongsAdapter adapter;
+    private LocalSongsAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +49,17 @@ public class PlayerActivity extends AppCompatActivity {
         cacheManager = CacheManager.getInstance(getApplicationContext());
         masterPlayer = MasterPlayer.getInstance(getApplicationContext());
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        //setTitle("");
+        /*toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });*/
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         bar = (SeekBar) findViewById(R.id.seekbar);
         timeLapsed = (TextView) findViewById(R.id.time_lapsed);
         timeCompleted = (TextView) findViewById(R.id.time_completed);
@@ -60,7 +71,7 @@ public class PlayerActivity extends AppCompatActivity {
         shuffle = (ImageButton) findViewById(R.id.shuffle);
         listView = (ListView) findViewById(R.id.list);
 
-        adapter = new DownloadedSongsAdapter(masterPlayer.getSongs(), getApplicationContext());
+        adapter = new LocalSongsAdapter(masterPlayer.getSongs(), getApplicationContext());
         listView.setAdapter(adapter);
         prev.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,16 +107,7 @@ public class PlayerActivity extends AppCompatActivity {
             }
         });
 
-        setSupportActionBar(toolbar);
-        //setTitle("In riproduzione");
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
 
         setupPlayer();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -160,7 +162,7 @@ public class PlayerActivity extends AppCompatActivity {
             listView.setVisibility(View.VISIBLE);
             imgView.setAlpha(0.3f);
             if (adapter.getCount() > masterPlayer.getIndex()) {
-                listView.smoothScrollToPosition(masterPlayer.getIndex());
+                listView.setSelection(masterPlayer.getIndex());
             }
         }
     }
@@ -191,9 +193,9 @@ public class PlayerActivity extends AppCompatActivity {
             } else {
                 repeat.setImageResource(R.drawable.controller_repeat_one);
             }
-            if (listView.getVisibility() == View.VISIBLE && adapter.getCount() > masterPlayer.getIndex()) {
-                listView.smoothScrollToPosition(masterPlayer.getIndex());
-            }
+            /*if (listView.getVisibility() == View.VISIBLE && adapter.getCount() > masterPlayer.getIndex()) {
+                listView.setSelection(masterPlayer.getIndex());
+            }*/
         }
     }
 
@@ -275,6 +277,9 @@ public class PlayerActivity extends AppCompatActivity {
                 @Override
                 public void OnTrackChange() {
                     setupPlayer();
+                    if (listView.getVisibility() == View.VISIBLE && adapter.getCount() > masterPlayer.getIndex()) {
+                        listView.setSelection(masterPlayer.getIndex());
+                    }
                 }
             });
 

@@ -12,7 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import net.ddns.paolo7297.musicdownloader.R;
-import net.ddns.paolo7297.musicdownloader.adapter.DownloadedSongsAdapter;
+import net.ddns.paolo7297.musicdownloader.adapter.LocalSongsAdapter;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
 import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
 import net.ddns.paolo7297.musicdownloader.playback.PlaylistDBHelper;
@@ -28,7 +28,7 @@ public class PlaylistActivity extends AppCompatActivity {
 
     private ListView listView;
     private PlaylistDBHelper dbHelper;
-    private DownloadedSongsAdapter adapter;
+    private LocalSongsAdapter adapter;
     private Toolbar toolbar;
     private String playlist;
     private ArrayList<Song> songs;
@@ -48,7 +48,7 @@ public class PlaylistActivity extends AppCompatActivity {
         setTitle(playlist);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        adapter = new DownloadedSongsAdapter(songs, getApplicationContext());
+        adapter = new LocalSongsAdapter(songs, getApplicationContext());
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

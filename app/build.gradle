@@ -7,8 +7,8 @@ android {
         applicationId "net.ddns.paolo7297.musicdownloader"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 16
-        versionName "1.23"
+        versionCode 17
+        versionName "1.24"
     }
     buildTypes {
         debug {
@@ -38,8 +38,8 @@ dependencies {
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.android.support:preference-v7:25.3.1'
     //compile 'ch.acra:acra:4.9.2'
-    compile 'com.google.firebase:firebase-core:11.0.2'
-    compile 'com.google.firebase:firebase-ads:11.0.2'
+    compile 'com.google.firebase:firebase-core:11.0.4'
+    compile 'com.google.firebase:firebase-ads:11.0.4'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.HaarigerHarald:android-youtubeExtractor:master-SNAPSHOT'
     compile 'com.github.dimorinny:show-case-card-view:0.0.1'

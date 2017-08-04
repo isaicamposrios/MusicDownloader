@@ -94,4 +94,9 @@
     <string name="hint">Click here or swipe right to see all app functions!</string>
     <string name="show_hint_name">Show tutorial</string>
     <string name="show_hint_at_startup">Show or hide tutorial at application startup</string>
+    <string name="unknown_artist">Unknown Artist</string>
+    <string name="by_song">By Song</string>
+    <string name="by_album">By Album</string>
+    <string name="by_artist">By Artist</string>
+    <string name="music">Music</string>
 </resources>

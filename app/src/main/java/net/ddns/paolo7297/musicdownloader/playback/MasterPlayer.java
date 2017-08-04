@@ -19,7 +19,6 @@ import android.support.v7.app.NotificationCompat;
 import android.support.v7.preference.PreferenceManager;
 import android.view.KeyEvent;
 
-import net.ddns.paolo7297.musicdownloader.CacheManager;
 import net.ddns.paolo7297.musicdownloader.Constants;
 import net.ddns.paolo7297.musicdownloader.R;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
@@ -442,6 +441,7 @@ public class MasterPlayer implements MediaPlayer.OnPreparedListener, MediaPlayer
                     }
                 }
             } else {
+                while (!new File(songs.get(index).getFile()).exists()) this.index++;
                 player.setDataSource(songs.get(index).getFile());
 
                 //title = songs.get(index);

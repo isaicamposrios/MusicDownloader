@@ -6,8 +6,8 @@ import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
 import android.os.AsyncTask;
 
-import net.ddns.paolo7297.musicdownloader.CacheManager;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
+import net.ddns.paolo7297.musicdownloader.playback.CacheManager;
 
 import java.io.File;
 import java.util.HashMap;

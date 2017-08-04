@@ -1,11 +1,14 @@
 package net.ddns.paolo7297.musicdownloader.ui.activity;
 
 import android.content.Intent;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.EditText;
 
@@ -49,6 +52,14 @@ public class SongsEditActivity extends AppCompatActivity {
         setTitle(getString(R.string.edit));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        title.setMovementMethod(new ScrollingMovementMethod());
+        artist.setMovementMethod(new ScrollingMovementMethod());
+        album.setMovementMethod(new ScrollingMovementMethod());
+        genre.setMovementMethod(new ScrollingMovementMethod());
+        year.setMovementMethod(new ScrollingMovementMethod());
+        composer.setMovementMethod(new ScrollingMovementMethod());
+
         songFile = new File(song);
         if (songFile.exists()) {
             try {
@@ -82,6 +93,21 @@ public class SongsEditActivity extends AppCompatActivity {
                                 finish();
                             } catch (IOException | ID3WriteException e) {
                                 e.printStackTrace();
+                            } finally {
+                                MediaScannerConnection.scanFile(
+                                        getApplicationContext(),
+                                        new String[]{songFile.getAbsolutePath()},
+                                        null,
+                                        new MediaScannerConnection.MediaScannerConnectionClient() {
+                                            public void onMediaScannerConnected() {
+
+                                            }
+
+                                            public void onScanCompleted(String path, Uri uri) {
+                                                System.out.println(path);
+                                            }
+                                        }
+                                );
                             }
                         }
                     });

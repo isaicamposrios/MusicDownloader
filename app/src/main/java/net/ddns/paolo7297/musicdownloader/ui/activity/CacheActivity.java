@@ -12,9 +12,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import net.ddns.paolo7297.musicdownloader.CacheManager;
 import net.ddns.paolo7297.musicdownloader.Constants;
 import net.ddns.paolo7297.musicdownloader.R;
+import net.ddns.paolo7297.musicdownloader.playback.CacheManager;
 
 import java.io.File;
 import java.util.Locale;

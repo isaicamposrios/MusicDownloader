@@ -19,13 +19,13 @@ import java.util.Locale;
  * Created by paolo on 20/04/17.
  */
 
-public class DownloadedSongsAdapter extends BaseAdapter {
+public class LocalSongsAdapter extends BaseAdapter {
 
     private ArrayList<Song> files;
     private Context context;
     private MasterPlayer masterPlayer;
 
-    public DownloadedSongsAdapter(ArrayList<Song> files, Context context) {
+    public LocalSongsAdapter(ArrayList<Song> files, Context context) {
         this.files = files;
         this.context = context;
         masterPlayer = MasterPlayer.getInstance(context);

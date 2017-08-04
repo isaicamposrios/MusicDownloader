@@ -54,8 +54,11 @@
 
         <activity
             android:name=".ui.activity.PlayerActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"></activity>
 
+        <activity
+            android:name=".ui.activity.SongDisplayActivity"
+            android:screenOrientation="portrait">
         </activity>
 
         <receiver android:name=".playback.NotificationMediaButtonsReceiver">

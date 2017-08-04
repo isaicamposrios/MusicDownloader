@@ -31,12 +31,12 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import net.ddns.paolo7297.musicdownloader.CacheManager;
 import net.ddns.paolo7297.musicdownloader.R;
 import net.ddns.paolo7297.musicdownloader.adapter.PlaylistAdapter;
 import net.ddns.paolo7297.musicdownloader.adapter.SearchAdapter;
 import net.ddns.paolo7297.musicdownloader.placeholder.Playlist;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
+import net.ddns.paolo7297.musicdownloader.playback.CacheManager;
 import net.ddns.paolo7297.musicdownloader.playback.MasterPlayer;
 import net.ddns.paolo7297.musicdownloader.playback.PlaylistDBHelper;
 import net.ddns.paolo7297.musicdownloader.task.QueryResolverTask;

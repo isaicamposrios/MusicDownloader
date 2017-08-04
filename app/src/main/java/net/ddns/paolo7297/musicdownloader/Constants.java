@@ -21,4 +21,7 @@ public class Constants {
     public final static String CACHE_AUTODELETE = "CacheAutodelete";
     public final static String HINT_SHOWN = "HintShow";
 
+    public final static String SONGS_TYPE = "Type";
+    public final static String SONGS_CONTENT = "Content";
+
 }

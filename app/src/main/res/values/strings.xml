@@ -96,5 +96,10 @@
     <string name="hint">Clicca qua o trascina verso destra per accedere a tutte le funzioni dell\'applicazione!</string>
     <string name="show_hint_name">Mostra tutorial</string>
     <string name="show_hint_at_startup">Scegli se mostrare o meno il tutorial all\'avvio</string>
+    <string name="unknown_artist">Artista Sconosciuto</string>
+    <string name="by_song">Per Brano</string>
+    <string name="by_album">Per Album</string>
+    <string name="by_artist">Per Artista</string>
+    <string name="music">Musica</string>
 
 </resources>

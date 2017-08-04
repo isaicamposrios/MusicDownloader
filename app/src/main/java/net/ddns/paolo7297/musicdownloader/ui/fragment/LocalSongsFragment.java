@@ -1,13 +1,10 @@
 package net.ddns.paolo7297.musicdownloader.ui.fragment;
 
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,7 +21,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import net.ddns.paolo7297.musicdownloader.R;
-import net.ddns.paolo7297.musicdownloader.adapter.DownloadedSongsAdapter;
+import net.ddns.paolo7297.musicdownloader.adapter.LocalSongsAdapter;
 import net.ddns.paolo7297.musicdownloader.adapter.PlaylistAdapter;
 import net.ddns.paolo7297.musicdownloader.placeholder.Playlist;
 import net.ddns.paolo7297.musicdownloader.placeholder.Song;
@@ -37,18 +34,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import static net.ddns.paolo7297.musicdownloader.Constants.FOLDER_HOME;
-
 /**
  * Created by paolo on 20/04/17.
  */
 
-public class DownloadedSongsFragment extends Fragment {
-    private DownloadedSongsAdapter adapter;
+public class LocalSongsFragment extends Fragment {
+    private LocalSongsAdapter adapter;
     private ProgressBar progressbar;
     private ListView listView;
     private ArrayList<Song> results;
     private PlaylistDBHelper dbHelper;
+    private int target = 0;
+
+    public void setTarget(int target) {
+        this.target = target;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,13 +58,13 @@ public class DownloadedSongsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.fragment_download, container, false);
+        final View view = inflater.inflate(R.layout.fragment_music, container, false);
         listView = (ListView) view.findViewById(R.id.list);
         progressbar = (ProgressBar) view.findViewById(R.id.spinner);
         progressbar.setVisibility(View.VISIBLE);
         progressbar.getIndeterminateDrawable().setColorFilter(ContextCompat.getColor(getActivity(), R.color.colorPrimary), PorterDuff.Mode.MULTIPLY);
         results = new ArrayList<>();
-        adapter = new DownloadedSongsAdapter(results, getActivity());
+        adapter = new LocalSongsAdapter(results, getActivity());
         listView.setAdapter(adapter);
         progressbar.setVisibility(View.VISIBLE);
         listView.setVisibility(View.GONE);
@@ -87,87 +87,12 @@ public class DownloadedSongsFragment extends Fragment {
         super.onResume();
         progressbar.setVisibility(View.GONE);
         listView.setVisibility(View.VISIBLE);
-
-        if (results == null || results.size() == 0) {
-            /*ArrayList<File> files = new ArrayList<>(Arrays.asList(new File(Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/").listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File pathname) {
-                    return pathname.getName().endsWith(".mp3");
-                }
-            })));*/
-            File f = new File(Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/");
-            ContentResolver cr = getActivity().getContentResolver();
-
-            Cursor c = null;
-            try {
-                results.clear();
-                c = cr.query(
-                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                        null,
-                        MediaStore.Audio.Media.DATA + " LIKE '" + f.getCanonicalPath() + "%' ",
-                        new String[]{},
-                        MediaStore.Audio.Media.TITLE + " ASC"
-                );
-                while (c != null && c.moveToNext()) {
-                    results.add(new Song(
-                            c.getLong(c.getColumnIndex(MediaStore.Audio.Media._ID)) + "",
-                            c.getString(c.getColumnIndex(MediaStore.Audio.Media.ARTIST)),
-                            c.getString(c.getColumnIndex(MediaStore.Audio.Media.TITLE)),
-                            (int) ((c.getLong(c.getColumnIndex(MediaStore.Audio.Media.DURATION)) / 1000)),
-                            c.getString(c.getColumnIndex(MediaStore.Audio.Media.DATA)),
-                            ((c.getLong(c.getColumnIndex(MediaStore.Audio.Media.SIZE)) / 1024) / 1024) + " MB",
-                            null
-                    ));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (c != null) {
-                    c.close();
-                }
-            }
-
-            /*new DownloadedSongsLoaderTask(new DownloadedSongsLoaderTask.DownloadedSongLoaderInterface() {
-                @Override
-                public void prepareUI() {
-                    listView.setVisibility(View.GONE);
-                    progressbar.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                public void updateFiles(ArrayList<Song> al) {
-                    results.clear();
-                    Song[] sr = al.toArray(new Song[al.size()]);
-                    Arrays.sort(sr, new Comparator<Song>() {
-                        @Override
-                        public int compare(Song lhs, Song rhs) {
-                            return lhs.getName().compareTo(rhs.getName());
-                        }
-                    });
-                    results.addAll(Arrays.asList(sr));
-                    adapter.notifyDataSetChanged();
-                    listView.setVisibility(View.VISIBLE);
-                    progressbar.setVisibility(View.GONE);
-                }
-
-                @Override
-                public ArrayList<File> getFiles() {
-                    return new ArrayList<>(Arrays.asList(new File(Environment.getExternalStorageDirectory() + "/" + FOLDER_HOME + "/").listFiles(new FileFilter() {
-                        @Override
-                        public boolean accept(File pathname) {
-                            return pathname.getName().endsWith(".mp3");
-                        }
-                    })));
-                }
-            }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);*/
-        } else {
-            for (int i = 0; i < results.size(); i++) {
-                if (!new File(results.get(i).getFile()).exists()) {
-                    results.remove(i);
-                    i--;
-                    adapter.notifyDataSetChanged();
-                }
-            }
+        try {
+            results.clear();
+            results.addAll(target == 0 ? Song.getDownloadedSongs(getActivity()) : Song.getSongs(getActivity()));
+            adapter.notifyDataSetChanged();
+        } catch (IOException e) {
+            results.clear();
         }
     }
 
